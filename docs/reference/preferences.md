@@ -89,11 +89,11 @@ There is no `Cmd+T` theme shortcut.
 |--------|------|------|
 | **Dark Mode** (default) | dark | Charcoal background with the Unit 42 orange accent (`#E85D2A`); optimized for long analysis sessions |
 | **Light Mode** | light | Soft gray chrome, white rows, navy text, teal and blue controls, blue selections and amber bookmarks |
-| **Spring** | light | 新緑: layers of fresh leaf green, sunlit green panels and forest-green text |
+| **Spring** | light | 新緑: fresh green navigation and headers, a pale cherry-blossom timeline, a butter-yellow histogram panel and forest-green text |
 | **Summer** | light | A beach palette: blue water, sunny yellow controls, orange bookmarks, white rows and near-black text |
 | **Autumn** | dark | 紅葉: maple-red headers, copper-orange highlights and walnut-brown working surfaces |
 | **Winter** | light | Icy blue panels, snow-white rows and pale glacier-blue controls |
-| **Christmas** | dark | Bold Christmas-red surfaces, holly-green headers, bright green histogram bars, gold buttons with near-black text, and white content |
+| **Christmas** | light | Green lettering, white headers and controls, and a candy-red workspace. Deeper green on red/white surfaces keeps text readable |
 
 Shared theme colors apply across the grid, modals, histogram, analytics panels and scrollbars. Text and control contrast is checked by the color-scheme tests. Features that only distinguish dark from light (native form controls and the auto-color palettes) follow the scheme's *base*. User-defined row colors and artifact-specific charts can have their own palettes.
 
@@ -101,7 +101,7 @@ The choice is saved in `ui-prefs.json` in the app's data folder and restored on 
 
 ### Seasonal colors and readability
 
-The seasonal palettes extend to the timeline, histogram, menus, dialogs, bookmarks and selection highlights. Summer is a **light** scheme; Christmas is separate from the icy Winter scheme. Filled controls use a contrasting foreground, so yellow and pale-blue buttons have dark text. Severity labels keep their usual meanings; decorative colors do not change detection levels or evidence.
+The seasonal palettes extend to the timeline, histogram, menus, dialogs, bookmarks and selection highlights. Summer and Christmas use a **light** base; Christmas is separate from the icy Winter scheme. Filled controls use a contrasting foreground. Christmas uses green shades for themed lettering, including severity labels, with white headers and controls; label text still identifies each severity. User-defined conditional formatting and artifact-specific charts retain their own colors. Decorative colors do not change detection levels or evidence.
 
 Light Mode uses neutral surfaces for long reading sessions, with separate colors for selections, bookmarks and controls. The color tests cover text contrast on Light Mode and seasonal panels, inputs and rows, selected/bookmarked rows, and the normal and hover colors of filled controls. The scheme is remembered across launches, including Light Mode and Christmas.
 

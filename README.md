@@ -7,9 +7,9 @@
 >
 > - **Color schemes** — **Dark Mode** and a refined **Light Mode** (soft gray and white,
 >   navy text, teal and blue accents), plus five expressive palettes:
->   **Spring** (新緑 — fresh leaf greens), **Summer** (beach blue, sunny yellow and orange),
+>   **Spring** (新緑 — fresh leaf greens with a pale cherry-blossom timeline), **Summer** (beach blue, sunny yellow and orange),
 >   **Autumn** (紅葉 — maple red, copper orange and brown), **Winter** (icy blue and white),
->   and **Christmas** (bold Christmas red, bright green, gold, white and near-black accents).
+>   and **Christmas** (green lettering, white headers and controls, and a candy-red workspace).
 >   Pick one from the toolbar's color-scheme dropdown or **Tools → Color Scheme**; the choice is
 >   remembered across launches.
 > - **Unsigned builds from GitHub Actions** — the `Build macOS (unsigned)` workflow builds a

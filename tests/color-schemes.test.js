@@ -60,8 +60,9 @@ test("every scheme keeps text readable (WCAG ratios) and its base matches its ba
     at(th.headerText, th.headerBg, 4.5, "headerText on headerBg");
     for (const key of ["accent", "success", "warning", "danger"]) at(th[key], th.bg, 3, `${key} on bg`);
     for (const [key, color] of Object.entries(th.sev)) at(color, th.bg, 3, `sev.${key} on bg`);
-    // Dark schemes have dark backgrounds and vice versa — `base` drives color-scheme and the glass menus.
-    assert.equal(luminance(th.bg) < 0.5 ? "dark" : "light", th.base, `${name}.base disagrees with its background`);
+    // Choose the base that matches readable foregrounds. 0.179 is the crossover
+    // where black and white have equal contrast, including saturated backgrounds.
+    assert.equal(contrast("#000000", th.bg) < contrast("#ffffff", th.bg) ? "dark" : "light", th.base, `${name}.base disagrees with its background`);
   }
 });
 
@@ -73,7 +74,7 @@ test("resolveTheme falls back to the default for unknown names and isDarkTheme f
   assert.equal(isThemeName("toString"), false);
   assert.equal(isThemeName("autumn"), true);
   assert.equal(isDarkTheme("summer"), false);
-  assert.equal(isDarkTheme("christmas"), true);
+  assert.equal(isDarkTheme("christmas"), false);
   assert.equal(isDarkTheme("spring"), false);
   assert.equal(isDarkTheme("bogus"), true, "unknown names resolve to the dark default");
 });

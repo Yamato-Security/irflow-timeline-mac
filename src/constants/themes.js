@@ -51,18 +51,18 @@ export const THEMES = {
     sev: { critical: "#bd2035", high: "#b04b0a", med: "#895900", low: "#506176", custom: "#7045a2", clean: "#187345", info: "#2563a6" },
   },
   // ── Seasonal schemes ─────────────────────────────────────────────────────────
-  // Spring / 新緑 — sun through young leaves: layered greens, not blossom pink.
+  // Spring / 新緑 — fresh leaf-green chrome framing a cherry-blossom timeline.
   spring: {
     base: "light",
-    bg: "#f0f7e8", bgAlt: "#dfedcc", bgInput: "#fbfff6", border: "#b2c792", borderAccent: "#427a25",
+    bg: "#fff3f6", bgAlt: "#dfedcc", bgInput: "#fffdfd", border: "#b2c792", borderAccent: "#427a25",
     text: "#18351c", textDim: "#345536", textMuted: "#49633c", accent: "#2c641b", accentHover: "#214f14", onAccent: "#ffffff",
-    rowOdd: "#e6f1d9", rowEven: "#f0f7e8", headerBg: "#c9e2a7", headerText: "#244d16",
+    rowOdd: "#ffe8ee", rowEven: "#fff7fa", headerBg: "#c9e2a7", headerText: "#244d16",
     selection: "rgba(77,128,36,0.18)", bookmark: "rgba(150,177,45,0.15)",
     modalBg: "#f4faec", modalBorder: "#a3bd7f", overlay: "rgba(18,40,20,0.50)",
     success: "#286131", warning: "#835400", danger: "#b4342c",
     btnBg: "#e3efd2", btnBorder: "#a3bd7f",
-    panelBg: "#d3e9b4", cellBorder: "#d2e3bf", accentSubtle: "rgba(66,122,37,0.12)",
-    histBar: "#55902a", histBarHover: "#337319", histGrid: "#b4ce99",
+    panelBg: "#fff6df", cellBorder: "#e9dce1", accentSubtle: "rgba(66,122,37,0.12)",
+    histBar: "#55902a", histBarHover: "#337319", histGrid: "#dfd3b9",
     primaryBtn: "#366e20", primaryBtnHover: "#285619", onPrimary: "#ffffff",
     toolbarBg: "rgba(201,226,167,0.96)", glassBg: "rgba(255,255,255,0.28)", glassBorder: "rgba(48,90,26,0.18)", glassHover: "rgba(66,122,37,0.12)",
     sev: { critical: "#b3261e", high: "#a9430a", med: "#815500", low: "#506149", custom: "#71509b", clean: "#286131", info: "#235c88" },
@@ -118,22 +118,22 @@ export const THEMES = {
     toolbarBg: "rgba(218,239,252,0.96)", glassBg: "rgba(255,255,255,0.42)", glassBorder: "rgba(37,95,132,0.16)", glassHover: "rgba(77,153,199,0.12)",
     sev: { critical: "#b33445", high: "#ad4c17", med: "#856000", low: "#456478", custom: "#685895", clean: "#276f62", info: "#16678d" },
   },
-  // Christmas — saturated Santa red, holly-green headers, vivid green histogram
-  // bars and gold controls. White text and darkened row highlights keep it readable.
+  // Christmas — green lettering, white headers and controls, and a clear candy-red
+  // workspace. Use a light base for native controls and dark green text on red/white.
   christmas: {
-    base: "dark",
-    bg: "#b00016", bgAlt: "#c60820", bgInput: "#a00012", border: "#e65460", borderAccent: "#ffe052",
-    text: "#ffffff", textDim: "#fff9ef", textMuted: "#fff0df", accent: "#fff06a", accentHover: "#fff9b0", onAccent: "#181b12",
-    rowOdd: "#a60013", rowEven: "#b00016", headerBg: "#007c2e", headerText: "#ffffff",
-    selection: "rgba(25,0,5,0.30)", bookmark: "rgba(0,48,16,0.32)",
-    modalBg: "#b00016", modalBorder: "#ee6570", overlay: "rgba(25,4,8,0.80)",
-    success: "#50f07d", warning: "#ffe052", danger: "#ffd0d0",
-    btnBg: "#00752b", btnBorder: "#2bd45d",
-    panelBg: "#a50013", cellBorder: "#ce3646", accentSubtle: "rgba(255,224,82,0.10)",
-    histBar: "#24dc58", histBarHover: "#7aff9b", histGrid: "#d64a59",
-    primaryBtn: "#ffe052", primaryBtnHover: "#fff19a", onPrimary: "#181b12",
-    toolbarBg: "rgba(208,16,36,0.97)", glassBg: "rgba(255,255,255,0.06)", glassBorder: "rgba(255,224,82,0.32)", glassHover: "rgba(0,0,0,0.12)",
-    sev: { critical: "#ffd0d0", high: "#ffdc9a", med: "#ffe052", low: "#fff0df", custom: "#f1daff", clean: "#50f07d", info: "#cbecff" },
+    base: "light",
+    bg: "#ff8088", bgAlt: "#ff969d", bgInput: "#fffdfd", border: "#bf3143", borderAccent: "#005c24",
+    text: "#001e09", textDim: "#003a14", textMuted: "#004116", accent: "#004416", accentHover: "#00330e", onAccent: "#baff9e",
+    rowOdd: "#ff8991", rowEven: "#ff8088", headerBg: "#ffffff", headerText: "#00652b",
+    selection: "rgba(255,255,255,0.28)", bookmark: "rgba(255,244,166,0.26)",
+    modalBg: "#fffdfd", modalBorder: "#bf3143", overlay: "rgba(51,6,13,0.55)",
+    success: "#004716", warning: "#003b12", danger: "#002d0b",
+    btnBg: "#ffffff", btnBorder: "#5a9167",
+    panelBg: "#ffa1a7", cellBorder: "#e56875", accentSubtle: "rgba(0,68,22,0.08)",
+    histBar: "#00812f", histBarHover: "#00591f", histGrid: "#dc5c69",
+    primaryBtn: "#ffffff", primaryBtnHover: "#f0ffe9", onPrimary: "#005c24",
+    toolbarBg: "rgba(255,150,157,0.98)", glassBg: "rgba(255,255,255,0.30)", glassBorder: "rgba(0,68,22,0.25)", glassHover: "rgba(255,255,255,0.22)",
+    sev: { critical: "#002d0b", high: "#00340e", med: "#003b12", low: "#004116", custom: "#003f18", clean: "#004716", info: "#003e1c" },
   },
 };
 
@@ -146,11 +146,11 @@ export const DEFAULT_THEME = "dark";
 export const THEME_OPTIONS = [
   { id: "dark", label: "Dark Mode", icon: "🌙", description: "Charcoal with the orange accent (default)" },
   { id: "light", label: "Light Mode", icon: "☀️", description: "Soft gray and white, navy text, teal and blue accents" },
-  { id: "spring", label: "Spring", icon: "🌱", description: "Sunlit new leaves — layered fresh greens" },
+  { id: "spring", label: "Spring", icon: "🌱", description: "Fresh leaf greens with a pale cherry-blossom timeline" },
   { id: "summer", label: "Summer", icon: "🌊", description: "Beach blue, sunny yellow, warm orange and white" },
   { id: "autumn", label: "Autumn", icon: "🍂", description: "Maple red, copper orange and warm brown" },
   { id: "winter", label: "Winter", icon: "❄️", description: "Snow white and pale glacier blue" },
-  { id: "christmas", label: "Christmas", icon: "🎄", description: "Bold Christmas red, bright green, gold and white" },
+  { id: "christmas", label: "Christmas", icon: "🎄", description: "Green lettering, white headers and a candy-red workspace" },
 ];
 
 export const THEME_IDS = THEME_OPTIONS.map((option) => option.id);
