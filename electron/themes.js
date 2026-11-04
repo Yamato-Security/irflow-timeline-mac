@@ -9,11 +9,12 @@
 const THEME_OPTIONS = Object.freeze([
   Object.freeze({ id: "dark", label: "Dark Mode", windowBackground: "#0f1114" }),
   Object.freeze({ id: "light", label: "Light Mode", windowBackground: "#f5f7fa" }),
-  Object.freeze({ id: "spring", label: "Spring", windowBackground: "#fff3f6" }),
+  Object.freeze({ id: "spring", label: "Spring", windowBackground: "#ffffff" }),
+  Object.freeze({ id: "sakura", label: "Sakura", windowBackground: "#fff5f8" }),
   Object.freeze({ id: "summer", label: "Summer", windowBackground: "#f4fbff" }),
   Object.freeze({ id: "autumn", label: "Autumn", windowBackground: "#281810" }),
   Object.freeze({ id: "winter", label: "Winter", windowBackground: "#f4fbff" }),
-  Object.freeze({ id: "christmas", label: "Christmas", windowBackground: "#ff8088" }),
+  Object.freeze({ id: "christmas", label: "Christmas", windowBackground: "#ff3333" }),
 ]);
 
 const DEFAULT_THEME = "dark";

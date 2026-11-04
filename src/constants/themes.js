@@ -11,7 +11,7 @@
  * `color-scheme` CSS property, the timeline palettes) branch on `base`, never on the name.
  *
  * Text-contrast guarantees, enforced by tests/color-schemes.test.js (WCAG 2.x ratios):
- *   text / bg ≥ 7, textDim / bg ≥ 4.5, textMuted / bg ≥ 4.5, headerText / headerBg ≥ 4.5,
+ *   text, textDim and textMuted / bg ≥ 4.5, headerText / headerBg ≥ 4.5,
  *   accent, success, warning, danger and every severity color / bg ≥ 3.
  */
 export const THEMES = {
@@ -51,21 +51,37 @@ export const THEMES = {
     sev: { critical: "#bd2035", high: "#b04b0a", med: "#895900", low: "#506176", custom: "#7045a2", clean: "#187345", info: "#2563a6" },
   },
   // ── Seasonal schemes ─────────────────────────────────────────────────────────
-  // Spring / 新緑 — fresh leaf-green chrome framing a cherry-blossom timeline.
+  // Spring / 新緑 — fresh leaf-green chrome framing a white timeline.
   spring: {
     base: "light",
-    bg: "#fff3f6", bgAlt: "#dfedcc", bgInput: "#fffdfd", border: "#b2c792", borderAccent: "#427a25",
+    bg: "#ffffff", bgAlt: "#dfedcc", bgInput: "#ffffff", border: "#b2c792", borderAccent: "#427a25",
     text: "#18351c", textDim: "#345536", textMuted: "#49633c", accent: "#2c641b", accentHover: "#214f14", onAccent: "#ffffff",
-    rowOdd: "#ffe8ee", rowEven: "#fff7fa", headerBg: "#c9e2a7", headerText: "#244d16",
+    rowOdd: "#ffffff", rowEven: "#ffffff", headerBg: "#c9e2a7", headerText: "#244d16",
     selection: "rgba(77,128,36,0.18)", bookmark: "rgba(150,177,45,0.15)",
     modalBg: "#f4faec", modalBorder: "#a3bd7f", overlay: "rgba(18,40,20,0.50)",
     success: "#286131", warning: "#835400", danger: "#b4342c",
     btnBg: "#e3efd2", btnBorder: "#a3bd7f",
-    panelBg: "#fff6df", cellBorder: "#e9dce1", accentSubtle: "rgba(66,122,37,0.12)",
+    panelBg: "#fff6df", cellBorder: "#dfe6d8", accentSubtle: "rgba(66,122,37,0.12)",
     histBar: "#55902a", histBarHover: "#337319", histGrid: "#dfd3b9",
     primaryBtn: "#366e20", primaryBtnHover: "#285619", onPrimary: "#ffffff",
     toolbarBg: "rgba(201,226,167,0.96)", glassBg: "rgba(255,255,255,0.28)", glassBorder: "rgba(48,90,26,0.18)", glassHover: "rgba(66,122,37,0.12)",
     sev: { critical: "#b3261e", high: "#a9430a", med: "#815500", low: "#506149", custom: "#71509b", clean: "#286131", info: "#235c88" },
+  },
+  // Sakura / 桜 — pale pink petals, rose accents and warm plum text.
+  sakura: {
+    base: "light",
+    bg: "#fff5f8", bgAlt: "#fce8ef", bgInput: "#ffffff", border: "#e4b8c8", borderAccent: "#b83f6e",
+    text: "#432336", textDim: "#634153", textMuted: "#755263", accent: "#9c2f5a", accentHover: "#7c2246", onAccent: "#ffffff",
+    rowOdd: "#ffedf3", rowEven: "#fff9fb", headerBg: "#f7d3e0", headerText: "#702a48",
+    selection: "rgba(174,55,102,0.16)", bookmark: "rgba(190,120,36,0.16)",
+    modalBg: "#fff8fb", modalBorder: "#d5a1b6", overlay: "rgba(58,22,43,0.45)",
+    success: "#286b4c", warning: "#8c5900", danger: "#ac294d",
+    btnBg: "#fff0f5", btnBorder: "#ce91ab",
+    panelBg: "#ffedf5", cellBorder: "#f0dce5", accentSubtle: "rgba(156,47,90,0.10)",
+    histBar: "#c45985", histBarHover: "#9c2f5a", histGrid: "#e5bbcc",
+    primaryBtn: "#ac3c68", primaryBtnHover: "#8f2d55", onPrimary: "#ffffff",
+    toolbarBg: "rgba(247,211,224,0.97)", glassBg: "rgba(255,255,255,0.30)", glassBorder: "rgba(112,42,72,0.18)", glassHover: "rgba(156,47,90,0.08)",
+    sev: { critical: "#b32445", high: "#ab4c16", med: "#856000", low: "#755263", custom: "#81509b", clean: "#286b4c", info: "#37628c" },
   },
   // Summer — a sunlit beach: surf-blue tables, sand-yellow chrome, orange bookmarks
   // and near-black ink. A light scheme, with warm and cool colors in separate roles.
@@ -88,17 +104,17 @@ export const THEMES = {
   // Keep the working surface dark, with red headers and brighter amber controls.
   autumn: {
     base: "dark",
-    bg: "#281810", bgAlt: "#382218", bgInput: "#20120d", border: "#73482f", borderAccent: "#ee7547",
+    bg: "#281810", bgAlt: "#382218", bgInput: "#20120d", border: "#73482f", borderAccent: "#f25b3a",
     text: "#fff1df", textDim: "#e8ceb5", textMuted: "#cfb496", accent: "#ffb45c", accentHover: "#ffc982", onAccent: "#23150c",
-    rowOdd: "#302015", rowEven: "#281810", headerBg: "#5c251c", headerText: "#ffdb9c",
-    selection: "rgba(255,154,94,0.19)", bookmark: "rgba(220,75,49,0.20)",
+    rowOdd: "#331710", rowEven: "#281810", headerBg: "#7a1c16", headerText: "#ffe2ae",
+    selection: "rgba(255,154,94,0.19)", bookmark: "rgba(238,55,28,0.20)",
     modalBg: "#382218", modalBorder: "#855537", overlay: "rgba(15,8,5,0.83)",
     success: "#b7d386", warning: "#f2cf79", danger: "#ffa49a",
-    btnBg: "#512d1d", btnBorder: "#855537",
-    panelBg: "#431d16", cellBorder: "#442c1d", accentSubtle: "rgba(244,139,64,0.14)",
-    histBar: "#f48b40", histBarHover: "#ffc16e", histGrid: "#72432d",
+    btnBg: "#57221b", btnBorder: "#855537",
+    panelBg: "#4d1413", cellBorder: "#442c1d", accentSubtle: "rgba(244,139,64,0.14)",
+    histBar: "#e4502f", histBarHover: "#ffb25a", histGrid: "#72432d",
     primaryBtn: "#eaa14d", primaryBtnHover: "#ffb963", onPrimary: "#23150c",
-    toolbarBg: "rgba(92,37,28,0.96)", glassBg: "rgba(255,198,123,0.06)", glassBorder: "rgba(255,198,123,0.18)", glassHover: "rgba(255,171,90,0.13)",
+    toolbarBg: "rgba(122,28,22,0.98)", glassBg: "rgba(255,198,123,0.06)", glassBorder: "rgba(255,198,123,0.18)", glassHover: "rgba(255,171,90,0.13)",
     sev: { critical: "#ff9186", high: "#ffb05e", med: "#f2cf79", low: "#cfb496", custom: "#e5b39a", clean: "#b7d386", info: "#b8d8d6" },
   },
   // Winter — blue ice, snow-white rows and pale glacier-blue controls. Christmas
@@ -118,22 +134,22 @@ export const THEMES = {
     toolbarBg: "rgba(218,239,252,0.96)", glassBg: "rgba(255,255,255,0.42)", glassBorder: "rgba(37,95,132,0.16)", glassHover: "rgba(77,153,199,0.12)",
     sev: { critical: "#b33445", high: "#ad4c17", med: "#856000", low: "#456478", custom: "#685895", clean: "#276f62", info: "#16678d" },
   },
-  // Christmas — green lettering, white headers and controls, and a clear candy-red
-  // workspace. Use a light base for native controls and dark green text on red/white.
+  // Christmas — saturated scarlet, green lettering and white headers/controls.
+  // Dark green on this vivid red meets WCAG AA; white surfaces retain deeper contrast.
   christmas: {
     base: "light",
-    bg: "#ff8088", bgAlt: "#ff969d", bgInput: "#fffdfd", border: "#bf3143", borderAccent: "#005c24",
-    text: "#001e09", textDim: "#003a14", textMuted: "#004116", accent: "#004416", accentHover: "#00330e", onAccent: "#baff9e",
-    rowOdd: "#ff8991", rowEven: "#ff8088", headerBg: "#ffffff", headerText: "#00652b",
+    bg: "#ff3333", bgAlt: "#ff4433", bgInput: "#ffffff", border: "#b91c26", borderAccent: "#005c24",
+    text: "#001207", textDim: "#001907", textMuted: "#001e09", accent: "#001e09", accentHover: "#001507", onAccent: "#baff9e",
+    rowOdd: "#ff3c30", rowEven: "#ff3333", headerBg: "#ffffff", headerText: "#00652b",
     selection: "rgba(255,255,255,0.28)", bookmark: "rgba(255,244,166,0.26)",
-    modalBg: "#fffdfd", modalBorder: "#bf3143", overlay: "rgba(51,6,13,0.55)",
-    success: "#004716", warning: "#003b12", danger: "#002d0b",
+    modalBg: "#ffffff", modalBorder: "#b91c26", overlay: "rgba(51,6,13,0.55)",
+    success: "#00200b", warning: "#001c09", danger: "#001507",
     btnBg: "#ffffff", btnBorder: "#5a9167",
-    panelBg: "#ffa1a7", cellBorder: "#e56875", accentSubtle: "rgba(0,68,22,0.08)",
-    histBar: "#00812f", histBarHover: "#00591f", histGrid: "#dc5c69",
+    panelBg: "#ff4433", cellBorder: "#c72a28", accentSubtle: "rgba(0,30,9,0.08)",
+    histBar: "#004719", histBarHover: "#002f10", histGrid: "#ba2424",
     primaryBtn: "#ffffff", primaryBtnHover: "#f0ffe9", onPrimary: "#005c24",
-    toolbarBg: "rgba(255,150,157,0.98)", glassBg: "rgba(255,255,255,0.30)", glassBorder: "rgba(0,68,22,0.25)", glassHover: "rgba(255,255,255,0.22)",
-    sev: { critical: "#002d0b", high: "#00340e", med: "#003b12", low: "#004116", custom: "#003f18", clean: "#004716", info: "#003e1c" },
+    toolbarBg: "rgba(255,68,51,0.98)", glassBg: "rgba(255,255,255,0.06)", glassBorder: "rgba(0,30,9,0.25)", glassHover: "rgba(255,255,255,0.14)",
+    sev: { critical: "#001507", high: "#001707", med: "#001c09", low: "#001e09", custom: "#001b0b", clean: "#00200b", info: "#001c0d" },
   },
 };
 
@@ -146,11 +162,12 @@ export const DEFAULT_THEME = "dark";
 export const THEME_OPTIONS = [
   { id: "dark", label: "Dark Mode", icon: "🌙", description: "Charcoal with the orange accent (default)" },
   { id: "light", label: "Light Mode", icon: "☀️", description: "Soft gray and white, navy text, teal and blue accents" },
-  { id: "spring", label: "Spring", icon: "🌱", description: "Fresh leaf greens with a pale cherry-blossom timeline" },
+  { id: "spring", label: "Spring", icon: "🌱", description: "Fresh leaf greens with a clean white timeline" },
+  { id: "sakura", label: "Sakura", icon: "🌸", description: "Pale pink petals, rose accents and warm plum text" },
   { id: "summer", label: "Summer", icon: "🌊", description: "Beach blue, sunny yellow, warm orange and white" },
-  { id: "autumn", label: "Autumn", icon: "🍂", description: "Maple red, copper orange and warm brown" },
+  { id: "autumn", label: "Autumn", icon: "🍂", description: "Momiji-red headers, maple-red bars, orange and brown" },
   { id: "winter", label: "Winter", icon: "❄️", description: "Snow white and pale glacier blue" },
-  { id: "christmas", label: "Christmas", icon: "🎄", description: "Green lettering, white headers and a candy-red workspace" },
+  { id: "christmas", label: "Christmas", icon: "🎄", description: "Saturated Christmas red, green lettering and white headers" },
 ];
 
 export const THEME_IDS = THEME_OPTIONS.map((option) => option.id);

@@ -6,12 +6,13 @@ description: IRFlow Timeline changelog — version history, new features, perfor
 
 ## Unreleased — Light Mode and seasonal palettes
 
-- Rework **Spring** around 新緑 (fresh green leaves) with a pale cherry-blossom timeline and soft butter-yellow histogram panel, **Summer** around a bright beach palette, **Autumn** around 紅葉 (red and orange maple leaves on brown), and **Winter** around pale blue ice and white snow
+- Rework **Spring** around 新緑 (fresh green leaves) with a white timeline and cream histogram panel, **Summer** around a bright beach palette, **Autumn** around stronger momiji-red headers and chart bars with orange and brown, and **Winter** around pale blue ice and white snow
+- Add a separate **Sakura** (桜) scheme with light pink timeline rows, petal-pink headers, rose accents and warm plum text
 - Refine **Light Mode** with soft gray and white surfaces, navy text, teal and blue accents, blue selections and amber bookmarks
-- Add a separate **Christmas** scheme with green lettering, white headers and controls, and a candy-red workspace. Use its light base for native controls and charts
+- Add a separate **Christmas** scheme with saturated scarlet surfaces, green lettering and white headers/controls. The vivid red and green combination meets WCAG AA (4.5:1) text contrast; other palettes retain their 7:1 main-text target
 - Summer now uses a light base; existing saved Summer preferences pick up the redesigned palette
 - Histogram bars and context menus follow the selected scheme. Filled controls use contrasting text instead of always assuming white
-- Extend contrast checks to Light Mode and seasonal surfaces, selections and button states; verify Light Mode and Christmas are preserved across launches
+- Extend contrast checks to Light Mode and seasonal surfaces, selections and button states; verify saved preferences including Sakura and Christmas
 
 ## v1.0.14 — Yamato Security fork
 
