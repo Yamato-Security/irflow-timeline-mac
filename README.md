@@ -10,13 +10,16 @@
 >   harvest gold on dark brown) and **Winter** (snow white with Christmas red and pine green).
 >   Pick one from the toolbar's color-scheme dropdown or **Tools → Color Scheme**; the choice is
 >   remembered across launches.
-> - **Unsigned test builds** — the `Build macOS (unsigned)` workflow builds a universal
->   (Apple silicon + Intel) app for every pull request and push to `main`. Download the zip or dmg
->   from the workflow run's **Artifacts**; tags `v*` also create a draft GitHub release.
+> - **Unsigned builds from GitHub Actions** — the `Build macOS (unsigned)` workflow builds a
+>   universal (Apple silicon + Intel) app for every pull request and push to `main`; download the
+>   zip or dmg from the workflow run's **Artifacts**. To cut a release, run the workflow by hand on
+>   `main` with **Create draft release** ticked (or push a `v<version>` tag): the files land on a
+>   draft GitHub release for you to publish. Bump `version` in `package.json` first for a new number.
 >
 > Upstream's own signed, notarized releases remain at
-> <https://github.com/r3nzsec/irflow-timeline/releases>. In-app updates are disabled in the fork's
-> test builds (no update feed), and the app keeps upstream's bundle identifier.
+> <https://github.com/r3nzsec/irflow-timeline/releases>; its release and docs-deployment workflows
+> are not included here (they need Apple and S3 credentials and a GitHub Pages site). In-app updates
+> are disabled in the fork's builds (no update feed), and the app keeps upstream's bundle identifier.
 
 ### Opening an unsigned test build
 

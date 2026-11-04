@@ -1,15 +1,21 @@
-# Yamato Security fork — unsigned (ad-hoc signed) universal macOS test builds.
+# Yamato Security fork — unsigned (ad-hoc signed) universal macOS builds.
 #
 # Every pull request and every push to main builds the renderer, runs the test suite,
 # bundles Hayabusa + bmc-tools and packages IRFlow Timeline as a universal
-# (Apple silicon + Intel) app: a zip and a dmg under the run's Artifacts. Tags `v*` also
-# create a DRAFT GitHub release holding the same files.
+# (Apple silicon + Intel) app: a zip and a dmg under the run's Artifacts.
+#
+# Releases — two ways, both end in a DRAFT GitHub release `v<package.json version>` that
+# you review and publish:
+#   * Actions → "Build macOS (unsigned)" → Run workflow on main → tick "Create draft release".
+#     Publishing that draft creates the tag at the built commit.
+#   * Push a tag `v<version>` that matches package.json.
+# Bump "version" in package.json (and package-lock.json) before releasing again.
 #
 # Nothing here is notarized or Developer-ID signed, so macOS blocks the first launch:
 # System Settings → Privacy & Security → Open Anyway, or
 #   xattr -dr com.apple.quarantine "/Applications/IRFlow Timeline.app"
-# Upstream's signed release pipeline (release-macos.yml) needs credentials this fork does
-# not have and runs on manual dispatch only.
+# Upstream's signed release pipeline (Apple notarization, S3 updater feed) needs credentials
+# this fork does not have, so it is not part of this repository.
 name: Build macOS (unsigned)
 
 on:
@@ -18,13 +24,18 @@ on:
     tags: ["v*"]
   pull_request:
   workflow_dispatch:
+    inputs:
+      draft_release:
+        description: "Create draft release: build this commit and attach it to the draft GitHub release v<package.json version>"
+        type: boolean
+        default: false
 
 permissions:
   contents: read
 
 concurrency:
-  group: build-macos-${{ github.ref }}
-  cancel-in-progress: ${{ !startsWith(github.ref, 'refs/tags/') }}
+  group: build-macos-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   build:
@@ -35,6 +46,8 @@ jobs:
     timeout-minutes: 60
     outputs:
       artifact: ${{ steps.meta.outputs.artifact }}
+      release: ${{ steps.meta.outputs.release }}
+      tag: ${{ steps.meta.outputs.tag }}
     steps:
       - name: Checkout
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
@@ -82,21 +95,33 @@ jobs:
           # On pull_request events GITHUB_SHA is the synthetic merge commit; label the build
           # with the commit that is actually on the branch.
           PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          DRAFT_RELEASE: ${{ inputs.draft_release }}
         run: |
           set -euo pipefail
           version="$(node -p "require('./package.json').version")"
           sha="${PR_HEAD_SHA:-${GITHUB_SHA}}"
+          release="false"
+          tag=""
           if [[ "${GITHUB_REF}" == refs/tags/v* ]]; then
             if [ "${GITHUB_REF_NAME}" != "v${version}" ]; then
-              echo "::error::Tag ${GITHUB_REF_NAME} does not match package.json version ${version}"
+              echo "::error::Tag ${GITHUB_REF_NAME} does not match package.json version ${version} (expected v${version})"
               exit 1
             fi
-            suffix=""
-          else
-            suffix="+g${sha::7}"
+            release="true"
+            tag="${GITHUB_REF_NAME}"
+          elif [ "${GITHUB_EVENT_NAME}" = "workflow_dispatch" ] && [ "${DRAFT_RELEASE}" = "true" ]; then
+            release="true"
+            tag="v${version}"
           fi
-          echo "suffix=${suffix}" >> "${GITHUB_OUTPUT}"
-          echo "artifact=irflow-timeline-mac-${version}${suffix//+/-}-macos-universal" >> "${GITHUB_OUTPUT}"
+          # Release builds carry the plain version; development builds add the commit.
+          if [ "${release}" = "true" ]; then suffix=""; else suffix="+g${sha::7}"; fi
+          echo "Building ${version}${suffix} (release=${release}${tag:+, tag ${tag}})"
+          {
+            echo "suffix=${suffix}"
+            echo "artifact=irflow-timeline-mac-${version}${suffix//+/-}-macos-universal"
+            echo "release=${release}"
+            echo "tag=${tag}"
+          } >> "${GITHUB_OUTPUT}"
 
       - name: Package unsigned universal app (zip + dmg)
         env:
@@ -113,7 +138,7 @@ jobs:
 
   draft-release:
     name: Draft GitHub release
-    if: startsWith(github.ref, 'refs/tags/v')
+    if: needs.build.outputs.release == 'true'
     needs: build
     runs-on: ubuntu-latest
     permissions:
@@ -129,13 +154,20 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}
+          TAG: ${{ needs.build.outputs.tag }}
         shell: bash
         run: |
           set -euo pipefail
-          tag="${GITHUB_REF_NAME}"
           ls -la release-files
-          if ! gh release view "${tag}" >/dev/null 2>&1; then
-            gh release create "${tag}" --draft --generate-notes \
-              --title "IRFlow Timeline ${tag#v} (Yamato Security fork, unsigned)"
+          # "true" (draft), "false" (published) or "missing".
+          state="$(gh release view "${TAG}" --json isDraft --jq .isDraft 2>/dev/null || echo missing)"
+          if [ "${state}" = "missing" ]; then
+            # --target pins the commit; GitHub creates the tag there when the draft is published.
+            gh release create "${TAG}" --draft --generate-notes --target "${GITHUB_SHA}" \
+              --title "IRFlow Timeline ${TAG#v} (Yamato Security fork, unsigned)"
+          elif [ "${state}" = "false" ] && [ "${GITHUB_EVENT_NAME}" != "push" ]; then
+            echo "::error::Release ${TAG} is already published. Bump \"version\" in package.json (and package-lock.json) before building another release."
+            exit 1
           fi
-          gh release upload "${tag}" release-files/* --clobber
+          gh release upload "${TAG}" release-files/* --clobber
+          echo "Draft release: $(gh release view "${TAG}" --json url --jq .url)"

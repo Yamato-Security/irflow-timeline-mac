@@ -4,9 +4,9 @@ description: IRFlow Timeline changelog — version history, new features, perfor
 
 # Changelog
 
-## Yamato Security fork — unreleased
+## v1.0.14 — Yamato Security fork
 
-`irflow-timeline-mac` is Yamato Security's fork of r3nzsec/irflow-timeline. Changes on top of upstream v1.0.13:
+`irflow-timeline-mac` is Yamato Security's fork of r3nzsec/irflow-timeline. First fork release; changes on top of upstream v1.0.13:
 
 ### Color schemes
 
@@ -17,8 +17,8 @@ description: IRFlow Timeline changelog — version history, new features, perfor
 
 ### Build
 
-- **Unsigned universal test builds** — the `Build macOS (unsigned)` workflow (pull requests, pushes to `main`, tags, manual runs) packages an ad-hoc-signed universal app as zip + dmg; tags create a draft GitHub release. `npm run dist:unsigned` does the same locally
-- Upstream's signed/notarized release workflow and the docs deployment run on manual dispatch only in this fork
+- **Unsigned universal builds** — the `Build macOS (unsigned)` workflow (pull requests, pushes to `main`, tags, manual runs) packages an ad-hoc-signed universal app as zip + dmg. Running it by hand with **Create draft release** ticked, or pushing a `v<version>` tag, attaches the files to a draft GitHub release. `npm run dist:unsigned` does the same locally
+- Upstream's signed/notarized release workflow and the GitHub Pages docs deployment are not part of this fork (they need Apple and S3 credentials and a Pages site)
 
 ## v1.0.13 — September 8, 2026
 
