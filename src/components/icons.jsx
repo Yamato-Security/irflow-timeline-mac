@@ -1,3 +1,4 @@
+// Modified by Yamato Security, 2026-11-04: readable check marks on seasonal accents.
 import useTheme from "../hooks/useTheme.js";
 
 export const BkmkIcon = ({ filled }) => {
@@ -17,10 +18,10 @@ export const CheckboxIcon = ({ checked, indeterminate }) => {
         fill={checked || indeterminate ? th.accent : "none"}
         stroke={checked || indeterminate ? th.accent : th.textMuted} strokeWidth="1.5" />
       {checked && !indeterminate && (
-        <polyline points="4,8 7,11 12,5" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        <polyline points="4,8 7,11 12,5" fill="none" stroke={th.onAccent} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
       )}
       {indeterminate && (
-        <line x1="4" y1="8" x2="12" y2="8" stroke="#fff" strokeWidth="2" strokeLinecap="round" />
+        <line x1="4" y1="8" x2="12" y2="8" stroke={th.onAccent} strokeWidth="2" strokeLinecap="round" />
       )}
     </svg>
   );

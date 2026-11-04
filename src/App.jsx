@@ -551,6 +551,7 @@ export default function App() {
     root.style.setProperty("--tle-bg", th.bg);
     root.style.setProperty("--tle-scrollbar-thumb", th.modalBorder);
     root.style.setProperty("--tle-scrollbar-thumb-hover", th.textMuted);
+    root.style.setProperty("--tle-text-muted", th.textMuted);
     root.style.setProperty("--tle-selection", th.selection);
     document.body.style.background = th.bg;
   }, [th]);
@@ -3513,7 +3514,7 @@ export default function App() {
           <h1 style={{ fontSize: 24, fontWeight: 700, color: th.text, margin: 0, fontFamily: "-apple-system, 'SF Pro Display', sans-serif", letterSpacing: "-0.01em" }}>IRFlow <span style={{ color: th.accent }}>Timeline</span></h1>
           <p style={{ color: th.textDim, fontSize: 14, letterSpacing: "0.14em", textTransform: "uppercase", margin: "10px 0 6px", fontWeight: 600 }}>DFIR Timeline Analysis for macOS</p>
           <div style={{ display: "flex", flexDirection: "column", gap: 10, alignItems: "stretch", width: "100%", marginTop: 26, WebkitAppRegion: "no-drag" }}>
-            <button onClick={() => runOpenFileDialog()} style={{ padding: "14px 48px", background: th.primaryBtn, color: "#fff", border: "none", borderRadius: 8, fontSize: 16, fontWeight: 600, cursor: "pointer", fontFamily: "-apple-system, sans-serif" }}
+            <button onClick={() => runOpenFileDialog()} style={{ padding: "14px 48px", background: th.primaryBtn, color: th.onPrimary, border: "none", borderRadius: 8, fontSize: 16, fontWeight: 600, cursor: "pointer", fontFamily: "-apple-system, sans-serif" }}
               onMouseEnter={(e) => { e.currentTarget.style.filter = "brightness(1.1)"; }}
               onMouseLeave={(e) => { e.currentTarget.style.filter = ""; }}>Open File</button>
 	          </div>
@@ -3532,7 +3533,7 @@ export default function App() {
                   {autoRestorable.tabs?.length || 0} tab{autoRestorable.tabs?.length === 1 ? "" : "s"} · auto-saved {(() => { try { const d = new Date(autoRestorable.savedAt); const mins = Math.round((Date.now() - d.getTime()) / 60000); return mins < 1 ? "just now" : mins < 60 ? `${mins} min ago` : `${Math.round(mins/60)} hr ago`; } catch { return "recently"; } })()}
                 </div>
               </div>
-              <button onClick={handleAutoRestore} style={{ padding: "6px 14px", background: th.warning, color: "#fff", border: "none", borderRadius: 6, fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: "-apple-system, sans-serif", transition: "background var(--m-base) var(--ease-out)", flexShrink: 0 }}>Restore</button>
+              <button onClick={handleAutoRestore} style={{ padding: "6px 14px", background: th.warning, color: th.onAccent, border: "none", borderRadius: 6, fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: "-apple-system, sans-serif", transition: "background var(--m-base) var(--ease-out)", flexShrink: 0 }}>Restore</button>
               <button onClick={handleDismissAutoRestore} aria-label="Dismiss" style={{ background: "none", border: "none", color: th.textMuted, cursor: "pointer", fontSize: 16, padding: "4px 6px", lineHeight: 1, flexShrink: 0 }}>✕</button>
             </div>
           )}
@@ -4583,7 +4584,7 @@ export default function App() {
                 const newCbf = { ...ct.checkboxFilters }; delete newCbf[filterDropdown.colName]; up("checkboxFilters", newCbf); setFilterDropdown(null);
               }} style={ms.bsm}>Reset</button>
               <button onClick={() => setFilterDropdown(null)} style={ms.bsm}>Cancel</button>
-              <button onClick={applyCheckboxFilter} style={{ padding: "4px 11px", minHeight: 26, background: th.primaryBtn, color: "#fff", border: "none", borderRadius: 4, fontSize: 11, cursor: "pointer", fontFamily: "-apple-system, sans-serif" }}>Apply</button>
+              <button onClick={applyCheckboxFilter} style={{ padding: "4px 11px", minHeight: 26, background: th.primaryBtn, color: th.onPrimary, border: "none", borderRadius: 4, fontSize: 11, cursor: "pointer", fontFamily: "-apple-system, sans-serif" }}>Apply</button>
             </div>
           </div>
         </>
@@ -4624,7 +4625,7 @@ export default function App() {
                 }
                 up("dateRangeFilters", newDrf);
                 setDateRangeDropdown(null);
-              }} style={{ padding: "4px 11px", minHeight: 26, background: th.primaryBtn, color: "#fff", border: "none", borderRadius: 4, fontSize: 11, cursor: "pointer", fontFamily: "-apple-system, sans-serif" }}>Apply</button>
+              }} style={{ padding: "4px 11px", minHeight: 26, background: th.primaryBtn, color: th.onPrimary, border: "none", borderRadius: 4, fontSize: 11, cursor: "pointer", fontFamily: "-apple-system, sans-serif" }}>Apply</button>
             </div>
           </div>
         </>
@@ -4773,7 +4774,7 @@ export default function App() {
       {contextMenu && renderContextPortal(
         <>
           <div onMouseDown={(e) => { if (shouldCloseContextBackdrop(e)) setContextMenu(null); }} onContextMenu={(e) => { e.preventDefault(); }} style={{ position: "fixed", inset: 0, zIndex: 99998 }} />
-          <div onMouseDown={(e) => e.stopPropagation()} onContextMenu={(e) => { e.preventDefault(); e.stopPropagation(); }} style={{ position: "fixed", left: contextMenu.x, top: contextMenu.y, background: isDark ? "rgba(28,31,36,0.97)" : "rgba(252,252,254,0.97)", backdropFilter: "blur(20px) saturate(180%)", WebkitBackdropFilter: "blur(20px) saturate(180%)", border: `1px solid ${isDark ? "rgba(255,255,255,0.12)" : "rgba(0,0,0,0.12)"}`, borderRadius: 10, padding: "5px 0", zIndex: 99999, boxShadow: isDark ? "0 12px 40px rgba(0,0,0,0.55), 0 0 0 0.5px rgba(255,255,255,0.06) inset" : "0 12px 40px rgba(0,0,0,0.18), 0 0 0 0.5px rgba(255,255,255,0.5) inset", minWidth: 200, animation: "tle-modal-in var(--m-fast) var(--ease-out)" }}>
+          <div onMouseDown={(e) => e.stopPropagation()} onContextMenu={(e) => { e.preventDefault(); e.stopPropagation(); }} style={{ position: "fixed", left: contextMenu.x, top: contextMenu.y, background: `${th.modalBg}f7`, backdropFilter: "blur(20px) saturate(180%)", WebkitBackdropFilter: "blur(20px) saturate(180%)", border: `1px solid ${th.modalBorder}`, borderRadius: 10, padding: "5px 0", zIndex: 99999, boxShadow: isDark ? "0 12px 40px rgba(0,0,0,0.55), 0 0 0 0.5px rgba(255,255,255,0.06) inset" : "0 12px 40px rgba(0,0,0,0.18), 0 0 0 0.5px rgba(255,255,255,0.5) inset", minWidth: 200, animation: "tle-modal-in var(--m-fast) var(--ease-out)" }}>
             {[
               ...(contextMenu.colName !== "__tags__" ? [
                 { label: (ct?.pinnedColumns || []).includes(contextMenu.colName) ? "Unpin Column" : "Pin Column",
@@ -4866,7 +4867,7 @@ export default function App() {
       {rowContextMenu && renderContextPortal(
         <>
           <div onMouseDown={(e) => { if (shouldCloseContextBackdrop(e)) setRowContextMenu(null); }} onContextMenu={(e) => { e.preventDefault(); }} style={{ position: "fixed", inset: 0, zIndex: 99998 }} />
-          <div onMouseDown={(e) => e.stopPropagation()} onContextMenu={(e) => { e.preventDefault(); e.stopPropagation(); }} style={{ position: "fixed", left: Math.min(rowContextMenu.x, window.innerWidth - 220), top: Math.min(rowContextMenu.y, window.innerHeight - 300), background: isDark ? "rgba(28,31,36,0.97)" : "rgba(252,252,254,0.97)", backdropFilter: "blur(20px) saturate(180%)", WebkitBackdropFilter: "blur(20px) saturate(180%)", border: `1px solid ${isDark ? "rgba(255,255,255,0.12)" : "rgba(0,0,0,0.12)"}`, borderRadius: 10, padding: "5px 0", zIndex: 99999, boxShadow: isDark ? "0 12px 40px rgba(0,0,0,0.55), 0 0 0 0.5px rgba(255,255,255,0.06) inset" : "0 12px 40px rgba(0,0,0,0.18), 0 0 0 0.5px rgba(255,255,255,0.5) inset", minWidth: 200, animation: "tle-modal-in var(--m-fast) var(--ease-out)" }}>
+          <div onMouseDown={(e) => e.stopPropagation()} onContextMenu={(e) => { e.preventDefault(); e.stopPropagation(); }} style={{ position: "fixed", left: Math.min(rowContextMenu.x, window.innerWidth - 220), top: Math.min(rowContextMenu.y, window.innerHeight - 300), background: `${th.modalBg}f7`, backdropFilter: "blur(20px) saturate(180%)", WebkitBackdropFilter: "blur(20px) saturate(180%)", border: `1px solid ${th.modalBorder}`, borderRadius: 10, padding: "5px 0", zIndex: 99999, boxShadow: isDark ? "0 12px 40px rgba(0,0,0,0.55), 0 0 0 0.5px rgba(255,255,255,0.06) inset" : "0 12px 40px rgba(0,0,0,0.18), 0 0 0 0.5px rgba(255,255,255,0.5) inset", minWidth: 200, animation: "tle-modal-in var(--m-fast) var(--ease-out)" }}>
             {rowContextMenu.cellColumn && (
               <button onClick={() => { copyCell(rowContextMenu.cellValue, rowContextMenu.cellColumn); setRowContextMenu(null); }}
                 onMouseEnter={(e) => { e.currentTarget.style.background = `${th.accent}22`; }}
@@ -4970,7 +4971,7 @@ export default function App() {
                     <span style={{ marginLeft: "auto", color: th.textMuted, fontSize: 11 }}>▸</span>
                   </button>
                   {/* Tags submenu */}
-                  <div data-tag-sub="" style={{ display: "none", position: "absolute", left: "100%", top: -5, background: isDark ? "rgba(28,31,36,0.97)" : "rgba(252,252,254,0.97)", backdropFilter: "blur(20px) saturate(180%)", WebkitBackdropFilter: "blur(20px) saturate(180%)", border: `1px solid ${isDark ? "rgba(255,255,255,0.12)" : "rgba(0,0,0,0.12)"}`, borderRadius: 10, padding: "5px 0", boxShadow: isDark ? "0 12px 40px rgba(0,0,0,0.55), 0 0 0 0.5px rgba(255,255,255,0.06) inset" : "0 12px 40px rgba(0,0,0,0.18), 0 0 0 0.5px rgba(255,255,255,0.5) inset", minWidth: 160, zIndex: 100000 }}>
+                  <div data-tag-sub="" style={{ display: "none", position: "absolute", left: "100%", top: -5, background: `${th.modalBg}f7`, backdropFilter: "blur(20px) saturate(180%)", WebkitBackdropFilter: "blur(20px) saturate(180%)", border: `1px solid ${th.modalBorder}`, borderRadius: 10, padding: "5px 0", boxShadow: isDark ? "0 12px 40px rgba(0,0,0,0.55), 0 0 0 0.5px rgba(255,255,255,0.06) inset" : "0 12px 40px rgba(0,0,0,0.18), 0 0 0 0.5px rgba(255,255,255,0.5) inset", minWidth: 160, zIndex: 100000 }}>
                     {tagEntries.map(([tag, color]) => {
                       const hasTg = rowContextMenu.currentTags.includes(tag);
                       return (
@@ -5093,7 +5094,7 @@ export default function App() {
       {cellContextMenu && renderContextPortal(
         <>
           <div onMouseDown={(e) => { if (shouldCloseContextBackdrop(e)) setCellContextMenu(null); }} onContextMenu={(e) => { e.preventDefault(); }} style={{ position: "fixed", inset: 0, zIndex: 99998 }} />
-          <div onMouseDown={(e) => e.stopPropagation()} onContextMenu={(e) => { e.preventDefault(); e.stopPropagation(); }} style={{ position: "fixed", left: Math.min(cellContextMenu.x, window.innerWidth - 240), top: Math.min(cellContextMenu.y, window.innerHeight - 160), background: isDark ? "rgba(28,31,36,0.97)" : "rgba(252,252,254,0.97)", backdropFilter: "blur(20px) saturate(180%)", WebkitBackdropFilter: "blur(20px) saturate(180%)", border: `1px solid ${isDark ? "rgba(255,255,255,0.12)" : "rgba(0,0,0,0.12)"}`, borderRadius: 10, padding: "5px 0", zIndex: 99999, boxShadow: isDark ? "0 12px 40px rgba(0,0,0,0.55), 0 0 0 0.5px rgba(255,255,255,0.06) inset" : "0 12px 40px rgba(0,0,0,0.18), 0 0 0 0.5px rgba(255,255,255,0.5) inset", minWidth: 200, animation: "tle-modal-in var(--m-fast) var(--ease-out)" }}>
+          <div onMouseDown={(e) => e.stopPropagation()} onContextMenu={(e) => { e.preventDefault(); e.stopPropagation(); }} style={{ position: "fixed", left: Math.min(cellContextMenu.x, window.innerWidth - 240), top: Math.min(cellContextMenu.y, window.innerHeight - 160), background: `${th.modalBg}f7`, backdropFilter: "blur(20px) saturate(180%)", WebkitBackdropFilter: "blur(20px) saturate(180%)", border: `1px solid ${th.modalBorder}`, borderRadius: 10, padding: "5px 0", zIndex: 99999, boxShadow: isDark ? "0 12px 40px rgba(0,0,0,0.55), 0 0 0 0.5px rgba(255,255,255,0.06) inset" : "0 12px 40px rgba(0,0,0,0.18), 0 0 0 0.5px rgba(255,255,255,0.5) inset", minWidth: 200, animation: "tle-modal-in var(--m-fast) var(--ease-out)" }}>
             <div style={{ padding: "4px 14px 2px", color: th.textMuted, fontSize: 10, fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif", textTransform: "uppercase", letterSpacing: "0.06em" }}>Filters</div>
             {[
               { label: `Filter in ${cellContextMenu.cellValue ? String(cellContextMenu.cellValue).slice(0, 40) : "(empty)"}`,

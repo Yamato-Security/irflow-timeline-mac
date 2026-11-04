@@ -5,9 +5,10 @@
 > viewer by Renzon Cruz. It keeps upstream's code, license (Apache-2.0), credits and documentation
 > (all below) and adds:
 >
-> - **Color schemes** — next to **Dark Mode** and **Light Mode**, four seasonal schemes:
->   **Spring** (fresh leaf greens), **Summer** (deep ocean blues), **Autumn** (pumpkin orange and
->   harvest gold on dark brown) and **Winter** (snow white with Christmas red and pine green).
+> - **Color schemes** — next to **Dark Mode** and **Light Mode**, five expressive palettes:
+>   **Spring** (新緑 — fresh leaf greens), **Summer** (beach blue, sunny yellow and orange),
+>   **Autumn** (紅葉 — maple red, copper orange and brown), **Winter** (icy blue and white),
+>   and **Christmas** (a rich red background with evergreen, gold, white and near-black accents).
 >   Pick one from the toolbar's color-scheme dropdown or **Tools → Color Scheme**; the choice is
 >   remembered across launches.
 > - **Unsigned builds from GitHub Actions** — the `Build macOS (unsigned)` workflow builds a

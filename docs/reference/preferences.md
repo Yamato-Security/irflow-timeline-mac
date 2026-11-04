@@ -14,7 +14,7 @@ The settings capsule to the right of **File / View / Actions / Tools / Help** pr
 |---------|----------------|
 | **Datetime format** dropdown | How timestamp columns render in the grid (raw or formatted) |
 | **Timezone** dropdown | Display timezone for timestamps (data in SQLite stays unchanged) |
-| **Color scheme** dropdown | Switch between **Dark Mode**, **Light Mode**, **Spring**, **Summer**, **Autumn** and **Winter** |
+| **Color scheme** dropdown | Switch between **Dark Mode**, **Light Mode**, **Spring**, **Summer**, **Autumn**, **Winter** and **Christmas** |
 | **A − / +** | Decrease or increase grid font size (9–18px) |
 | **Histogram** icon | Show or hide the timeline histogram panel |
 
@@ -89,14 +89,22 @@ There is no `Cmd+T` theme shortcut.
 |--------|------|------|
 | **Dark Mode** (default) | dark | Charcoal background with the Unit 42 orange accent (`#E85D2A`); optimized for long analysis sessions |
 | **Light Mode** | light | White background with the same orange accent; for screen sharing and report preparation |
-| **Spring** | light | Fresh leaf greens on a pale, sunlit background, with a cherry-blossom tint for bookmarks |
-| **Summer** | dark | Deep ocean blues with bright surf, seafoam and sand highlights |
-| **Autumn** | dark | Pumpkin orange and harvest gold on dark roasted browns |
-| **Winter** | light | Snow white and ice with Christmas red, pine green and a little gold |
+| **Spring** | light | 新緑: layers of fresh leaf green, sunlit green panels and forest-green text |
+| **Summer** | light | A beach palette: blue water, sunny yellow controls, orange bookmarks, white rows and near-black text |
+| **Autumn** | dark | 紅葉: maple-red headers, copper-orange highlights and walnut-brown working surfaces |
+| **Winter** | light | Icy blue panels, snow-white rows and pale glacier-blue controls |
+| **Christmas** | dark | Rich red background, evergreen headers, gold buttons with near-black text, and snow-white content |
 
-Every scheme applies consistently across the grid, modals, histogram, analytics panels, scrollbars and all other UI elements, and keeps its text at WCAG AA contrast. Features that only distinguish dark from light (the glass context menus, native form controls, the auto-color palettes) follow the scheme's *base*.
+Shared theme colors apply across the grid, modals, histogram, analytics panels and scrollbars. Text and control contrast is checked by the color-scheme tests. Features that only distinguish dark from light (native form controls and the auto-color palettes) follow the scheme's *base*. User-defined row colors and artifact-specific charts can have their own palettes.
 
 The choice is saved in `ui-prefs.json` in the app's data folder and restored on the next launch; the window is painted in the scheme's background before the interface loads.
+
+### Seasonal colors and readability
+
+The seasonal palettes extend to the timeline, histogram, menus, dialogs, bookmarks and selection highlights. Summer is a **light** scheme; Christmas is separate from the icy Winter scheme. Filled controls use a contrasting foreground, so yellow and pale-blue buttons have dark text. Severity labels keep their usual meanings; decorative colors do not change detection levels or evidence.
+
+The color tests cover text contrast on seasonal panels, inputs and rows, selected/bookmarked rows, and the normal and hover colors of filled controls. The scheme is remembered across launches, including Christmas.
+
 
 ### Histogram
 

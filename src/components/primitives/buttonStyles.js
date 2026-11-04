@@ -1,3 +1,4 @@
+// Modified by Yamato Security, 2026-11-04: use the theme foreground on accent buttons.
 /**
  * Pure style object generator for themed buttons.
  *
@@ -57,7 +58,7 @@ export function buttonStyles(th, { variant = "primary", size = "md", disabled = 
     default:
       variantStyle = {
         background: disabled ? th.btnBg : th.accent,
-        color: disabled ? th.textMuted : "#fff",
+        color: disabled ? th.textMuted : th.onAccent,
         border: "none",
         fontWeight: 600,
       };

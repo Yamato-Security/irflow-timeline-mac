@@ -1,6 +1,7 @@
-// Modified by Yamato Security, 2026-11-04: added the Spring, Summer, Autumn and Winter
-// color schemes, the `base` token on every theme, and the THEME_OPTIONS catalog/helpers
-// that drive the Color Scheme menus (see electron/themes.js for the main-process mirror).
+// Modified by Yamato Security, 2026-11-04: redesigned the seasonal palettes, added Christmas,
+// and defined onAccent/onPrimary foregrounds for readable filled controls. The `base` token
+// and THEME_OPTIONS catalog drive the Color Scheme menus; electron/themes.js is the
+// main-process mirror.
 
 /**
  * Color schemes.
@@ -17,7 +18,7 @@ export const THEMES = {
   dark: {
     base: "dark",
     bg: "#0f1114", bgAlt: "#181b20", bgInput: "#12151a", border: "#2a2d33", borderAccent: "#E85D2A",
-    text: "#e0ddd8", textDim: "#b0aaa4", textMuted: "#948e88", accent: "#E85D2A", accentHover: "#F47B50",
+    text: "#e0ddd8", textDim: "#b0aaa4", textMuted: "#948e88", accent: "#E85D2A", accentHover: "#F47B50", onAccent: "#151311",
     rowOdd: "#141720", rowEven: "#0f1114", headerBg: "#181b20", headerText: "#E85D2A",
     selection: "rgba(232,93,42,0.14)", bookmark: "rgba(232,93,42,0.06)",
     modalBg: "#181b20", modalBorder: "#333639", overlay: "rgba(5,5,8,0.85)",
@@ -26,7 +27,7 @@ export const THEMES = {
     // Unit 42 extended palette
     panelBg: "#0b0d10", cellBorder: "#12151a", accentSubtle: "rgba(232,93,42,0.12)",
     histBar: "#E85D2A", histBarHover: "#F47B50", histGrid: "#1e2028",
-    primaryBtn: "#E85D2A", primaryBtnHover: "#C44D1E",
+    primaryBtn: "#E85D2A", primaryBtnHover: "#F47B50", onPrimary: "#151311",
     toolbarBg: "rgba(24,27,32,0.82)", glassBg: "rgba(255,255,255,0.05)", glassBorder: "rgba(255,255,255,0.08)", glassHover: "rgba(255,255,255,0.10)",
     // Severity palette — used by SUS_COLORS, INT_COLOR, PI_SEV_COLORS, IOC verdicts.
     // Distinct from brand `accent` (which is #E85D2A): severity needs cooler reds, deeper amber, etc.
@@ -35,7 +36,7 @@ export const THEMES = {
   light: {
     base: "light",
     bg: "#ffffff", bgAlt: "#f7f5f3", bgInput: "#ffffff", border: "#e0dbd6", borderAccent: "#B84317",
-    text: "#1c1917", textDim: "#554f4a", textMuted: "#6f6862", accent: "#B84317", accentHover: "#963512",
+    text: "#1c1917", textDim: "#554f4a", textMuted: "#6f6862", accent: "#B84317", accentHover: "#963512", onAccent: "#ffffff",
     rowOdd: "#faf8f6", rowEven: "#ffffff", headerBg: "#f7f5f3", headerText: "#B84317",
     selection: "rgba(232,93,42,0.10)", bookmark: "rgba(232,93,42,0.06)",
     modalBg: "#ffffff", modalBorder: "#e0dbd6", overlay: "rgba(28,25,23,0.5)",
@@ -44,76 +45,94 @@ export const THEMES = {
     // Unit 42 extended palette
     panelBg: "#f0ebe6", cellBorder: "#ebe6e0", accentSubtle: "rgba(232,93,42,0.08)",
     histBar: "#B84317", histBarHover: "#963512", histGrid: "#e0dbd6",
-    primaryBtn: "#B84317", primaryBtnHover: "#963512",
+    primaryBtn: "#B84317", primaryBtnHover: "#963512", onPrimary: "#ffffff",
     toolbarBg: "rgba(247,245,243,0.82)", glassBg: "rgba(0,0,0,0.03)", glassBorder: "rgba(0,0,0,0.06)", glassHover: "rgba(0,0,0,0.08)",
     sev: { critical: "#dc2626", high: "#cc4400", med: "#92400e", low: "#554f4a", custom: "#6d28d9", clean: "#15803d", info: "#1d4ed8" },
   },
   // ── Seasonal schemes ─────────────────────────────────────────────────────────
-  // Spring — new leaves on a pale, sunlit background; a touch of cherry blossom for
-  // bookmarks and custom tags.
+  // Spring / 新緑 — sun through young leaves: layered greens, not blossom pink.
   spring: {
     base: "light",
-    bg: "#f6fbf3", bgAlt: "#e9f4e3", bgInput: "#ffffff", border: "#c9dfc0", borderAccent: "#2e8b3d",
-    text: "#172315", textDim: "#3d5739", textMuted: "#53704f", accent: "#2e8b3d", accentHover: "#246f31",
-    rowOdd: "#eff7ea", rowEven: "#f6fbf3", headerBg: "#e3f0dc", headerText: "#1f6e36",
-    selection: "rgba(46,139,61,0.16)", bookmark: "rgba(217,83,138,0.10)",
-    modalBg: "#ffffff", modalBorder: "#c9dfc0", overlay: "rgba(23,35,21,0.5)",
-    success: "#1f7a33", warning: "#9a6200", danger: "#bf3a2b",
-    btnBg: "#e9f4e3", btnBorder: "#c9dfc0",
-    panelBg: "#e9f4e3", cellBorder: "#dcebd5", accentSubtle: "rgba(46,139,61,0.12)",
-    histBar: "#3fa34d", histBarHover: "#2e8b3d", histGrid: "#d6e8cf",
-    primaryBtn: "#2e8b3d", primaryBtnHover: "#246f31",
-    toolbarBg: "rgba(233,244,227,0.85)", glassBg: "rgba(46,139,61,0.05)", glassBorder: "rgba(46,139,61,0.14)", glassHover: "rgba(46,139,61,0.10)",
-    sev: { critical: "#b3261e", high: "#b9410a", med: "#8a5a00", low: "#5b6b5a", custom: "#b4336f", clean: "#1f7a33", info: "#1f5fa8" },
+    bg: "#f0f7e8", bgAlt: "#dfedcc", bgInput: "#fbfff6", border: "#b2c792", borderAccent: "#427a25",
+    text: "#18351c", textDim: "#345536", textMuted: "#49633c", accent: "#2c641b", accentHover: "#214f14", onAccent: "#ffffff",
+    rowOdd: "#e6f1d9", rowEven: "#f0f7e8", headerBg: "#c9e2a7", headerText: "#244d16",
+    selection: "rgba(77,128,36,0.18)", bookmark: "rgba(150,177,45,0.15)",
+    modalBg: "#f4faec", modalBorder: "#a3bd7f", overlay: "rgba(18,40,20,0.50)",
+    success: "#286131", warning: "#835400", danger: "#b4342c",
+    btnBg: "#e3efd2", btnBorder: "#a3bd7f",
+    panelBg: "#d3e9b4", cellBorder: "#d2e3bf", accentSubtle: "rgba(66,122,37,0.12)",
+    histBar: "#55902a", histBarHover: "#337319", histGrid: "#b4ce99",
+    primaryBtn: "#366e20", primaryBtnHover: "#285619", onPrimary: "#ffffff",
+    toolbarBg: "rgba(201,226,167,0.96)", glassBg: "rgba(255,255,255,0.28)", glassBorder: "rgba(48,90,26,0.18)", glassHover: "rgba(66,122,37,0.12)",
+    sev: { critical: "#b3261e", high: "#a9430a", med: "#815500", low: "#506149", custom: "#71509b", clean: "#286131", info: "#235c88" },
   },
-  // Summer — deep ocean water with bright surf, seafoam and sand.
+  // Summer — a sunlit beach: surf-blue tables, sand-yellow chrome, orange bookmarks
+  // and near-black ink. A light scheme, with warm and cool colors in separate roles.
   summer: {
-    base: "dark",
-    bg: "#06192b", bgAlt: "#0b2540", bgInput: "#082036", border: "#164366", borderAccent: "#22b8e6",
-    text: "#e6f4fb", textDim: "#a9cde0", textMuted: "#7fa8c0", accent: "#22b8e6", accentHover: "#5ad0f5",
-    rowOdd: "#09213a", rowEven: "#06192b", headerBg: "#0b2540", headerText: "#4fd1ff",
-    selection: "rgba(34,184,230,0.16)", bookmark: "rgba(245,199,106,0.10)",
-    modalBg: "#0b2540", modalBorder: "#1b4d75", overlay: "rgba(2,10,20,0.85)",
-    success: "#3ddc97", warning: "#f5c76a", danger: "#ff6b6b",
-    btnBg: "#10304d", btnBorder: "#1b4d75",
-    panelBg: "#04121f", cellBorder: "#0d2a45", accentSubtle: "rgba(34,184,230,0.12)",
-    histBar: "#22b8e6", histBarHover: "#5ad0f5", histGrid: "#123a5a",
-    primaryBtn: "#1aa3d1", primaryBtnHover: "#22b8e6",
-    toolbarBg: "rgba(11,37,64,0.82)", glassBg: "rgba(120,200,255,0.06)", glassBorder: "rgba(120,200,255,0.12)", glassHover: "rgba(120,200,255,0.12)",
-    sev: { critical: "#ff6b6b", high: "#ff9f43", med: "#f5c76a", low: "#8fb3c9", custom: "#c792ea", clean: "#3ddc97", info: "#4fd1ff" },
+    base: "light",
+    bg: "#f4fbff", bgAlt: "#e0f3ff", bgInput: "#ffffff", border: "#afcfdd", borderAccent: "#c75a12",
+    text: "#101b24", textDim: "#304e5c", textMuted: "#48616a", accent: "#00699b", accentHover: "#00517d", onAccent: "#ffffff",
+    rowOdd: "#eaf7ff", rowEven: "#ffffff", headerBg: "#ccecff", headerText: "#064964",
+    selection: "rgba(0,105,155,0.14)", bookmark: "rgba(234,122,34,0.17)",
+    modalBg: "#f8fcff", modalBorder: "#9bbdce", overlay: "rgba(8,36,54,0.48)",
+    success: "#196b47", warning: "#936000", danger: "#c43a1c",
+    btnBg: "#ffdf73", btnBorder: "#c39d2b",
+    panelBg: "#fff0bd", cellBorder: "#d8eaf2", accentSubtle: "rgba(0,105,155,0.10)",
+    histBar: "#007fba", histBarHover: "#005f98", histGrid: "#d7cc9e",
+    primaryBtn: "#ffc947", primaryBtnHover: "#ffb737", onPrimary: "#171c20",
+    toolbarBg: "rgba(255,226,139,0.97)", glassBg: "rgba(255,255,255,0.32)", glassBorder: "rgba(72,74,40,0.18)", glassHover: "rgba(210,112,18,0.12)",
+    sev: { critical: "#c02b25", high: "#b94d0c", med: "#876000", low: "#48616a", custom: "#74519b", clean: "#196b47", info: "#00699b" },
   },
-  // Autumn — pumpkin orange and harvest gold on dark roasted browns, with a Halloween
-  // purple for custom tags.
+  // Autumn / 紅葉 — maple red and copper-orange against walnut and chestnut.
+  // Keep the working surface dark, with red headers and brighter amber controls.
   autumn: {
     base: "dark",
-    bg: "#1a110b", bgAlt: "#251911", bgInput: "#1f140d", border: "#3d2a1c", borderAccent: "#ff7a1a",
-    text: "#f5e9d8", textDim: "#d2b89a", textMuted: "#ab8d6b", accent: "#ff7a1a", accentHover: "#ff9640",
-    rowOdd: "#20150e", rowEven: "#1a110b", headerBg: "#251911", headerText: "#ff8c33",
-    selection: "rgba(255,122,26,0.16)", bookmark: "rgba(230,168,35,0.10)",
-    modalBg: "#251911", modalBorder: "#4a3322", overlay: "rgba(10,6,3,0.85)",
-    success: "#8fbf3f", warning: "#e6a823", danger: "#e5484d",
-    btnBg: "#2e1f15", btnBorder: "#4a3322",
-    panelBg: "#140d08", cellBorder: "#2a1c12", accentSubtle: "rgba(255,122,26,0.12)",
-    histBar: "#ff7a1a", histBarHover: "#ff9640", histGrid: "#33231a",
-    primaryBtn: "#e0680f", primaryBtnHover: "#ff7a1a",
-    toolbarBg: "rgba(37,25,17,0.82)", glassBg: "rgba(255,170,90,0.06)", glassBorder: "rgba(255,170,90,0.12)", glassHover: "rgba(255,170,90,0.12)",
-    sev: { critical: "#e5484d", high: "#ff7a1a", med: "#e6a823", low: "#a68b6f", custom: "#b388eb", clean: "#8fbf3f", info: "#8fb4d9" },
+    bg: "#281810", bgAlt: "#382218", bgInput: "#20120d", border: "#73482f", borderAccent: "#ee7547",
+    text: "#fff1df", textDim: "#e8ceb5", textMuted: "#cfb496", accent: "#ffb45c", accentHover: "#ffc982", onAccent: "#23150c",
+    rowOdd: "#302015", rowEven: "#281810", headerBg: "#5c251c", headerText: "#ffdb9c",
+    selection: "rgba(255,154,94,0.19)", bookmark: "rgba(220,75,49,0.20)",
+    modalBg: "#382218", modalBorder: "#855537", overlay: "rgba(15,8,5,0.83)",
+    success: "#b7d386", warning: "#f2cf79", danger: "#ffa49a",
+    btnBg: "#512d1d", btnBorder: "#855537",
+    panelBg: "#431d16", cellBorder: "#442c1d", accentSubtle: "rgba(244,139,64,0.14)",
+    histBar: "#f48b40", histBarHover: "#ffc16e", histGrid: "#72432d",
+    primaryBtn: "#eaa14d", primaryBtnHover: "#ffb963", onPrimary: "#23150c",
+    toolbarBg: "rgba(92,37,28,0.96)", glassBg: "rgba(255,198,123,0.06)", glassBorder: "rgba(255,198,123,0.18)", glassHover: "rgba(255,171,90,0.13)",
+    sev: { critical: "#ff9186", high: "#ffb05e", med: "#f2cf79", low: "#cfb496", custom: "#e5b39a", clean: "#b7d386", info: "#b8d8d6" },
   },
-  // Winter — fresh snow and ice with Christmas red, pine green and a little gold.
+  // Winter — blue ice, snow-white rows and pale glacier-blue controls. Christmas
+  // has its own scheme below; red and green here are reserved for status meanings.
   winter: {
     base: "light",
-    bg: "#fbfdff", bgAlt: "#eef4fa", bgInput: "#ffffff", border: "#cfdceb", borderAccent: "#c41e3a",
-    text: "#15202b", textDim: "#3d4f61", textMuted: "#56687a", accent: "#c41e3a", accentHover: "#a3172f",
-    rowOdd: "#f3f7fb", rowEven: "#fbfdff", headerBg: "#e4efe8", headerText: "#146b3a",
-    selection: "rgba(20,107,58,0.14)", bookmark: "rgba(196,30,58,0.08)",
-    modalBg: "#ffffff", modalBorder: "#cfdceb", overlay: "rgba(21,32,43,0.5)",
-    success: "#146b3a", warning: "#9c6a00", danger: "#b3122e",
-    btnBg: "#eef4fa", btnBorder: "#cfdceb",
-    panelBg: "#eef4fa", cellBorder: "#e1eaf3", accentSubtle: "rgba(196,30,58,0.08)",
-    histBar: "#146b3a", histBarHover: "#0f5a30", histGrid: "#d9e4ee",
-    primaryBtn: "#c41e3a", primaryBtnHover: "#a3172f",
-    toolbarBg: "rgba(238,244,250,0.85)", glassBg: "rgba(20,60,120,0.04)", glassBorder: "rgba(20,60,120,0.10)", glassHover: "rgba(20,60,120,0.08)",
-    sev: { critical: "#b3122e", high: "#b9410a", med: "#8a5a00", low: "#56687a", custom: "#6f3bb0", clean: "#146b3a", info: "#1d5fb4" },
+    bg: "#f4fbff", bgAlt: "#e3f3fc", bgInput: "#ffffff", border: "#b1cedf", borderAccent: "#6baccd",
+    text: "#183749", textDim: "#365568", textMuted: "#456478", accent: "#16678d", accentHover: "#0a5276", onAccent: "#ffffff",
+    rowOdd: "#ecf7fd", rowEven: "#ffffff", headerBg: "#d0eafa", headerText: "#24536e",
+    selection: "rgba(66,139,185,0.18)", bookmark: "rgba(120,187,227,0.18)",
+    modalBg: "#f8fcff", modalBorder: "#a6c8dc", overlay: "rgba(19,46,66,0.43)",
+    success: "#276f62", warning: "#856000", danger: "#b33445",
+    btnBg: "#ebf8ff", btnBorder: "#a6c8dc",
+    panelBg: "#dff2ff", cellBorder: "#d5e9f5", accentSubtle: "rgba(65,141,183,0.10)",
+    histBar: "#418db7", histBarHover: "#22688c", histGrid: "#b6d6e9",
+    primaryBtn: "#b8e5fa", primaryBtnHover: "#9ddaf5", onPrimary: "#163e52",
+    toolbarBg: "rgba(218,239,252,0.96)", glassBg: "rgba(255,255,255,0.42)", glassBorder: "rgba(37,95,132,0.16)", glassHover: "rgba(77,153,199,0.12)",
+    sev: { critical: "#b33445", high: "#ad4c17", med: "#856000", low: "#456478", custom: "#685895", clean: "#276f62", info: "#16678d" },
+  },
+  // Christmas — a rich red workspace with evergreen headers, gold controls and
+  // snow-white text; near-black ink keeps the yellow buttons readable.
+  christmas: {
+    base: "dark",
+    bg: "#680f23", bgAlt: "#7e1730", bgInput: "#510d1c", border: "#a94759", borderAccent: "#ffe083",
+    text: "#fffdf3", textDim: "#ffe6dc", textMuted: "#f3cabf", accent: "#ffe083", accentHover: "#fff0b9", onAccent: "#1c1710",
+    rowOdd: "#73172b", rowEven: "#680f23", headerBg: "#15593d", headerText: "#fff1b3",
+    selection: "rgba(255,224,131,0.16)", bookmark: "rgba(141,219,154,0.16)",
+    modalBg: "#73172b", modalBorder: "#bd6172", overlay: "rgba(20,6,10,0.82)",
+    success: "#b2e59c", warning: "#ffdf76", danger: "#ffc0b8",
+    btnBg: "#164f37", btnBorder: "#448d68",
+    panelBg: "#520a1c", cellBorder: "#863247", accentSubtle: "rgba(255,224,131,0.12)",
+    histBar: "#8cdb9a", histBarHover: "#b4efb8", histGrid: "#9c4154",
+    primaryBtn: "#ffe083", primaryBtnHover: "#fff0b9", onPrimary: "#1c1710",
+    toolbarBg: "rgba(116,18,43,0.97)", glassBg: "rgba(255,242,211,0.06)", glassBorder: "rgba(255,224,131,0.22)", glassHover: "rgba(255,224,131,0.12)",
+    sev: { critical: "#ffc0b8", high: "#ffc280", med: "#ffe083", low: "#e4c7cc", custom: "#e2cafa", clean: "#b2e59c", info: "#b5e2ff" },
   },
 };
 
@@ -126,10 +145,11 @@ export const DEFAULT_THEME = "dark";
 export const THEME_OPTIONS = [
   { id: "dark", label: "Dark Mode", icon: "🌙", description: "Charcoal with the orange accent (default)" },
   { id: "light", label: "Light Mode", icon: "☀️", description: "White with the orange accent" },
-  { id: "spring", label: "Spring", icon: "🌱", description: "Fresh leaf greens on a pale background" },
-  { id: "summer", label: "Summer", icon: "🌊", description: "Deep ocean blues with bright surf" },
-  { id: "autumn", label: "Autumn", icon: "🍂", description: "Pumpkin orange and harvest gold on dark brown" },
-  { id: "winter", label: "Winter", icon: "🎄", description: "Snow white with Christmas red and pine green" },
+  { id: "spring", label: "Spring", icon: "🌱", description: "Sunlit new leaves — layered fresh greens" },
+  { id: "summer", label: "Summer", icon: "🌊", description: "Beach blue, sunny yellow, warm orange and white" },
+  { id: "autumn", label: "Autumn", icon: "🍂", description: "Maple red, copper orange and warm brown" },
+  { id: "winter", label: "Winter", icon: "❄️", description: "Snow white and pale glacier blue" },
+  { id: "christmas", label: "Christmas", icon: "🎄", description: "Festive red, evergreen, gold and snow white" },
 ];
 
 export const THEME_IDS = THEME_OPTIONS.map((option) => option.id);
@@ -147,4 +167,15 @@ export function resolveTheme(name) {
 /** Whether `name` resolves to a dark-based scheme. */
 export function isDarkTheme(name) {
   return resolveTheme(name).base === "dark";
+}
+
+/** Build once per histogram render; interpolate the theme's two density endpoints. */
+export function createHistogramColorScale(theme) {
+  const rgb = (hex) => hex.match(/[0-9a-f]{2}/gi).map((part) => parseInt(part, 16));
+  const low = rgb(theme.histBar);
+  const high = rgb(theme.histBarHover);
+  return (ratio) => {
+    const t = Math.max(0, Math.min(1, ratio));
+    return `rgb(${low.map((channel, i) => Math.round(channel + (high[i] - channel) * t)).join(",")})`;
+  };
 }

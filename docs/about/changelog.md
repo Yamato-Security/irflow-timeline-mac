@@ -4,6 +4,14 @@ description: IRFlow Timeline changelog — version history, new features, perfor
 
 # Changelog
 
+## Unreleased — Seasonal palettes
+
+- Rework **Spring** around 新緑 (fresh green leaves), **Summer** around a bright beach palette, **Autumn** around 紅葉 (red and orange maple leaves on brown), and **Winter** around pale blue ice and white snow
+- Add a separate **Christmas** scheme with a rich red background, green headers, gold controls, white content and near-black button text
+- Summer now uses a light base; existing saved Summer preferences pick up the redesigned palette
+- Histogram bars and context menus follow the selected scheme. Filled controls use contrasting text instead of always assuming white
+- Extend contrast checks to seasonal surfaces, selections and button states; verify Christmas is preserved across launches
+
 ## v1.0.14 — Yamato Security fork
 
 `irflow-timeline-mac` is Yamato Security's fork of r3nzsec/irflow-timeline. First fork release; changes on top of upstream v1.0.13:
