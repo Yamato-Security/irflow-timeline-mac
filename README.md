@@ -5,10 +5,11 @@
 > viewer by Renzon Cruz. It keeps upstream's code, license (Apache-2.0), credits and documentation
 > (all below) and adds:
 >
-> - **Color schemes** — next to **Dark Mode** and **Light Mode**, five expressive palettes:
+> - **Color schemes** — **Dark Mode** and a refined **Light Mode** (soft gray and white,
+>   navy text, teal and blue accents), plus five expressive palettes:
 >   **Spring** (新緑 — fresh leaf greens), **Summer** (beach blue, sunny yellow and orange),
 >   **Autumn** (紅葉 — maple red, copper orange and brown), **Winter** (icy blue and white),
->   and **Christmas** (a rich red background with evergreen, gold, white and near-black accents).
+>   and **Christmas** (bold Christmas red, bright green, gold, white and near-black accents).
 >   Pick one from the toolbar's color-scheme dropdown or **Tools → Color Scheme**; the choice is
 >   remembered across launches.
 > - **Unsigned builds from GitHub Actions** — the `Build macOS (unsigned)` workflow builds a

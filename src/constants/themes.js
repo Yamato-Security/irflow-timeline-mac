@@ -35,19 +35,20 @@ export const THEMES = {
   },
   light: {
     base: "light",
-    bg: "#ffffff", bgAlt: "#f7f5f3", bgInput: "#ffffff", border: "#e0dbd6", borderAccent: "#B84317",
-    text: "#1c1917", textDim: "#554f4a", textMuted: "#6f6862", accent: "#B84317", accentHover: "#963512", onAccent: "#ffffff",
-    rowOdd: "#faf8f6", rowEven: "#ffffff", headerBg: "#f7f5f3", headerText: "#B84317",
-    selection: "rgba(232,93,42,0.10)", bookmark: "rgba(232,93,42,0.06)",
-    modalBg: "#ffffff", modalBorder: "#e0dbd6", overlay: "rgba(28,25,23,0.5)",
-    success: "#15803d", warning: "#9A5B00", danger: "#dc2626",
-    btnBg: "#f0ebe6", btnBorder: "#e0dbd6",
-    // Unit 42 extended palette
-    panelBg: "#f0ebe6", cellBorder: "#ebe6e0", accentSubtle: "rgba(232,93,42,0.08)",
-    histBar: "#B84317", histBarHover: "#963512", histGrid: "#e0dbd6",
-    primaryBtn: "#B84317", primaryBtnHover: "#963512", onPrimary: "#ffffff",
-    toolbarBg: "rgba(247,245,243,0.82)", glassBg: "rgba(0,0,0,0.03)", glassBorder: "rgba(0,0,0,0.06)", glassHover: "rgba(0,0,0,0.08)",
-    sev: { critical: "#dc2626", high: "#cc4400", med: "#92400e", low: "#554f4a", custom: "#6d28d9", clean: "#15803d", info: "#1d4ed8" },
+    // A neutral workspace: soft gray chrome, white paper, navy ink and restrained
+    // teal/blue controls. Amber bookmarks stay distinct from blue selections.
+    bg: "#f5f7fa", bgAlt: "#edf2f7", bgInput: "#ffffff", border: "#c4cfdc", borderAccent: "#2563a6",
+    text: "#172536", textDim: "#34465b", textMuted: "#506176", accent: "#0b6274", accentHover: "#084b5c", onAccent: "#ffffff",
+    rowOdd: "#f4f7fb", rowEven: "#ffffff", headerBg: "#e2eaf3", headerText: "#233e5b",
+    selection: "rgba(37,99,166,0.14)", bookmark: "rgba(210,144,24,0.13)",
+    modalBg: "#ffffff", modalBorder: "#b7c5d5", overlay: "rgba(19,35,54,0.42)",
+    success: "#187345", warning: "#925800", danger: "#c12c3e",
+    btnBg: "#f8fafc", btnBorder: "#aebed0",
+    panelBg: "#eaf0f6", cellBorder: "#e1e7ef", accentSubtle: "rgba(11,98,116,0.08)",
+    histBar: "#337f9a", histBarHover: "#175c7a", histGrid: "#c4d0de",
+    primaryBtn: "#2563a6", primaryBtnHover: "#1c4e86", onPrimary: "#ffffff",
+    toolbarBg: "rgba(237,242,247,0.97)", glassBg: "rgba(255,255,255,0.55)", glassBorder: "rgba(48,74,105,0.16)", glassHover: "rgba(37,99,166,0.08)",
+    sev: { critical: "#bd2035", high: "#b04b0a", med: "#895900", low: "#506176", custom: "#7045a2", clean: "#187345", info: "#2563a6" },
   },
   // ── Seasonal schemes ─────────────────────────────────────────────────────────
   // Spring / 新緑 — sun through young leaves: layered greens, not blossom pink.
@@ -117,22 +118,22 @@ export const THEMES = {
     toolbarBg: "rgba(218,239,252,0.96)", glassBg: "rgba(255,255,255,0.42)", glassBorder: "rgba(37,95,132,0.16)", glassHover: "rgba(77,153,199,0.12)",
     sev: { critical: "#b33445", high: "#ad4c17", med: "#856000", low: "#456478", custom: "#685895", clean: "#276f62", info: "#16678d" },
   },
-  // Christmas — a rich red workspace with evergreen headers, gold controls and
-  // snow-white text; near-black ink keeps the yellow buttons readable.
+  // Christmas — saturated Santa red, holly-green headers, vivid green histogram
+  // bars and gold controls. White text and darkened row highlights keep it readable.
   christmas: {
     base: "dark",
-    bg: "#680f23", bgAlt: "#7e1730", bgInput: "#510d1c", border: "#a94759", borderAccent: "#ffe083",
-    text: "#fffdf3", textDim: "#ffe6dc", textMuted: "#f3cabf", accent: "#ffe083", accentHover: "#fff0b9", onAccent: "#1c1710",
-    rowOdd: "#73172b", rowEven: "#680f23", headerBg: "#15593d", headerText: "#fff1b3",
-    selection: "rgba(255,224,131,0.16)", bookmark: "rgba(141,219,154,0.16)",
-    modalBg: "#73172b", modalBorder: "#bd6172", overlay: "rgba(20,6,10,0.82)",
-    success: "#b2e59c", warning: "#ffdf76", danger: "#ffc0b8",
-    btnBg: "#164f37", btnBorder: "#448d68",
-    panelBg: "#520a1c", cellBorder: "#863247", accentSubtle: "rgba(255,224,131,0.12)",
-    histBar: "#8cdb9a", histBarHover: "#b4efb8", histGrid: "#9c4154",
-    primaryBtn: "#ffe083", primaryBtnHover: "#fff0b9", onPrimary: "#1c1710",
-    toolbarBg: "rgba(116,18,43,0.97)", glassBg: "rgba(255,242,211,0.06)", glassBorder: "rgba(255,224,131,0.22)", glassHover: "rgba(255,224,131,0.12)",
-    sev: { critical: "#ffc0b8", high: "#ffc280", med: "#ffe083", low: "#e4c7cc", custom: "#e2cafa", clean: "#b2e59c", info: "#b5e2ff" },
+    bg: "#b00016", bgAlt: "#c60820", bgInput: "#a00012", border: "#e65460", borderAccent: "#ffe052",
+    text: "#ffffff", textDim: "#fff9ef", textMuted: "#fff0df", accent: "#fff06a", accentHover: "#fff9b0", onAccent: "#181b12",
+    rowOdd: "#a60013", rowEven: "#b00016", headerBg: "#007c2e", headerText: "#ffffff",
+    selection: "rgba(25,0,5,0.30)", bookmark: "rgba(0,48,16,0.32)",
+    modalBg: "#b00016", modalBorder: "#ee6570", overlay: "rgba(25,4,8,0.80)",
+    success: "#50f07d", warning: "#ffe052", danger: "#ffd0d0",
+    btnBg: "#00752b", btnBorder: "#2bd45d",
+    panelBg: "#a50013", cellBorder: "#ce3646", accentSubtle: "rgba(255,224,82,0.10)",
+    histBar: "#24dc58", histBarHover: "#7aff9b", histGrid: "#d64a59",
+    primaryBtn: "#ffe052", primaryBtnHover: "#fff19a", onPrimary: "#181b12",
+    toolbarBg: "rgba(208,16,36,0.97)", glassBg: "rgba(255,255,255,0.06)", glassBorder: "rgba(255,224,82,0.32)", glassHover: "rgba(0,0,0,0.12)",
+    sev: { critical: "#ffd0d0", high: "#ffdc9a", med: "#ffe052", low: "#fff0df", custom: "#f1daff", clean: "#50f07d", info: "#cbecff" },
   },
 };
 
@@ -144,12 +145,12 @@ export const DEFAULT_THEME = "dark";
  */
 export const THEME_OPTIONS = [
   { id: "dark", label: "Dark Mode", icon: "🌙", description: "Charcoal with the orange accent (default)" },
-  { id: "light", label: "Light Mode", icon: "☀️", description: "White with the orange accent" },
+  { id: "light", label: "Light Mode", icon: "☀️", description: "Soft gray and white, navy text, teal and blue accents" },
   { id: "spring", label: "Spring", icon: "🌱", description: "Sunlit new leaves — layered fresh greens" },
   { id: "summer", label: "Summer", icon: "🌊", description: "Beach blue, sunny yellow, warm orange and white" },
   { id: "autumn", label: "Autumn", icon: "🍂", description: "Maple red, copper orange and warm brown" },
   { id: "winter", label: "Winter", icon: "❄️", description: "Snow white and pale glacier blue" },
-  { id: "christmas", label: "Christmas", icon: "🎄", description: "Festive red, evergreen, gold and snow white" },
+  { id: "christmas", label: "Christmas", icon: "🎄", description: "Bold Christmas red, bright green, gold and white" },
 ];
 
 export const THEME_IDS = THEME_OPTIONS.map((option) => option.id);

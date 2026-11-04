@@ -88,12 +88,12 @@ There is no `Cmd+T` theme shortcut.
 | Scheme | Base | Look |
 |--------|------|------|
 | **Dark Mode** (default) | dark | Charcoal background with the Unit 42 orange accent (`#E85D2A`); optimized for long analysis sessions |
-| **Light Mode** | light | White background with the same orange accent; for screen sharing and report preparation |
+| **Light Mode** | light | Soft gray chrome, white rows, navy text, teal and blue controls, blue selections and amber bookmarks |
 | **Spring** | light | 新緑: layers of fresh leaf green, sunlit green panels and forest-green text |
 | **Summer** | light | A beach palette: blue water, sunny yellow controls, orange bookmarks, white rows and near-black text |
 | **Autumn** | dark | 紅葉: maple-red headers, copper-orange highlights and walnut-brown working surfaces |
 | **Winter** | light | Icy blue panels, snow-white rows and pale glacier-blue controls |
-| **Christmas** | dark | Rich red background, evergreen headers, gold buttons with near-black text, and snow-white content |
+| **Christmas** | dark | Bold Christmas-red surfaces, holly-green headers, bright green histogram bars, gold buttons with near-black text, and white content |
 
 Shared theme colors apply across the grid, modals, histogram, analytics panels and scrollbars. Text and control contrast is checked by the color-scheme tests. Features that only distinguish dark from light (native form controls and the auto-color palettes) follow the scheme's *base*. User-defined row colors and artifact-specific charts can have their own palettes.
 
@@ -103,7 +103,7 @@ The choice is saved in `ui-prefs.json` in the app's data folder and restored on 
 
 The seasonal palettes extend to the timeline, histogram, menus, dialogs, bookmarks and selection highlights. Summer is a **light** scheme; Christmas is separate from the icy Winter scheme. Filled controls use a contrasting foreground, so yellow and pale-blue buttons have dark text. Severity labels keep their usual meanings; decorative colors do not change detection levels or evidence.
 
-The color tests cover text contrast on seasonal panels, inputs and rows, selected/bookmarked rows, and the normal and hover colors of filled controls. The scheme is remembered across launches, including Christmas.
+Light Mode uses neutral surfaces for long reading sessions, with separate colors for selections, bookmarks and controls. The color tests cover text contrast on Light Mode and seasonal panels, inputs and rows, selected/bookmarked rows, and the normal and hover colors of filled controls. The scheme is remembered across launches, including Light Mode and Christmas.
 
 
 ### Histogram

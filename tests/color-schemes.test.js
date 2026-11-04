@@ -105,6 +105,8 @@ test("ui-prefs store round-trips the scheme and sanitizes missing, corrupt and u
     assert.deepEqual(createUiPrefsStore(file).load(), { themeName: "autumn" }, "a fresh store reads it back");
     assert.deepEqual(store.save({ themeName: "christmas" }), { themeName: "christmas" });
     assert.deepEqual(createUiPrefsStore(file).load(), { themeName: "christmas" });
+    assert.deepEqual(store.save({ themeName: "light" }), { themeName: "light" });
+    assert.deepEqual(createUiPrefsStore(file).load(), { themeName: "light" });
     assert.deepEqual(store.save({ themeName: "neon" }), { themeName: "dark" }, "unknown schemes fall back to the default");
     fs.writeFileSync(file, "{ not json", "utf8");
     assert.deepEqual(store.load(), { themeName: "dark" }, "corrupt file → defaults");
@@ -170,20 +172,24 @@ test("no renderer code branches on the scheme name — only on base/isDark", () 
 });
 
 
-test("seasonal text stays readable on panels, controls and selected/bookmarked rows", async () => {
+test("light and seasonal text stays readable on panels, controls and selected/bookmarked rows", async () => {
   const { THEMES } = await themesModule();
   const composite = (rgba, background) => {
     const [r, g, b, a] = rgba.match(/[\d.]+/g).map(Number);
     const under = background.match(/[0-9a-f]{2}/gi).map((part) => parseInt(part, 16));
     return "#" + [r, g, b].map((v, i) => Math.round(v * a + under[i] * (1 - a)).toString(16).padStart(2, "0")).join("");
   };
-  for (const name of ["spring", "summer", "autumn", "winter", "christmas"]) {
+  for (const name of ["light", "spring", "summer", "autumn", "winter", "christmas"]) {
     const th = THEMES[name];
     for (const surface of ["bg", "bgAlt", "bgInput", "modalBg", "rowOdd", "rowEven", "panelBg", "btnBg", "headerBg"]) {
       for (const foreground of ["text", "textDim", "textMuted", "accent"]) {
         const ratio = contrast(th[foreground], th[surface]);
         assert.ok(ratio >= 4.5, `${name}: ${foreground} on ${surface}: ${ratio.toFixed(2)}`);
       }
+    }
+    for (const foreground of ["text", "textDim", "textMuted", "accent"]) {
+      const ratio = contrast(th[foreground], composite(th.toolbarBg, th.bg));
+      assert.ok(ratio >= 4.5, `${name}: ${foreground} on toolbar: ${ratio.toFixed(2)}`);
     }
     for (const row of [th.rowOdd, th.rowEven]) {
       for (const highlight of [th.selection, th.bookmark]) {
