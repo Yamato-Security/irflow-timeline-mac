@@ -134,7 +134,8 @@ test("Color Scheme menu, toolbar picker, preload and main process are wired toge
   assert.match(main, /safeHandle\("get-ui-prefs"/);
   assert.match(main, /safeHandle\("set-theme-preference"/);
   assert.match(main, /backgroundColor: windowBackgroundFor\(uiPrefs\.load\(\)\.themeName\)/);
-  assert.match(main, /currentTheme: uiPrefs\.load\(\)\.themeName, applyTheme/);
+  assert.match(main, /getCurrentTheme: \(\) => uiPrefs\.load\(\)\.themeName, applyTheme/);
+  assert.match(menu, /const currentTheme = typeof getCurrentTheme === "function" \? getCurrentTheme\(\) : DEFAULT_THEME/);
   assert.match(main, /safeSend\("set-theme", prefs\.themeName\)/, "menu-initiated changes reach the renderer");
 
   const app = read("src/App.jsx");

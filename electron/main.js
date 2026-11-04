@@ -634,7 +634,7 @@ function buildMenu() {
     mainWindow, loadRecentFiles: _loadRecentFiles, saveRecentFiles: _saveRecentFiles,
     enqueueImport, safeSend, activeWindow: _activeWindow, updateController,
     onTempDirChanged: _applyTempStorageEnv,
-    currentTheme: uiPrefs.load().themeName, applyTheme,
+    getCurrentTheme: () => uiPrefs.load().themeName, applyTheme,
   });
 }
 
