@@ -1,8 +1,11 @@
+// Modified by Yamato Security, 2026-11-04: color schemes resolve through resolveTheme(), dark/light
+// branching uses the scheme's `base`, the chosen scheme is restored from the main process at
+// startup, and document-level colors (body, scrollbars, selection) follow the scheme.
 import { lazy, Suspense, useState, useEffect, useRef, useCallback, useMemo, Fragment } from "react";
 import { createPortal } from "react-dom";
 // ── Extracted constants ──────────────────────────────────────────
 import { ROW_HEIGHT, HEADER_HEIGHT, FILTER_HEIGHT, OVERSCAN, VIRTUAL_WINDOW, VIRTUAL_AHEAD, QUERY_DEBOUNCE, DETAIL_PANEL_HEIGHT_DEFAULT, DETAIL_PANEL_MIN_HEIGHT, DETAIL_PANEL_MAX_HEIGHT, TAG_COL_WIDTH_DEFAULT, TAG_COL_WIDTH_MIN, BKMK_COL_WIDTH, CHECKBOX_COL_WIDTH, VT_COL_WIDTH, EVIDENCE_COL_WIDTH, VT_COMPATIBLE_RE, MAX_PHYSICAL_H, SKELETON_ARM_DELAY } from "./constants/grid.js";
-import { THEMES } from "./constants/themes.js";
+import { resolveTheme, isThemeName } from "./constants/themes.js";
 import { DT_FORMATS, TIMEZONES } from "./constants/datetime.js";
 import { TAG_PRESETS } from "./constants/presets.js";
 
@@ -537,7 +540,20 @@ export default function App() {
     const r = await tle.importFiles(paths);
     if (r?.scopePending) handleOpenFileDialogResult(tle, setModal, r);
   }, [tle, setModal]);
-  const th = THEMES[themeName];
+  const th = resolveTheme(themeName);
+  const isDark = th.base === "dark";
+  // Document-level colors (body background, scrollbars, text selection, native form controls)
+  // follow the scheme; index.html reads these custom properties.
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    const root = document.documentElement;
+    root.style.colorScheme = th.base;
+    root.style.setProperty("--tle-bg", th.bg);
+    root.style.setProperty("--tle-scrollbar-thumb", th.modalBorder);
+    root.style.setProperty("--tle-scrollbar-thumb-hover", th.textMuted);
+    root.style.setProperty("--tle-selection", th.selection);
+    document.body.style.background = th.bg;
+  }, [th]);
   const isGrouped = ct?.groupByColumns?.length > 0;
   const handleCheckForUpdates = async () => {
     if (!tle?.checkForUpdates || checkingForUpdates) return;
@@ -1271,7 +1287,7 @@ export default function App() {
             const order = DIFF_COLUMN_ORDER.filter((h) => headers.includes(h));
             const rest = headers.filter((h) => !order.includes(h));
             const includeUnchanged = !!diffMeta?.includeUnchanged;
-            const thNow = THEMES[themeNameRef.current] || THEMES.dark;
+            const thNow = resolveTheme(themeNameRef.current);
             return {
               ...base,
               _detectedProfile: "Tab Diff",
@@ -1554,6 +1570,9 @@ export default function App() {
 
     // Load saved filter presets
     tle.loadFilterPresets().then((p) => setFilterPresets(p || [])).catch(() => {});
+
+    // Restore the color scheme chosen in an earlier session (the main process keeps it in ui-prefs.json).
+    tle.getUiPrefs?.().then((prefs) => { if (isThemeName(prefs?.themeName)) setThemeName(prefs.themeName); }).catch(() => {});
 
     return () => {
       for (const unsub of unsubs.splice(0)) {
@@ -4579,12 +4598,12 @@ export default function App() {
             <div style={{ marginBottom: 8 }}>
               <label style={{ display: "block", color: th.textMuted, fontSize: 11, marginBottom: 2, fontFamily: "-apple-system, sans-serif" }}>From</label>
               <input type="datetime-local" value={dateRangeDropdown.from} onChange={(e) => setDateRangeDropdown({ ...dateRangeDropdown, from: e.target.value })}
-                style={{ width: "100%", background: th.bgInput, border: `1px solid ${th.btnBorder}`, borderRadius: 4, color: th.text, fontSize: 11, padding: "4px 6px", outline: "none", fontFamily: "inherit", boxSizing: "border-box", colorScheme: themeName }} />
+                style={{ width: "100%", background: th.bgInput, border: `1px solid ${th.btnBorder}`, borderRadius: 4, color: th.text, fontSize: 11, padding: "4px 6px", outline: "none", fontFamily: "inherit", boxSizing: "border-box", colorScheme: th.base }} />
             </div>
             <div style={{ marginBottom: 10 }}>
               <label style={{ display: "block", color: th.textMuted, fontSize: 11, marginBottom: 2, fontFamily: "-apple-system, sans-serif" }}>To</label>
               <input type="datetime-local" value={dateRangeDropdown.to} onChange={(e) => setDateRangeDropdown({ ...dateRangeDropdown, to: e.target.value })}
-                style={{ width: "100%", background: th.bgInput, border: `1px solid ${th.btnBorder}`, borderRadius: 4, color: th.text, fontSize: 11, padding: "4px 6px", outline: "none", fontFamily: "inherit", boxSizing: "border-box", colorScheme: themeName }} />
+                style={{ width: "100%", background: th.bgInput, border: `1px solid ${th.btnBorder}`, borderRadius: 4, color: th.text, fontSize: 11, padding: "4px 6px", outline: "none", fontFamily: "inherit", boxSizing: "border-box", colorScheme: th.base }} />
             </div>
             <div style={{ display: "flex", justifyContent: "flex-end", gap: 6 }}>
               <button onClick={() => {
@@ -4754,7 +4773,7 @@ export default function App() {
       {contextMenu && renderContextPortal(
         <>
           <div onMouseDown={(e) => { if (shouldCloseContextBackdrop(e)) setContextMenu(null); }} onContextMenu={(e) => { e.preventDefault(); }} style={{ position: "fixed", inset: 0, zIndex: 99998 }} />
-          <div onMouseDown={(e) => e.stopPropagation()} onContextMenu={(e) => { e.preventDefault(); e.stopPropagation(); }} style={{ position: "fixed", left: contextMenu.x, top: contextMenu.y, background: themeName === "dark" ? "rgba(28,31,36,0.97)" : "rgba(252,252,254,0.97)", backdropFilter: "blur(20px) saturate(180%)", WebkitBackdropFilter: "blur(20px) saturate(180%)", border: `1px solid ${themeName === "dark" ? "rgba(255,255,255,0.12)" : "rgba(0,0,0,0.12)"}`, borderRadius: 10, padding: "5px 0", zIndex: 99999, boxShadow: themeName === "dark" ? "0 12px 40px rgba(0,0,0,0.55), 0 0 0 0.5px rgba(255,255,255,0.06) inset" : "0 12px 40px rgba(0,0,0,0.18), 0 0 0 0.5px rgba(255,255,255,0.5) inset", minWidth: 200, animation: "tle-modal-in var(--m-fast) var(--ease-out)" }}>
+          <div onMouseDown={(e) => e.stopPropagation()} onContextMenu={(e) => { e.preventDefault(); e.stopPropagation(); }} style={{ position: "fixed", left: contextMenu.x, top: contextMenu.y, background: isDark ? "rgba(28,31,36,0.97)" : "rgba(252,252,254,0.97)", backdropFilter: "blur(20px) saturate(180%)", WebkitBackdropFilter: "blur(20px) saturate(180%)", border: `1px solid ${isDark ? "rgba(255,255,255,0.12)" : "rgba(0,0,0,0.12)"}`, borderRadius: 10, padding: "5px 0", zIndex: 99999, boxShadow: isDark ? "0 12px 40px rgba(0,0,0,0.55), 0 0 0 0.5px rgba(255,255,255,0.06) inset" : "0 12px 40px rgba(0,0,0,0.18), 0 0 0 0.5px rgba(255,255,255,0.5) inset", minWidth: 200, animation: "tle-modal-in var(--m-fast) var(--ease-out)" }}>
             {[
               ...(contextMenu.colName !== "__tags__" ? [
                 { label: (ct?.pinnedColumns || []).includes(contextMenu.colName) ? "Unpin Column" : "Pin Column",
@@ -4828,7 +4847,7 @@ export default function App() {
               }},
             ].map((item, i) =>
               item === null ? (
-                <div key={i} style={{ height: 1, background: themeName === "dark" ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)", margin: "4px 8px" }} />
+                <div key={i} style={{ height: 1, background: isDark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)", margin: "4px 8px" }} />
               ) : (
                 <button key={i} onClick={() => { item.action(); setContextMenu(null); }}
                   onMouseEnter={(e) => { e.currentTarget.style.background = `${th.accent}22`; }}
@@ -4847,7 +4866,7 @@ export default function App() {
       {rowContextMenu && renderContextPortal(
         <>
           <div onMouseDown={(e) => { if (shouldCloseContextBackdrop(e)) setRowContextMenu(null); }} onContextMenu={(e) => { e.preventDefault(); }} style={{ position: "fixed", inset: 0, zIndex: 99998 }} />
-          <div onMouseDown={(e) => e.stopPropagation()} onContextMenu={(e) => { e.preventDefault(); e.stopPropagation(); }} style={{ position: "fixed", left: Math.min(rowContextMenu.x, window.innerWidth - 220), top: Math.min(rowContextMenu.y, window.innerHeight - 300), background: themeName === "dark" ? "rgba(28,31,36,0.97)" : "rgba(252,252,254,0.97)", backdropFilter: "blur(20px) saturate(180%)", WebkitBackdropFilter: "blur(20px) saturate(180%)", border: `1px solid ${themeName === "dark" ? "rgba(255,255,255,0.12)" : "rgba(0,0,0,0.12)"}`, borderRadius: 10, padding: "5px 0", zIndex: 99999, boxShadow: themeName === "dark" ? "0 12px 40px rgba(0,0,0,0.55), 0 0 0 0.5px rgba(255,255,255,0.06) inset" : "0 12px 40px rgba(0,0,0,0.18), 0 0 0 0.5px rgba(255,255,255,0.5) inset", minWidth: 200, animation: "tle-modal-in var(--m-fast) var(--ease-out)" }}>
+          <div onMouseDown={(e) => e.stopPropagation()} onContextMenu={(e) => { e.preventDefault(); e.stopPropagation(); }} style={{ position: "fixed", left: Math.min(rowContextMenu.x, window.innerWidth - 220), top: Math.min(rowContextMenu.y, window.innerHeight - 300), background: isDark ? "rgba(28,31,36,0.97)" : "rgba(252,252,254,0.97)", backdropFilter: "blur(20px) saturate(180%)", WebkitBackdropFilter: "blur(20px) saturate(180%)", border: `1px solid ${isDark ? "rgba(255,255,255,0.12)" : "rgba(0,0,0,0.12)"}`, borderRadius: 10, padding: "5px 0", zIndex: 99999, boxShadow: isDark ? "0 12px 40px rgba(0,0,0,0.55), 0 0 0 0.5px rgba(255,255,255,0.06) inset" : "0 12px 40px rgba(0,0,0,0.18), 0 0 0 0.5px rgba(255,255,255,0.5) inset", minWidth: 200, animation: "tle-modal-in var(--m-fast) var(--ease-out)" }}>
             {rowContextMenu.cellColumn && (
               <button onClick={() => { copyCell(rowContextMenu.cellValue, rowContextMenu.cellColumn); setRowContextMenu(null); }}
                 onMouseEnter={(e) => { e.currentTarget.style.background = `${th.accent}22`; }}
@@ -4888,7 +4907,7 @@ export default function App() {
             {/* Filter in / Filter out */}
             {rowContextMenu.cellColumn && (
               <>
-                <div style={{ height: 1, background: themeName === "dark" ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)", margin: "4px 8px" }} />
+                <div style={{ height: 1, background: isDark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)", margin: "4px 8px" }} />
                 <div style={{ padding: "4px 14px 2px", color: th.textMuted, fontSize: 10, fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif", textTransform: "uppercase", letterSpacing: "0.06em" }}>Filters</div>
                 <button onClick={() => {
                   setTabs((prev) => prev.map((t) => {
@@ -4922,7 +4941,7 @@ export default function App() {
                 </button>
               </>
             )}
-            <div style={{ height: 1, background: themeName === "dark" ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)", margin: "4px 8px" }} />
+            <div style={{ height: 1, background: isDark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)", margin: "4px 8px" }} />
             {/* Tags — collapsible submenu */}
             {(() => {
               // The palette is the tag vocabulary, but a row can carry tags no
@@ -4951,7 +4970,7 @@ export default function App() {
                     <span style={{ marginLeft: "auto", color: th.textMuted, fontSize: 11 }}>▸</span>
                   </button>
                   {/* Tags submenu */}
-                  <div data-tag-sub="" style={{ display: "none", position: "absolute", left: "100%", top: -5, background: themeName === "dark" ? "rgba(28,31,36,0.97)" : "rgba(252,252,254,0.97)", backdropFilter: "blur(20px) saturate(180%)", WebkitBackdropFilter: "blur(20px) saturate(180%)", border: `1px solid ${themeName === "dark" ? "rgba(255,255,255,0.12)" : "rgba(0,0,0,0.12)"}`, borderRadius: 10, padding: "5px 0", boxShadow: themeName === "dark" ? "0 12px 40px rgba(0,0,0,0.55), 0 0 0 0.5px rgba(255,255,255,0.06) inset" : "0 12px 40px rgba(0,0,0,0.18), 0 0 0 0.5px rgba(255,255,255,0.5) inset", minWidth: 160, zIndex: 100000 }}>
+                  <div data-tag-sub="" style={{ display: "none", position: "absolute", left: "100%", top: -5, background: isDark ? "rgba(28,31,36,0.97)" : "rgba(252,252,254,0.97)", backdropFilter: "blur(20px) saturate(180%)", WebkitBackdropFilter: "blur(20px) saturate(180%)", border: `1px solid ${isDark ? "rgba(255,255,255,0.12)" : "rgba(0,0,0,0.12)"}`, borderRadius: 10, padding: "5px 0", boxShadow: isDark ? "0 12px 40px rgba(0,0,0,0.55), 0 0 0 0.5px rgba(255,255,255,0.06) inset" : "0 12px 40px rgba(0,0,0,0.18), 0 0 0 0.5px rgba(255,255,255,0.5) inset", minWidth: 160, zIndex: 100000 }}>
                     {tagEntries.map(([tag, color]) => {
                       const hasTg = rowContextMenu.currentTags.includes(tag);
                       return (
@@ -4974,7 +4993,7 @@ export default function App() {
                         </button>
                       );
                     })}
-                    <div style={{ height: 1, background: themeName === "dark" ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)", margin: "4px 8px" }} />
+                    <div style={{ height: 1, background: isDark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)", margin: "4px 8px" }} />
                     <button onClick={() => { setRowContextMenu(null); setModal(openSimpleModal("tags")); }}
                       onMouseEnter={(e) => { e.currentTarget.style.background = `${th.accent}22`; }}
                       onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; }}
@@ -5074,7 +5093,7 @@ export default function App() {
       {cellContextMenu && renderContextPortal(
         <>
           <div onMouseDown={(e) => { if (shouldCloseContextBackdrop(e)) setCellContextMenu(null); }} onContextMenu={(e) => { e.preventDefault(); }} style={{ position: "fixed", inset: 0, zIndex: 99998 }} />
-          <div onMouseDown={(e) => e.stopPropagation()} onContextMenu={(e) => { e.preventDefault(); e.stopPropagation(); }} style={{ position: "fixed", left: Math.min(cellContextMenu.x, window.innerWidth - 240), top: Math.min(cellContextMenu.y, window.innerHeight - 160), background: themeName === "dark" ? "rgba(28,31,36,0.97)" : "rgba(252,252,254,0.97)", backdropFilter: "blur(20px) saturate(180%)", WebkitBackdropFilter: "blur(20px) saturate(180%)", border: `1px solid ${themeName === "dark" ? "rgba(255,255,255,0.12)" : "rgba(0,0,0,0.12)"}`, borderRadius: 10, padding: "5px 0", zIndex: 99999, boxShadow: themeName === "dark" ? "0 12px 40px rgba(0,0,0,0.55), 0 0 0 0.5px rgba(255,255,255,0.06) inset" : "0 12px 40px rgba(0,0,0,0.18), 0 0 0 0.5px rgba(255,255,255,0.5) inset", minWidth: 200, animation: "tle-modal-in var(--m-fast) var(--ease-out)" }}>
+          <div onMouseDown={(e) => e.stopPropagation()} onContextMenu={(e) => { e.preventDefault(); e.stopPropagation(); }} style={{ position: "fixed", left: Math.min(cellContextMenu.x, window.innerWidth - 240), top: Math.min(cellContextMenu.y, window.innerHeight - 160), background: isDark ? "rgba(28,31,36,0.97)" : "rgba(252,252,254,0.97)", backdropFilter: "blur(20px) saturate(180%)", WebkitBackdropFilter: "blur(20px) saturate(180%)", border: `1px solid ${isDark ? "rgba(255,255,255,0.12)" : "rgba(0,0,0,0.12)"}`, borderRadius: 10, padding: "5px 0", zIndex: 99999, boxShadow: isDark ? "0 12px 40px rgba(0,0,0,0.55), 0 0 0 0.5px rgba(255,255,255,0.06) inset" : "0 12px 40px rgba(0,0,0,0.18), 0 0 0 0.5px rgba(255,255,255,0.5) inset", minWidth: 200, animation: "tle-modal-in var(--m-fast) var(--ease-out)" }}>
             <div style={{ padding: "4px 14px 2px", color: th.textMuted, fontSize: 10, fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif", textTransform: "uppercase", letterSpacing: "0.06em" }}>Filters</div>
             {[
               { label: `Filter in ${cellContextMenu.cellValue ? String(cellContextMenu.cellValue).slice(0, 40) : "(empty)"}`,
@@ -5106,7 +5125,7 @@ export default function App() {
                 <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{item.label}</span>
               </button>
             ))}
-            <div style={{ height: 1, background: themeName === "dark" ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)", margin: "4px 8px" }} />
+            <div style={{ height: 1, background: isDark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)", margin: "4px 8px" }} />
             <div style={{ padding: "4px 14px 2px", color: th.textMuted, fontSize: 10, fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif", textTransform: "uppercase", letterSpacing: "0.06em" }}>Columns</div>
             <button onClick={() => { up("hiddenColumns", new Set([...(ct?.hiddenColumns || []), cellContextMenu.colName])); setCellContextMenu(null); }}
               onMouseEnter={(e) => { e.currentTarget.style.background = `${th.accent}22`; }}

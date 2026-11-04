@@ -1,5 +1,5 @@
 {
-  "name": "irflow-timeline",
+  "name": "irflow-timeline-mac",
   "version": "1.0.13",
   "description": "SQLite-backed DFIR workspace for macOS. Large forensic datasets, native artifacts, AI application histories, and OS activity telemetry become searchable timelines with source provenance.",
   "main": "electron/main.js",
@@ -20,6 +20,7 @@
     "dist:smoke": "npm run bundle:tools && npm run build:renderer && SKIP_NOTARIZE=1 CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder --config electron-builder.config.cjs --mac",
     "dist:dmg": "npm run bundle:tools && npm run build:renderer && electron-builder --config electron-builder.config.cjs --mac dmg",
     "dist:universal": "npm run bundle:tools && npm run build:renderer && electron-builder --config electron-builder.config.cjs --mac --universal",
+    "dist:unsigned": "npm run bundle:tools && npm run build:renderer && bash scripts/package-unsigned-mac.sh",
     "rebuild": "electron-rebuild -f -w better-sqlite3",
     "postinstall": "patch-package && electron-rebuild -f -w better-sqlite3",
     "smoke:electron": "electron scripts/smoke-electron-runtime.js",
