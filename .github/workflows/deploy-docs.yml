@@ -1,11 +1,9 @@
+# Yamato Security fork: the documentation site is published by upstream
+# (https://r3nzsec.github.io/irflow-timeline/). This fork has no GitHub Pages site, so the
+# deployment only runs when dispatched manually after enabling Pages for the repository.
 name: Deploy Documentation
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'docs/**'
-      - '.github/workflows/deploy-docs.yml'
   workflow_dispatch:
 
 permissions:

@@ -4,6 +4,22 @@ description: IRFlow Timeline changelog — version history, new features, perfor
 
 # Changelog
 
+## Yamato Security fork — unreleased
+
+`irflow-timeline-mac` is Yamato Security's fork of r3nzsec/irflow-timeline. Changes on top of upstream v1.0.13:
+
+### Color schemes
+
+- **Four seasonal color schemes** join Dark Mode and Light Mode: **Spring** (leaf greens on a pale background), **Summer** (deep ocean blues), **Autumn** (pumpkin orange and harvest gold on dark brown) and **Winter** (snow white with Christmas red and pine green). Choose one from the toolbar dropdown or **Tools → Color Scheme**
+- **The choice is remembered** across launches, the native menu shows the active scheme, and the window is painted in the scheme's background before the interface loads
+- Scrollbars, text selection and native form controls follow the scheme; the Ransomware report follows the scheme's dark or light base
+- Every scheme keeps its text at WCAG AA contrast, enforced by the test suite
+
+### Build
+
+- **Unsigned universal test builds** — the `Build macOS (unsigned)` workflow (pull requests, pushes to `main`, tags, manual runs) packages an ad-hoc-signed universal app as zip + dmg; tags create a draft GitHub release. `npm run dist:unsigned` does the same locally
+- Upstream's signed/notarized release workflow and the docs deployment run on manual dispatch only in this fork
+
 ## v1.0.13 — September 8, 2026
 
 ### Process Inspector — correct process identity and lower-noise promotion

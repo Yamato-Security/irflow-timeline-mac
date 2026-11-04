@@ -1,5 +1,5 @@
 ---
-description: Configure date/time display format, timezone, font size, theme, and temp storage in IRFlow Timeline.
+description: Configure date/time display format, timezone, font size, color scheme, and temp storage in IRFlow Timeline.
 ---
 
 # Preferences
@@ -14,7 +14,7 @@ The settings capsule to the right of **File / View / Actions / Tools / Help** pr
 |---------|----------------|
 | **Datetime format** dropdown | How timestamp columns render in the grid (raw or formatted) |
 | **Timezone** dropdown | Display timezone for timestamps (data in SQLite stays unchanged) |
-| **☀ / 🌙** button | Toggle **Dark** and **Light** theme |
+| **Color scheme** dropdown | Switch between **Dark Mode**, **Light Mode**, **Spring**, **Summer**, **Autumn** and **Winter** |
 | **A − / +** | Decrease or increase grid font size (9–18px) |
 | **Histogram** icon | Show or hide the timeline histogram panel |
 
@@ -78,17 +78,25 @@ Work in UTC during analysis to maintain consistency with log sources and other a
 
 Smaller sizes (9–10px) are useful for wide timelines with many columns. Larger sizes (14–18px) help when presenting findings or working on high-resolution displays.
 
-### Theme
+### Color Scheme
 
-- **Toolbar:** click the **☀ / 🌙** button next to the timezone selector
-- **macOS menu:** **Tools → Theme → Dark** or **Light**
+- **Toolbar:** the color-scheme dropdown next to the timezone selector
+- **macOS menu:** **Tools → Color Scheme**, where the active scheme is checked
 
 There is no `Cmd+T` theme shortcut.
 
-- **Dark** (default) — optimized for extended analysis sessions with a dark background and the Unit 42 orange accent color (`#E85D2A`)
-- **Light** — white background with the same orange accent, designed for screen sharing and report preparation
+| Scheme | Base | Look |
+|--------|------|------|
+| **Dark Mode** (default) | dark | Charcoal background with the Unit 42 orange accent (`#E85D2A`); optimized for long analysis sessions |
+| **Light Mode** | light | White background with the same orange accent; for screen sharing and report preparation |
+| **Spring** | light | Fresh leaf greens on a pale, sunlit background, with a cherry-blossom tint for bookmarks |
+| **Summer** | dark | Deep ocean blues with bright surf, seafoam and sand highlights |
+| **Autumn** | dark | Pumpkin orange and harvest gold on dark roasted browns |
+| **Winter** | light | Snow white and ice with Christmas red, pine green and a little gold |
 
-Both themes apply consistently across the grid, modals, histogram, analytics panels, and all other UI elements.
+Every scheme applies consistently across the grid, modals, histogram, analytics panels, scrollbars and all other UI elements, and keeps its text at WCAG AA contrast. Features that only distinguish dark from light (the glass context menus, native form controls, the auto-color palettes) follow the scheme's *base*.
+
+The choice is saved in `ui-prefs.json` in the app's data folder and restored on the next launch; the window is painted in the scheme's background before the interface loads.
 
 ### Histogram
 

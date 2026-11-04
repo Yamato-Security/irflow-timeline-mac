@@ -1,0 +1,136 @@
+# Yamato Security fork — unsigned (ad-hoc signed) universal macOS test builds.
+#
+# Every pull request and every push to main builds the renderer, runs the test suite,
+# bundles Hayabusa + bmc-tools and packages IRFlow Timeline as a universal
+# (Apple silicon + Intel) app: a zip and a dmg under the run's Artifacts. Tags `v*` also
+# create a DRAFT GitHub release holding the same files.
+#
+# Nothing here is notarized or Developer-ID signed, so macOS blocks the first launch:
+# System Settings → Privacy & Security → Open Anyway, or
+#   xattr -dr com.apple.quarantine "/Applications/IRFlow Timeline.app"
+# Upstream's signed release pipeline (release-macos.yml) needs credentials this fork does
+# not have and runs on manual dispatch only.
+name: Build macOS (unsigned)
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: build-macos-${{ github.ref }}
+  cancel-in-progress: ${{ !startsWith(github.ref, 'refs/tags/') }}
+
+jobs:
+  build:
+    name: Build universal app
+    # macos-14 is an Apple-silicon runner; electron-builder produces the x64 and arm64
+    # sub-builds and merges them, and `lipo` makes the bundled Hayabusa universal too.
+    runs-on: macos-14
+    timeout-minutes: 60
+    outputs:
+      artifact: ${{ steps.meta.outputs.artifact }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 22.17.0
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Smoke Electron and native SQLite runtime
+        run: npm run smoke:electron
+
+      - name: Run test suite
+        timeout-minutes: 15
+        run: npm test
+
+      - name: Build renderer
+        run: npm run build:renderer
+
+      - name: Bundle external tools (Hayabusa + bmc-tools)
+        env:
+          # Authenticated GitHub API lookups: shared runner IPs exhaust the anonymous limit.
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm run bundle:tools
+          echo "==> Verifying bundled tools"
+          test -f hayabusa/hayabusa || { echo "::error::hayabusa binary missing after bundle"; exit 1; }
+          test -d hayabusa/rules    || { echo "::error::hayabusa rules dir missing after bundle"; exit 1; }
+          test -f tools/bmc-tools/bmc-tools.py || { echo "::error::bmc-tools.py missing after bundle"; exit 1; }
+          lipo -info hayabusa/hayabusa
+          lipo -info hayabusa/hayabusa | grep -q "x86_64 arm64\|arm64 x86_64" \
+            || { echo "::error::hayabusa binary is not a universal (x86_64+arm64) fat binary"; exit 1; }
+
+      - name: Build metadata
+        id: meta
+        shell: bash
+        run: |
+          set -euo pipefail
+          version="$(node -p "require('./package.json').version")"
+          if [[ "${GITHUB_REF}" == refs/tags/v* ]]; then
+            if [ "${GITHUB_REF_NAME}" != "v${version}" ]; then
+              echo "::error::Tag ${GITHUB_REF_NAME} does not match package.json version ${version}"
+              exit 1
+            fi
+            suffix=""
+          else
+            suffix="+g${GITHUB_SHA::7}"
+          fi
+          echo "suffix=${suffix}" >> "${GITHUB_OUTPUT}"
+          echo "artifact=irflow-timeline-mac-${version}${suffix//+/-}-macos-universal" >> "${GITHUB_OUTPUT}"
+
+      - name: Package unsigned universal app (zip + dmg)
+        env:
+          BUILD_SUFFIX: ${{ steps.meta.outputs.suffix }}
+        run: bash scripts/package-unsigned-mac.sh
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: ${{ steps.meta.outputs.artifact }}
+          path: release/unsigned/
+          if-no-files-found: error
+          retention-days: 30
+
+  draft-release:
+    name: Draft GitHub release
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download build artifacts
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: ${{ needs.build.outputs.artifact }}
+          path: release-files
+
+      - name: Create or update the draft release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          tag="${GITHUB_REF_NAME}"
+          ls -la release-files
+          if ! gh release view "${tag}" >/dev/null 2>&1; then
+            gh release create "${tag}" --draft --generate-notes \
+              --title "IRFlow Timeline ${tag#v} (Yamato Security fork, unsigned)"
+          fi
+          gh release upload "${tag}" release-files/* --clobber

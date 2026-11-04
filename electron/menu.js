@@ -1,6 +1,8 @@
 /**
  * menu.js — Native macOS menu builder
  *
+ * Modified by Yamato Security, 2026-11-04: Tools → Theme became Tools → Color Scheme with six radio items.
+ *
  * Extracted from main.js. Builds the application menu template
  * with recent files, keyboard shortcuts, and all menu actions.
  */
@@ -11,6 +13,7 @@ const fs = require("fs");
 const { planImportPaths } = require("./parsers/ai-history-import");
 const { loadTempDirSetting, saveTempDirSetting, isUsable } = require("./utils/temp-dir");
 const { openDialogOptions } = require("./utils/open-dialog");
+const { THEME_OPTIONS, DEFAULT_THEME } = require("./themes");
 
 /**
  * Build and set the native application menu.
@@ -23,9 +26,11 @@ const { openDialogOptions } = require("./utils/open-dialog");
  * @param {Function} deps.safeSend
  * @param {Function} deps.activeWindow
  * @param {object} deps.updateController
+ * @param {string} [deps.currentTheme] - Color scheme id shown as checked
+ * @param {Function} [deps.applyTheme] - Persists + applies a color scheme id
  */
 function buildMenu(deps) {
-  const { mainWindow, loadRecentFiles, saveRecentFiles, enqueueImport, safeSend, activeWindow, updateController, onTempDirChanged } = deps;
+  const { mainWindow, loadRecentFiles, saveRecentFiles, enqueueImport, safeSend, activeWindow, updateController, onTempDirChanged, currentTheme = DEFAULT_THEME, applyTheme } = deps;
 
   // Build recent files submenu
   const recentFiles = loadRecentFiles();
@@ -190,11 +195,18 @@ function buildMenu(deps) {
         },
         { type: "separator" },
         {
-          label: "Theme",
-          submenu: [
-            { label: "Dark", click: () => mainWindow?.webContents.send("set-theme", "dark") },
-            { label: "Light", click: () => mainWindow?.webContents.send("set-theme", "light") },
-          ],
+          // Radio items mirror the toolbar picker; applyTheme (main.js) persists the choice,
+          // tells the renderer and rebuilds this menu so the check mark follows.
+          label: "Color Scheme",
+          submenu: THEME_OPTIONS.map((option) => ({
+            label: option.label,
+            type: "radio",
+            checked: option.id === currentTheme,
+            click: () => {
+              if (applyTheme) applyTheme(option.id);
+              else mainWindow?.webContents.send("set-theme", option.id);
+            },
+          })),
         },
         { type: "separator" },
         {

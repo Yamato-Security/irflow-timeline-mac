@@ -1,3 +1,44 @@
+# IRFlow Timeline — Yamato Security fork
+
+> **`irflow-timeline-mac`** is [Yamato Security](https://github.com/Yamato-Security)'s fork of
+> [r3nzsec/irflow-timeline](https://github.com/r3nzsec/irflow-timeline), the macOS DFIR timeline
+> viewer by Renzon Cruz. It keeps upstream's code, license (Apache-2.0), credits and documentation
+> (all below) and adds:
+>
+> - **Color schemes** — next to **Dark Mode** and **Light Mode**, four seasonal schemes:
+>   **Spring** (fresh leaf greens), **Summer** (deep ocean blues), **Autumn** (pumpkin orange and
+>   harvest gold on dark brown) and **Winter** (snow white with Christmas red and pine green).
+>   Pick one from the toolbar's color-scheme dropdown or **Tools → Color Scheme**; the choice is
+>   remembered across launches.
+> - **Unsigned test builds** — the `Build macOS (unsigned)` workflow builds a universal
+>   (Apple silicon + Intel) app for every pull request and push to `main`. Download the zip or dmg
+>   from the workflow run's **Artifacts**; tags `v*` also create a draft GitHub release.
+>
+> Upstream's own signed, notarized releases remain at
+> <https://github.com/r3nzsec/irflow-timeline/releases>. In-app updates are disabled in the fork's
+> test builds (no update feed), and the app keeps upstream's bundle identifier.
+
+### Opening an unsigned test build
+
+The test builds are ad-hoc signed and not notarized, so macOS blocks the first launch.
+
+1. Download `irflow-timeline-mac-…-mac-universal.zip` (or the `.dmg`), unzip it and drag
+   **IRFlow Timeline.app** to **Applications**.
+2. Either open **System Settings → Privacy & Security** after the blocked launch and click
+   **Open Anyway**, or clear the quarantine flag in Terminal:
+
+   ```bash
+   xattr -dr com.apple.quarantine "/Applications/IRFlow Timeline.app"
+   ```
+
+3. Launch the app. Switch schemes with the toolbar dropdown (next to the timezone selector) or
+   **Tools → Color Scheme**.
+
+To build the same package locally on a Mac: `npm install && npm run dist:unsigned` (output in
+`release/unsigned/`).
+
+---
+
 # IRFlow Timeline
 
 ![IRFlow Timeline home screen — capability launcher with Process Inspector, Lateral Movement, Persistence, Sigma, Collect AI Artifacts, Master File Table, USN Journal, and Open & Explore](assets/IRFlow-Timeline-Home.png)
@@ -28,8 +69,8 @@ For the full feature list and documentation, visit the **[IRFlow Timeline Docs](
 - macOS 12+ (Monterey or later)
 
 ```bash
-git clone https://github.com/r3nzsec/irflow-timeline.git
-cd irflow-timeline
+git clone https://github.com/Yamato-Security/irflow-timeline-mac.git
+cd irflow-timeline-mac
 npm install
 npx electron-rebuild -f -w better-sqlite3
 
@@ -39,8 +80,11 @@ npm run dev
 # Build + launch
 npm run start
 
-# Package as universal DMG
+# Package as universal DMG (needs a Developer ID certificate)
 npm run dist:universal
+
+# Package an ad-hoc-signed universal zip + dmg for testing (no certificate needed)
+npm run dist:unsigned
 ```
 
 Output in `release/`.

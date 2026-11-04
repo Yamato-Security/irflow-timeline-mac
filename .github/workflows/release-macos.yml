@@ -1,9 +1,10 @@
+# Yamato Security fork: upstream's signed, notarized release pipeline needs Apple Developer
+# and S3 updater credentials this repository does not have, so it no longer runs on tag
+# pushes. Unsigned test builds come from build-macos.yml. Dispatch this manually only after
+# configuring the variables and secrets listed under "Validate release configuration".
 name: Release macOS
 
 on:
-  push:
-    tags:
-      - "v*"
   workflow_dispatch:
     inputs:
       from_tag:

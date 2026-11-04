@@ -1,3 +1,4 @@
+// Modified by Yamato Security, 2026-11-04: the report CSS follows the color scheme's base (dark/light).
 import { Fragment, useCallback } from "react";
 import { isIpcError, ipcErrorMessage } from "../../utils/ipc-result";
 import useUIStore from "../../store/useUIStore.js";
@@ -12,7 +13,7 @@ import { formatNumber } from "../../utils/format.js";
 export default function RansomwareModal() {
   const modal = useUIStore((s) => s.modal);
   const setModal = useUIStore((s) => s.setModal);
-  const { th, themeName } = useTheme();
+  const { th, isDark } = useTheme();
   const ct = useCurrentTab();
   const tabs = useTabStore((s) => s.tabs);
   const tle = typeof window !== "undefined" ? window.tle : null;
@@ -351,7 +352,6 @@ export default function RansomwareModal() {
     }
 
     // Theme-aware CSS — adapts to current dark/light mode
-    const isDark = themeName === "dark";
     const c = {
       bg: isDark ? "#0d1117" : "#ffffff",
       bgAlt: isDark ? "#161b22" : "#f7f5f3",
