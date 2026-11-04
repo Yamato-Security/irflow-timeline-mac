@@ -78,9 +78,14 @@ jobs:
       - name: Build metadata
         id: meta
         shell: bash
+        env:
+          # On pull_request events GITHUB_SHA is the synthetic merge commit; label the build
+          # with the commit that is actually on the branch.
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
           set -euo pipefail
           version="$(node -p "require('./package.json').version")"
+          sha="${PR_HEAD_SHA:-${GITHUB_SHA}}"
           if [[ "${GITHUB_REF}" == refs/tags/v* ]]; then
             if [ "${GITHUB_REF_NAME}" != "v${version}" ]; then
               echo "::error::Tag ${GITHUB_REF_NAME} does not match package.json version ${version}"
@@ -88,7 +93,7 @@ jobs:
             fi
             suffix=""
           else
-            suffix="+g${GITHUB_SHA::7}"
+            suffix="+g${sha::7}"
           fi
           echo "suffix=${suffix}" >> "${GITHUB_OUTPUT}"
           echo "artifact=irflow-timeline-mac-${version}${suffix//+/-}-macos-universal" >> "${GITHUB_OUTPUT}"
