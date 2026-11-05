@@ -5,6 +5,8 @@
  * instead of SQLite (see electron/db/duckdb/). Rows are bulk-loaded with DuckDB's appender,
  * the SQLite indexes and FTS5 trigram index are gone (DuckDB scans columns in parallel),
  * and the background "index" build now stores each timestamp column's sort key instead.
+ * Modified by Yamato Security, 2026-11-06: a file that matches a format template (Juntei's
+ * CSV outputs, electron/format-templates.js) takes its timestamp columns from the template.
  *
  * Architecture:
  *   1. Streaming import: CSV/XLSX rows are appended in batches
@@ -28,6 +30,7 @@ const crypto = require("crypto");
 const { dbg } = require("./logger");
 const { registerRuntimeFunctions } = require("./db/runtime-functions");
 const { safeRegexTester } = require("./utils/safe-regex");
+const { detectFormatTemplate } = require("./format-templates");
 const { regexCondition } = require("./db/sql-match");
 
 // Suffix of the column that stores sort_datetime(<col>) once the background build has run.
@@ -162,17 +165,25 @@ class TimelineDB {
       )`
     );
 
-    // Detect timestamp columns based on header names.
+    // A known format (a format template) declares its timestamp columns: exactly those are
+    // timestamps, and finalizeImport never re-classifies them.
+    // Otherwise detect timestamp columns based on header names.
     // Exclude duration fields and timestamp metadata such as basis, precision, offset, and zone.
+    const template = detectFormatTemplate(headers);
     const tsColumns = new Set();
-    headers.forEach((h) => {
-      if (
-        /(time|date|timestamp|created|modified|accessed|when|start|end|written)/i.test(h) &&
-        !/elapsed|duration|basis|precision|offset|timezone/i.test(h)
-      ) {
-        tsColumns.add(h);
-      }
-    });
+    if (template) {
+      const declared = new Set(template.timestampColumns);
+      headers.forEach((h) => { if (declared.has(h)) tsColumns.add(h); });
+    } else {
+      headers.forEach((h) => {
+        if (
+          /(time|date|timestamp|created|modified|accessed|when|start|end|written)/i.test(h) &&
+          !/elapsed|duration|basis|precision|offset|timezone/i.test(h)
+        ) {
+          tsColumns.add(h);
+        }
+      });
+    }
 
     const meta = {
       tabId,
@@ -181,6 +192,7 @@ class TimelineDB {
       headers,
       safeCols,
       tsColumns,
+      formatTemplate: template ? template.name : null,
       numericColumns: new Set(),
       indexedCols: new Set(),
       sortKeyCols: new Set(),
@@ -194,7 +206,7 @@ class TimelineDB {
     lazyWriteStatements(meta);
     applySortKeys(meta);
     this.databases.set(tabId, meta);
-    dbg("DB", `createTab OK`, { tabId, colCount: headers.length, tsColumns: [...tsColumns] });
+    dbg("DB", `createTab OK`, { tabId, colCount: headers.length, tsColumns: [...tsColumns], formatTemplate: meta.formatTemplate });
     return { tabId, headers, tsColumns: [...tsColumns] };
     } catch (err) {
       dbg("DB", `createTab FAILED`, { tabId, error: err.message, stack: err.stack });
@@ -278,7 +290,8 @@ class TimelineDB {
     // sort_datetime UDF used for sorting, over the first 5000 rows: demote a column only
     // when it has enough non-empty values AND almost none are sortable as dates. Genuine
     // timestamp columns parse and are never demoted (which would break chronological sort).
-    for (const col of meta.safeCols) {
+    // A format template's timestamp columns are declared, so they are not re-checked.
+    for (const col of meta.formatTemplate ? [] : meta.safeCols) {
       if (!meta.tsColumns.has(col.original)) continue;
       try {
         const r = db.prepare(

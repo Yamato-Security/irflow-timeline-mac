@@ -25,6 +25,11 @@ description: IRFlow Timeline changelog — version history, new features, perfor
 - **The Tags column can be hidden**, from the header menu or the Column Manager, which now lists it; **Show All** brings it back
 - The status bar, start screen and Quick Help say **DuckDB-backed** instead of SQLite-backed
 
+### Juntei
+
+- **Every CSV that Juntei writes is recognized**, from `juntei auto-parse` and from each `juntei parse-…` and `juntei persistence-hunter` command: 55 templates, one per output, in `electron/juntei-templates.json`. The status bar names the format (for example **Juntei MFT**)
+- **Each template lists its timestamp columns, and only those are timestamps**: they get the ⏱ mark, the date format and time zone, chronological sorting, date-range filters, the histogram and the Timestamp Converter. Every other column stays as written, whatever its name or values look like. Guessing from column names had missed 56 timestamp columns in Juntei's outputs (`MetadataChanged (SI)`, `LastRun`, `PreviousRun1`–`7`, `LastRunUTC`, …) and taken 33 other columns for timestamps (`UpdateSequenceNumber`, `StartType`, `FocusTimeMs`, …). See [Juntei Templates](/reference/juntei-templates)
+
 ### Fixes
 
 - **Copying from a cell's detail popup shows that it worked.** The popup's Copy buttons fill in solid for a second (near-black on light themes, near-white on dark ones) and say "✓ Copied", with a quick press, and Timestamp Converter values show "✓ Copied" beside the value; a copy the clipboard refuses says "Copy failed"
