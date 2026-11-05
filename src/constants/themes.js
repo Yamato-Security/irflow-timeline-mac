@@ -10,11 +10,11 @@
  * light design — components that only know two moods (context-menu glass, the
  * `color-scheme` CSS property, the timeline palettes) branch on `base`, never on the name.
  *
- * Standard palette text-contrast guarantees, enforced by tests/color-schemes.test.js (WCAG 2.x ratios):
+ * Palette text-contrast guarantees, enforced by tests/color-schemes.test.js (WCAG 2.x ratios):
  *   text, textDim and textMuted / bg ≥ 4.5, headerText / headerBg ≥ 4.5,
  *   accent, success, warning, danger and every severity color / bg ≥ 3.
- * The exact Christmas reference palette is decorative and does not meet these
- * text contrast targets. Opaque action fills are still checked for readable text.
+ * Autumn and Christmas target 4.5:1 for main text; the other schemes target 7:1.
+ * Reference header and control fills use their own contrasting foregrounds.
  */
 export const THEMES = {
   dark: {
@@ -54,21 +54,21 @@ export const THEMES = {
   },
   // ── Seasonal schemes ─────────────────────────────────────────────────────────
   // Spring reference: https://stitchpalettes.com/palette/uplifting-spring-spa1006/
-  // Light Forest Green and Blue Green dominate; the floral colors are accents.
+  // Light Forest Green and the requested #678215 green dominate; floral accents remain.
   spring: {
     base: "light",
-    bg: "#a6b784", bgAlt: "#748c7c", bgInput: "#fae3a0", border: "#748c7c", borderAccent: "#6f5497",
-    text: "#0b170f", textDim: "#112016", textMuted: "#142017", accent: "#21172d", accentHover: "#17101f", onAccent: "#fae3a0",
+    bg: "#a6b784", bgAlt: "#678215", bgInput: "#fae3a0", border: "#678215", borderAccent: "#6f5497",
+    text: "#010500", textDim: "#040602", textMuted: "#070803", accent: "#0f060a", accentHover: "#010500", onAccent: "#fae3a0",
     rowOdd: "#a6b784", rowEven: "#a6b784", headerBg: "#a6b784", headerText: "#102015",
     selection: "rgba(178,165,205,0.22)", bookmark: "rgba(226,166,190,0.20)",
     modalBg: "#a6b784", modalBorder: "#6f5497", overlay: "rgba(36,51,41,0.55)",
     success: "#27462e", warning: "#604c0f", danger: "#732f4b",
     btnBg: "#b2a5cd", btnBorder: "#6f5497",
-    panelBg: "#a6b784", cellBorder: "#748c7c", accentSubtle: "rgba(111,84,151,0.10)",
-    histBar: "#6f5497", histBarHover: "#6f5497", histGrid: "#748c7c",
+    panelBg: "#a6b784", cellBorder: "#678215", accentSubtle: "rgba(111,84,151,0.10)",
+    histBar: "#6f5497", histBarHover: "#6f5497", histGrid: "#678215",
     primaryBtn: "#6f5497", primaryBtnHover: "#6f5497", onPrimary: "#fae3a0",
     fillAccent: "#6f5497", fillAccentHover: "#6f5497", fillWarning: "#6f5497", fillDanger: "#6f5497",
-    toolbarBg: "rgba(116,140,124,0.98)", glassBg: "rgba(166,183,132,0.30)", glassBorder: "rgba(111,84,151,0.30)", glassHover: "rgba(250,227,160,0.10)",
+    toolbarBg: "rgba(103,130,21,0.98)", glassBg: "rgba(166,183,132,0.30)", glassBorder: "rgba(111,84,151,0.30)", glassHover: "rgba(250,227,160,0.10)",
     sev: { critical: "#732f4b", high: "#7e3e19", med: "#604c0f", low: "#142017", custom: "#614786", clean: "#27462e", info: "#24475c" },
   },
   // Sakura reference: https://img.magnific.com/premium-vector/color-element-trendy-pallete-color-sakura-color-pallete-swatch-summer-shade-tone-with-hex-code_615232-1235.jpg
@@ -142,24 +142,24 @@ export const THEMES = {
     toolbarBg: "rgba(218,239,252,0.96)", glassBg: "rgba(255,255,255,0.42)", glassBorder: "rgba(37,95,132,0.16)", glassHover: "rgba(77,153,199,0.12)",
     sev: { critical: "#b33445", high: "#ad4c17", med: "#856000", low: "#456478", custom: "#685895", clean: "#276f62", info: "#16678d" },
   },
-  // Christmas reference: https://letmeorganiseyou.co.uk/wp-content/uploads/2025/12/Xmas-Colours-Hex-Codes-LMOU.png
-  // Reversed roles: Grinch Green backgrounds, Candy Cane Red lettering and bars.
-  // This decorative palette has low body-text contrast; white controls stay readable.
+  // Christmas reference: https://stitchpalettes.com/palette/merry-christmas-spa0153/
+  // Dark Khaki Green dominates, Red Ruby frames headers/actions, and warm golds support.
+  // Cream lettering on green and near-black lettering on ruby keep both surfaces readable.
   christmas: {
-    base: "light",
-    bg: "#58d130", bgAlt: "#58d130", bgInput: "#f8f8ff", border: "#c0c0c0", borderAccent: "#e8d9b5",
-    text: "#d00000", textDim: "#d00000", textMuted: "#d00000", accent: "#d00000", accentHover: "#d00000", onAccent: "#d00000",
-    rowOdd: "#58d130", rowEven: "#58d130", headerBg: "#f8f8ff", headerText: "#d00000",
-    selection: "rgba(248,248,255,0.28)", bookmark: "rgba(232,217,181,0.24)",
-    modalBg: "#58d130", modalBorder: "#e8d9b5", overlay: "rgba(139,0,0,0.65)",
-    success: "#d00000", warning: "#d00000", danger: "#d00000",
-    btnBg: "#f8f8ff", btnBorder: "#8b0000",
-    panelBg: "#58d130", cellBorder: "#0b6b3a", accentSubtle: "rgba(208,0,0,0.10)",
-    histBar: "#d00000", histBarHover: "#d00000", histGrid: "#0b6b3a",
-    primaryBtn: "#f8f8ff", primaryBtnHover: "#f8f8ff", onPrimary: "#d00000",
-    fillAccent: "#f8f8ff", fillAccentHover: "#f8f8ff", fillWarning: "#f8f8ff", fillDanger: "#f8f8ff",
-    toolbarBg: "rgba(88,209,48,1)", glassBg: "rgba(248,248,255,0.14)", glassBorder: "rgba(232,217,181,0.35)", glassHover: "rgba(248,248,255,0.24)",
-    sev: { critical: "#d00000", high: "#d00000", med: "#d00000", low: "#d00000", custom: "#d00000", clean: "#d00000", info: "#d00000" },
+    base: "dark",
+    bg: "#66582f", bgAlt: "#5a4e29", bgInput: "#392515", border: "#956b3a", borderAccent: "#ce4c4b",
+    text: "#f0d4a8", textDim: "#e9cfa7", textMuted: "#ead0a6", accent: "#f0d4a8", accentHover: "#ffe8c5", onAccent: "#070803",
+    rowOdd: "#62552d", rowEven: "#66582f", headerBg: "#ce4c4b", headerText: "#070803",
+    selection: "rgba(206,76,75,0.12)", bookmark: "rgba(222,163,105,0.05)",
+    modalBg: "#66582f", modalBorder: "#dea369", overlay: "rgba(57,37,21,0.82)",
+    success: "#d6e4ae", warning: "#f0d4a8", danger: "#ffb2a6",
+    btnBg: "#5a4e29", btnBorder: "#956b3a",
+    panelBg: "#392515", cellBorder: "#956b3a", accentSubtle: "rgba(206,76,75,0.10)",
+    histBar: "#ce4c4b", histBarHover: "#dea369", histGrid: "#956b3a",
+    primaryBtn: "#ce4c4b", primaryBtnHover: "#dea369", onPrimary: "#070803",
+    fillAccent: "#ce4c4b", fillAccentHover: "#dea369", fillWarning: "#dea369", fillDanger: "#ce4c4b",
+    toolbarBg: "rgba(102,88,47,0.98)", glassBg: "rgba(240,212,168,0.06)", glassBorder: "rgba(222,163,105,0.30)", glassHover: "rgba(206,76,75,0.12)",
+    sev: { critical: "#ffb2a6", high: "#dea369", med: "#f0d4a8", low: "#ead0a6", custom: "#e4b9c5", clean: "#d6e4ae", info: "#cfdddf" },
   },
 };
 
@@ -181,12 +181,12 @@ export const DEFAULT_THEME = "dark";
 export const THEME_OPTIONS = [
   { id: "dark", label: "Dark Mode", icon: "🌙", description: "Charcoal with the orange accent (default)" },
   { id: "light", label: "Light Mode", icon: "☀️", description: "Soft gray and white, navy text, teal and blue accents" },
-  { id: "spring", label: "Spring", icon: "🌱", description: "Uplifting Spring: light forest green, blue green and floral accents" },
+  { id: "spring", label: "Spring", icon: "🌱", description: "Light forest green, fresh #678215 green and floral accents" },
   { id: "sakura", label: "Sakura", icon: "🌸", description: "Reference Sakura pinks, cream, pale blue and plum text" },
   { id: "summer", label: "Summer", icon: "🌊", description: "Aqua blue, pale-yellow headers and sunny-yellow chart panels" },
   { id: "autumn", label: "Autumn", icon: "🍂", description: "Japanese autumn: bright-red timeline and dark-red headers" },
   { id: "winter", label: "Winter", icon: "❄️", description: "Snow white and pale glacier blue" },
-  { id: "christmas", label: "Christmas", icon: "🎄", description: "Grinch Green backgrounds, Candy Cane Red text and white headers" },
+  { id: "christmas", label: "Christmas", icon: "🎄", description: "Merry Christmas: khaki-green workspace, ruby-red headers and warm gold accents" },
 ];
 
 export const THEME_IDS = THEME_OPTIONS.map((option) => option.id);

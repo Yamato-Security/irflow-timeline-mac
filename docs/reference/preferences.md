@@ -89,12 +89,12 @@ There is no `Cmd+T` theme shortcut.
 |--------|------|------|
 | **Dark Mode** (default) | dark | Charcoal background with the Unit 42 orange accent (`#E85D2A`); optimized for long analysis sessions |
 | **Light Mode** | light | Soft gray chrome, white rows, navy text, teal and blue controls, blue selections and amber bookmarks |
-| **Spring** | light | Uplifting Spring: predominantly Light Forest Green and Blue Green backgrounds, with lavender, cranberry and pale-yellow accents |
+| **Spring** | light | Predominantly Light Forest Green and fresh `#678215` green backgrounds, with lavender, cranberry and pale-yellow accents |
 | **Sakura** | light | Reference blossom pinks, cream and pale blue, with bright rose controls and dark plum lettering |
 | **Summer** | light | Aqua blue, pale-yellow headers and controls (`#F3E2B3`), sunny-yellow chart panels and inputs (`#EDC02C`), with citrus/green accents |
 | **Autumn** | dark | Brighter momiji-red timeline backgrounds (`#C93036`) and darker red-brown headers (`#6B3C2C`), with warm reference-palette accents |
 | **Winter** | light | Icy blue panels, snow-white rows and pale glacier-blue controls |
-| **Christmas** | light | Grinch Green `#58D130` backgrounds, Candy Cane Red `#D00000` lettering and solid chart bars, Candy Cane White headers and controls |
+| **Christmas** | dark | Merry Christmas: predominantly Dark Khaki Green `#66582F`, Red Ruby `#CE4C4B` headers and controls, cream lettering and warm gold accents |
 
 Shared theme colors apply across the grid, modals, histogram, analytics panels and scrollbars. Text and control contrast is checked by the color-scheme tests. Features that only distinguish dark from light (native form controls and the auto-color palettes) follow the scheme's *base*. User-defined row colors and artifact-specific charts can have their own palettes.
 
@@ -102,21 +102,21 @@ The choice is saved in `ui-prefs.json` in the app's data folder and restored on 
 
 ### Seasonal colors and readability
 
-The seasonal palettes extend to the timeline, histogram, menus, dialogs, bookmarks and selection highlights. Spring, Sakura, Summer, Winter and Christmas use a **light** base; Autumn uses a **dark** base; Christmas is separate from the icy Winter scheme. Filled controls use a contrasting foreground. Christmas uses exact Candy Cane Red for themed lettering, including severity labels, with white headers and controls; label text still identifies each severity. User-defined conditional formatting and artifact-specific charts retain their own colors. Decorative colors do not change detection levels or evidence.
+The seasonal palettes extend to the timeline, histogram, menus, dialogs, bookmarks and selection highlights. Spring, Sakura, Summer and Winter use a **light** base; Autumn and Christmas use a **dark** base. Christmas is separate from the icy Winter scheme. Cream text on khaki green and near-black text on ruby-red headers and primary controls keep the Christmas palette readable. Severity labels retain distinct colors. User-defined conditional formatting and artifact-specific charts retain their own colors. Decorative colors do not change detection levels or evidence.
 
 Light Mode uses neutral surfaces for long reading sessions, with separate colors for selections, bookmarks and controls. The color tests cover text contrast on Light Mode and seasonal panels, inputs and rows, selected/bookmarked rows, and the normal and hover colors of filled controls. The scheme is remembered across launches, including Light Mode and Christmas.
 
 ### Reference palettes
 
-- **Spring:** [Uplifting Spring (SPA1006)](https://stitchpalettes.com/palette/uplifting-spring-spa1006/) publishes `#6F5497`, `#B2A5CD`, `#E2A6BE`, `#FAE3A0`, `#A6B784` and `#748C7C`. Light Forest Green and Blue Green dominate the backgrounds.
+- **Spring:** [Uplifting Spring (SPA1006)](https://stitchpalettes.com/palette/uplifting-spring-spa1006/) publishes `#6F5497`, `#B2A5CD`, `#E2A6BE`, `#FAE3A0`, `#A6B784` and `#748C7C`. The theme replaces the reference's Blue Green `#748C7C` with the requested fresh green `#678215`, including translucent toolbar backgrounds. Light Forest Green and the new green dominate; near-black text keeps the darker green readable.
 - **Sakura:** [Sakura Blossom palette](https://img.magnific.com/premium-vector/color-element-trendy-pallete-color-sakura-color-pallete-swatch-summer-shade-tone-with-hex-code_615232-1235.jpg): `#D4E0EE`, `#FFDBDB`, `#FFA7A6`, `#FFF4F3`, `#F25477` and `#EC275F`. Dark plum foregrounds keep the pale surfaces and rose controls readable.
 - **Summer:** [Summer palette 6](https://avemateiu.com/wp-content/uploads/2019/06/summer-color-palette-6.png): `#F03613`, `#EDC02C`, `#27B46E`, `#A2EEEB` and `#F3E2B3`. Aqua remains the main timeline color. Pale yellow `#F3E2B3` frames the headers and controls; sunny yellow `#EDC02C` fills chart panels, inputs and dialogs. Citrus and green are supporting accents. Deep blue remains on chart bars and provides readable contrast.
 - **Autumn:** [Japanese fall palette](https://branding-lab.net/wp-content/uploads/2026/11/japanese-fall-color-palette.jpg): `#C93036`, `#F08300`, `#E9B626`, `#83A33C`, `#A34C66` and `#6B3C2C`, with cream foregrounds.
-- **Christmas:** [Christmas hex-code reference](https://letmeorganiseyou.co.uk/wp-content/uploads/2025/12/Xmas-Colours-Hex-Codes-LMOU.png): Classic Red `#B11226`, Traditional Green `#0B6B3A`, Holly Berry `#8B0000`, Vintage Green `#2E5339`, Candy Cane Red `#D00000`, Champagne Gold `#E8D9B5`, Silver `#C0C0C0`, Grinch Green `#58D130`, Coca-Cola Red `#F40009` and Candy Cane White `#F8F8FF`.
+- **Christmas:** [Merry Christmas (SPA0153)](https://stitchpalettes.com/palette/merry-christmas-spa0153/) ([reference image](https://stitchpalettes.com/wp-content/uploads/2019/12/SPA0153_square.webp)): Golden Oak `#F0D4A8`, Pale Golden Brown `#DEA369`, Very Dark Yellow Beige `#956B3A`, Dark Khaki Green `#66582F`, Red Ruby `#CE4C4B` and Very Dark Mocha Brown `#392515`.
 
-Christmas reverses the reference reds and greens: Grinch Green `#58D130` fills the backgrounds, and Candy Cane Red `#D00000` colors lettering and solid chart bars. It is a decorative option: body-text contrast is approximately **2.87:1**, below WCAG AA. White headers and primary controls provide approximately **5.39:1** contrast for the red text. Choose Light Mode or another standard palette when higher body-text contrast is needed.
+Christmas uses green for most of the workspace and red as the secondary color in headers, chart bars and primary controls. Cream lettering provides approximately **4.89:1** contrast on the khaki-green background. Near-black labels on ruby-red headers and controls provide approximately **4.55:1** contrast. Mocha chart panels help the ruby-red bars stand out; gold supports borders, hover states and bookmarks. The text, selections, bookmarks and control colors are covered by the standard contrast checks.
 
-Autumn swaps the brighter red and darker red-brown working surfaces: `#C93036` is the timeline background and `#6B3C2C` frames the headers. Its main text targets WCAG AA (4.5:1); the other standard palettes retain their 7:1 main-text target. The existing standard-palette checks still cover muted text, inputs, headers, controls and selections.
+Autumn swaps the brighter red and darker red-brown working surfaces: `#C93036` is the timeline background and `#6B3C2C` frames the headers. Autumn and Christmas main text target WCAG AA (4.5:1); the other palettes retain their 7:1 main-text target. The existing standard-palette checks still cover muted text, inputs, headers, controls and selections.
 
 Accent lettering and opaque control fills are separate theme tokens. This lets the reference palettes retain their colors without drawing a label or checkmark in the same color as its button background.
 

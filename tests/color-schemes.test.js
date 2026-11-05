@@ -49,23 +49,19 @@ test("the catalog lists the eight schemes in menu order and every scheme has a c
   }
 });
 
-test("standard schemes keep readable text; the exact Christmas palette is reported separately", async (t) => {
+test("every scheme keeps readable text and distinct severity colors", async () => {
   const { THEMES } = await themesModule();
   for (const [name, th] of Object.entries(THEMES)) {
     const at = (fg, bg, min, what) => assert.ok(contrast(fg, bg) >= min, `${name}: ${what} ${contrast(fg, bg).toFixed(2)} < ${min}`);
-    if (name === "christmas") {
-      assert.equal(th.base, "light");
-      t.diagnostic(`Reversed Christmas palette: text/background ${contrast(th.text, th.bg).toFixed(2)}:1; header ${contrast(th.headerText, th.headerBg).toFixed(2)}:1. This decorative palette is not WCAG AA.`);
-      continue;
-    }
-    // Autumn's brighter red working surface targets AA; the other standard palettes retain AAA.
-    at(th.text, th.bg, name === "autumn" ? 4.5 : 7, "text on bg");
+    // The Autumn and Christmas reference backgrounds target AA; other palettes retain AAA.
+    at(th.text, th.bg, ["autumn", "christmas"].includes(name) ? 4.5 : 7, "text on bg");
     at(th.textDim, th.bg, 4.5, "textDim on bg");
     at(th.textMuted, th.bg, 4.5, "textMuted on bg");
     at(th.textMuted, th.bgAlt, 4.5, "textMuted on bgAlt");
     at(th.headerText, th.headerBg, 4.5, "headerText on headerBg");
     for (const key of ["accent", "success", "warning", "danger"]) at(th[key], th.bg, 3, `${key} on bg`);
     for (const [key, color] of Object.entries(th.sev)) at(color, th.bg, 3, `sev.${key} on bg`);
+    assert.equal(new Set(Object.values(th.sev)).size, 7, `${name}: severity colors must remain distinct`);
     // Choose the base that matches readable foregrounds. 0.179 is the crossover
     // where black and white have equal contrast, including saturated backgrounds.
     assert.equal(contrast("#000000", th.bg) < contrast("#ffffff", th.bg) ? "dark" : "light", th.base, `${name}.base disagrees with its background`);
@@ -80,7 +76,7 @@ test("resolveTheme falls back to the default for unknown names and isDarkTheme f
   assert.equal(isThemeName("toString"), false);
   assert.equal(isThemeName("autumn"), true);
   assert.equal(isDarkTheme("summer"), false);
-  assert.equal(isDarkTheme("christmas"), false);
+  assert.equal(isDarkTheme("christmas"), true);
   assert.equal(isDarkTheme("spring"), false);
   assert.equal(isDarkTheme("bogus"), true, "unknown names resolve to the dark default");
 });
@@ -188,21 +184,22 @@ test("light and seasonal text stays readable on panels, controls and selected/bo
     const under = background.match(/[0-9a-f]{2}/gi).map((part) => parseInt(part, 16));
     return "#" + [r, g, b].map((v, i) => Math.round(v * a + under[i] * (1 - a)).toString(16).padStart(2, "0")).join("");
   };
-  for (const name of ["light", "spring", "sakura", "summer", "autumn", "winter"]) {
+  for (const name of ["light", "spring", "sakura", "summer", "autumn", "winter", "christmas"]) {
     const th = THEMES[name];
-    for (const surface of ["bg", "bgAlt", "bgInput", "modalBg", "rowOdd", "rowEven", "panelBg", "btnBg", "headerBg"]) {
+    for (const surface of ["bg", "bgAlt", "bgInput", "modalBg", "rowOdd", "rowEven", "panelBg", "btnBg"]) {
       for (const foreground of ["text", "textDim", "textMuted", "accent"]) {
         const ratio = contrast(th[foreground], th[surface]);
         assert.ok(ratio >= 4.5, `${name}: ${foreground} on ${surface}: ${ratio.toFixed(2)}`);
       }
     }
+    assert.ok(contrast(th.headerText, th.headerBg) >= 4.5, `${name}: header foreground on its own surface`);
     for (const foreground of ["text", "textDim", "textMuted", "accent"]) {
       const ratio = contrast(th[foreground], composite(th.toolbarBg, th.bg));
       assert.ok(ratio >= 4.5, `${name}: ${foreground} on toolbar: ${ratio.toFixed(2)}`);
     }
     for (const row of [th.rowOdd, th.rowEven]) {
       for (const highlight of [th.selection, th.bookmark]) {
-        assert.ok(contrast(th.text, composite(highlight, row)) >= (name === "autumn" ? 4.5 : 7), `${name}: highlighted row text`);
+        assert.ok(contrast(th.text, composite(highlight, row)) >= (["autumn", "christmas"].includes(name) ? 4.5 : 7), `${name}: highlighted row text`);
       }
     }
   }

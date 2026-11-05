@@ -9,7 +9,7 @@
 >   navy text, teal and blue accents), plus six expressive palettes:
 >   **Spring** (predominantly green backgrounds with floral accents), **Sakura** (reference pinks, cream and pale blue),
 >   **Summer** (aqua blue, pale-yellow headers and sunny-yellow chart panels), **Autumn** (紅葉 — brighter red backgrounds, dark red headers and warm accents),
->   **Winter** (icy blue and white), and **Christmas** (Grinch Green `#58D130` backgrounds, Candy Cane Red `#D00000` lettering/bars and white headers).
+>   **Winter** (icy blue and white), and **Christmas** (dark khaki-green backgrounds, ruby-red headers and controls, warm gold and cream accents).
 >   Pick one from the toolbar's color-scheme dropdown or **Tools → Color Scheme**; the choice is
 >   remembered across launches.
 > - **Unsigned builds from GitHub Actions** — the `Build macOS (unsigned)` workflow builds a
