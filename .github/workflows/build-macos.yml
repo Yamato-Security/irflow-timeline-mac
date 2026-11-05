@@ -62,7 +62,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Smoke Electron and native SQLite runtime
+      - name: Smoke Electron runtime (DuckDB engine, SQLite readers)
         run: npm run smoke:electron
 
       - name: Run test suite

@@ -4,6 +4,23 @@ description: IRFlow Timeline changelog — version history, new features, perfor
 
 # Changelog
 
+## v1.0.15 — Yamato Security fork
+
+### DuckDB engine
+
+- **Timelines are stored and queried with [DuckDB](https://duckdb.org/) instead of SQLite.** DuckDB is a columnar database that runs each query on every CPU core, which suits timeline work: searches, sorts, stacking, histograms and the analyzers all read whole columns
+- **Search needs no index any more.** Each column is checked with a case-insensitive substring match in parallel, so complete results are there as soon as a tab opens; there is no full-text index to wait for. Regex search uses DuckDB's own regex engine (RE2) and falls back to JavaScript only for lookarounds and backreferences
+- **Much smaller temp databases.** DuckDB compresses each column: a 41 MB Hayabusa CSV now takes 35 MB on disk instead of 242 MB, a 29 MB MFT CSV 8 MB instead of 178 MB
+- **Faster to a ready tab.** Rows are bulk-loaded on DuckDB's thread while the next batch is parsed, and the background step after import only stores each timestamp column's sort key instead of building an index per column plus a full-text index
+- **Search finds text after a NUL character** — SQLite stopped reading a value at an embedded NUL byte (seen in EVTX fields), so a match later in the row was missed
+- **Numeric column statistics and sorts skip empty cells** instead of counting them as 0
+- SQLite is still used to read SQLite evidence (Plaso storage, browser, VS Code, Codex and other AI app databases, the EVTX message database), for saved Sigma scan results (`results.sqlite`), and for the VirusTotal cache, so scan history and caches from earlier versions keep working
+- Tab databases from earlier versions are not reused; sessions re-import their files as before
+
+### Build
+
+- **Universal macOS builds carry both DuckDB binaries** (`npm run bundle:duckdb`, part of `bundle:tools`), fetched at the version and SHA-512 recorded in `package-lock.json`; the packaging script and the Electron smoke test check the engine
+
 ## v1.0.14 — Yamato Security fork
 
 `irflow-timeline-mac` is Yamato Security's fork of r3nzsec/irflow-timeline. First fork release; changes on top of upstream v1.0.13:

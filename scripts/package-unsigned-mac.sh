@@ -1,7 +1,7 @@
 #!/bin/bash
 # package-unsigned-mac.sh — Build an ad-hoc-signed universal macOS app for testing.
 #
-# Added by Yamato Security, 2026-11-04. Writes to release/unsigned/:
+# Added by Yamato Security, 2026-11-04 (2026-11-05: checks both DuckDB bindings). Writes to release/unsigned/:
 #   <name>-<version><suffix>-mac-universal.zip   the .app, ad-hoc signed, zipped with ditto
 #   <name>-<version><suffix>-mac-universal.dmg   the same app on a read-only disk image
 #   SHA256SUMS.txt
@@ -41,6 +41,16 @@ echo "==> App bundle: $APP_PATH"
 echo "==> Ad-hoc signing (Apple silicon refuses to run unsigned native code)"
 codesign --force --deep --sign - "$APP_PATH"
 codesign --verify --deep --strict --verbose=2 "$APP_PATH"
+
+# Both DuckDB native libraries must ship, unpacked from app.asar, or the app cannot open a tab
+# on one of the two architectures (see scripts/ensure-duckdb-bindings.cjs).
+UNPACKED="$APP_PATH/Contents/Resources/app.asar.unpacked/node_modules/@duckdb"
+for arch in x64 arm64; do
+  lib="$UNPACKED/node-bindings-darwin-$arch/libduckdb.dylib"
+  [ -f "$lib" ] && [ -f "$UNPACKED/node-bindings-darwin-$arch/duckdb.node" ] \
+    || { echo "ERROR: DuckDB binding for darwin-$arch is missing from the app"; ls -la "$UNPACKED" || true; exit 1; }
+  echo "==> DuckDB darwin-$arch: $(lipo -archs "$lib")"
+done
 
 MAIN_BIN="$APP_PATH/Contents/MacOS/${PRODUCT_NAME}"
 ARCHS="$(lipo -archs "$MAIN_BIN")"
