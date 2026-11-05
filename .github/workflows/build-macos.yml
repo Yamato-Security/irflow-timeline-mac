@@ -7,7 +7,8 @@
 # Releases — two ways, both end in a DRAFT GitHub release `v<package.json version>` that
 # you review and publish:
 #   * Actions → "Build macOS (unsigned)" → Run workflow on main → tick "Create draft release".
-#     Publishing that draft creates the tag at the built commit.
+#     Publishing that draft creates the tag at the built commit. The tag push builds once more,
+#     but a published release keeps the files it was published with.
 #   * Push a tag `v<version>` that matches package.json.
 # Bump "version" in package.json (and package-lock.json) before releasing again.
 #
@@ -165,7 +166,13 @@ jobs:
             # --target pins the commit; GitHub creates the tag there when the draft is published.
             gh release create "${TAG}" --draft --generate-notes --target "${GITHUB_SHA}" \
               --title "IRFlow Timeline ${TAG#v} (Yamato Security fork, unsigned)"
-          elif [ "${state}" = "false" ] && [ "${GITHUB_EVENT_NAME}" != "push" ]; then
+          elif [ "${state}" = "false" ]; then
+            if [ "${GITHUB_EVENT_NAME}" = "push" ]; then
+              # Publishing a draft creates its tag, and that tag push runs this workflow again.
+              # The published release already has the files that were reviewed; keep them.
+              echo "::notice::Release ${TAG} is already published; its files are left unchanged."
+              exit 0
+            fi
             echo "::error::Release ${TAG} is already published. Bump \"version\" in package.json (and package-lock.json) before building another release."
             exit 1
           fi
