@@ -2733,8 +2733,9 @@ export default function App() {
     });
     setTabs((prev) => prev.map((t) => (t.id === tab.id ? { ...t, columnWidths: { ...t.columnWidths, ...widths } } : t)));
   }, [ct, fmtCell, fontSize, activeFilters]);
-  // Cell popup (double-click a cell): its Copy buttons and Timestamp Converter values say
-  // "Copied" for a moment, so a copy is visible while the popup covers the status bar.
+  // Cell popup (double-click a cell): its Copy buttons fill in solid and say "Copied" for a
+  // second, and Timestamp Converter values say "Copied", because the popup's overlay blurs
+  // the status bar's "Copied!".
   const [popupCopied, setPopupCopied] = useState(null); // { key, ok, tick }
   const popupCopiedTimerRef = useRef(null);
   const copyFromPopup = useCallback(async (key, text) => {
@@ -2742,7 +2743,7 @@ export default function App() {
     try { await navigator.clipboard.writeText(text); } catch { ok = false; }
     setPopupCopied({ key, ok, tick: Date.now() });
     clearTimeout(popupCopiedTimerRef.current);
-    popupCopiedTimerRef.current = setTimeout(() => setPopupCopied(null), 1500);
+    popupCopiedTimerRef.current = setTimeout(() => setPopupCopied(null), 1000);
     if (ok) { setCopiedMsg(true); setTimeout(() => setCopiedMsg(false), 1200); }
   }, []);
   useEffect(() => { setPopupCopied(null); }, [cellPopup]);
@@ -4505,17 +4506,20 @@ export default function App() {
             if (decoded && /[\x20-\x7e]/.test(decoded)) cpDecoded = decoded;
           } catch { /* invalid base64 */ }
         }
-        // A Copy button that turns into "Copied" (or "Copy failed") with a quick press for 1.5 s.
-        // The key changes on every copy, so the button remounts and the animation plays again.
+        // A Copy button that fills in solid for 1 s with "Copied" (or red "Copy failed") and a
+        // quick press. The fill is the theme's text color, so it is near-black on light themes and
+        // near-white on dark ones, the strongest contrast with the popup in every theme. The key
+        // changes on every copy, so the button remounts and the animation plays again.
         const copyButton = (key, text, small = false) => {
           const done = popupCopied?.key === key ? popupCopied : null;
-          const tone = done ? (done.ok ? th.success : th.danger) : null;
+          const fill = done ? (done.ok ? th.text : th.danger) : null;
+          const ink = done ? (done.ok ? th.modalBg : "#ffffff") : th.text;
           return (
             <button key={done ? `${key}-${done.tick}` : key} type="button" onClick={() => copyFromPopup(key, text)}
               aria-label={done ? (done.ok ? "Copied" : "Copy failed") : "Copy"}
               style={{
-                background: tone ? `${tone}22` : th.btnBg, border: `1px solid ${tone || th.btnBorder}`, borderRadius: small ? 4 : 6,
-                color: tone || th.text, fontSize: small ? 10 : 11, padding: small ? "2px 8px" : "4px 10px", cursor: "pointer",
+                background: fill || th.btnBg, border: `1px solid ${fill || th.btnBorder}`, borderRadius: small ? 4 : 6,
+                color: ink, fontWeight: done ? 600 : undefined, fontSize: small ? 10 : 11, padding: small ? "2px 8px" : "4px 10px", cursor: "pointer",
                 display: "flex", alignItems: "center", justifyContent: "center", gap: small ? 3 : 4, minWidth: small ? 66 : 82,
                 animation: done ? "tle-copy-pop 320ms var(--ease-out-soft)" : undefined,
                 transition: "background var(--m-base), color var(--m-base), border-color var(--m-base)",

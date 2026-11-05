@@ -31,3 +31,12 @@ test("the button says Copied or Copy failed and replays its press animation on e
   assert.match(btn, /animation: done \? "tle-copy-pop/);
   assert.match(app, /@keyframes tle-copy-pop \{/);
 });
+
+test("a successful copy fills the button with the theme's text color for one second", () => {
+  const btn = app.slice(app.indexOf("const copyButton = ("), app.indexOf("const cpCopyText ="));
+  assert.match(btn, /const fill = done \? \(done\.ok \? th\.text : th\.danger\) : null;/);
+  assert.match(btn, /const ink = done \? \(done\.ok \? th\.modalBg : "#ffffff"\) : th\.text;/);
+  assert.match(btn, /background: fill \|\| th\.btnBg/);
+  const fn = app.slice(app.indexOf("const copyFromPopup = useCallback("), app.indexOf("const copyCell = useCallback("));
+  assert.match(fn, /setTimeout\(\(\) => setPopupCopied\(null\), 1000\)/);
+});
