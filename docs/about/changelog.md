@@ -11,7 +11,9 @@ description: IRFlow Timeline changelog — version history, new features, perfor
 - Make Spring's backgrounds predominantly Light Forest Green and Blue Green, with floral accent colors
 - Keep Summer predominantly aqua blue and sunny yellow, using the supplied citrus red, leaf green and sand as supporting accents
 - Add Sakura's cream, pale blue and blossom pinks; use Japanese autumn red, orange, yellow, leaf green, plum and brown for Autumn
-- Use exact **Grinch Green `#58D130`** for Christmas lettering and solid histogram bars. Preserve the reference reds and Candy Cane White headers. This decorative palette's lower text contrast is documented rather than described as WCAG AA
+- Reverse Summer's sunny yellow and pale-yellow roles; use pale headers and sunny chart panels
+- Reverse Autumn's brighter red and darker red-brown surfaces: brighter timeline backgrounds and darker headers, with readable cream text
+- Reverse Christmas's red/green roles: exact **Grinch Green `#58D130`** backgrounds and **Candy Cane Red `#D00000`** lettering/bars, with white headers and controls. Its lower body-text contrast is documented rather than described as WCAG AA
 - Separate opaque control fills from accent lettering so labels and checkmarks remain visible with the reference palettes
 - Make histogram bars and context menus follow the theme; retain saved preferences and both color-scheme menus
 - Validate standard-palette text contrast, all palettes' primary-control contrast, and menu/catalog parity

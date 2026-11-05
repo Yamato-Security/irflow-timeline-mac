@@ -8,8 +8,8 @@
 > - **Color schemes** — **Dark Mode** and a refined **Light Mode** (soft gray and white,
 >   navy text, teal and blue accents), plus six expressive palettes:
 >   **Spring** (predominantly green backgrounds with floral accents), **Sakura** (reference pinks, cream and pale blue),
->   **Summer** (aqua blue and sunny yellow, with citrus, leaf-green and sand accents), **Autumn** (紅葉 — red, orange, yellow, green, plum and brown),
->   **Winter** (icy blue and white), and **Christmas** (reference reds, exact Grinch Green `#58D130` lettering/bars and white headers).
+>   **Summer** (aqua blue, pale-yellow headers and sunny-yellow chart panels), **Autumn** (紅葉 — brighter red backgrounds, dark red headers and warm accents),
+>   **Winter** (icy blue and white), and **Christmas** (Grinch Green `#58D130` backgrounds, Candy Cane Red `#D00000` lettering/bars and white headers).
 >   Pick one from the toolbar's color-scheme dropdown or **Tools → Color Scheme**; the choice is
 >   remembered across launches.
 > - **Unsigned builds from GitHub Actions** — the `Build macOS (unsigned)` workflow builds a

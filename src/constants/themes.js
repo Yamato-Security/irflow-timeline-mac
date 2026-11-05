@@ -93,37 +93,37 @@ export const THEMES = {
   // Aqua and sunny yellow dominate; citrus red, leaf green and sand are accents.
   summer: {
     base: "light",
-    bg: "#a2eeeb", bgAlt: "#a2eeeb", bgInput: "#f3e2b3", border: "#6ebebd", borderAccent: "#f03613",
+    bg: "#a2eeeb", bgAlt: "#a2eeeb", bgInput: "#edc02c", border: "#6ebebd", borderAccent: "#f03613",
     text: "#101b24", textDim: "#304e5c", textMuted: "#3b535b", accent: "#005166", accentHover: "#004355", onAccent: "#0a1017",
-    rowOdd: "#a2eeeb", rowEven: "#d1f6f4", headerBg: "#edc02c", headerText: "#23474d",
+    rowOdd: "#a2eeeb", rowEven: "#d1f6f4", headerBg: "#f3e2b3", headerText: "#23474d",
     selection: "rgba(39,180,110,0.16)", bookmark: "rgba(240,54,19,0.16)",
-    modalBg: "#f3e2b3", modalBorder: "#6ebebd", overlay: "rgba(8,36,54,0.48)",
+    modalBg: "#edc02c", modalBorder: "#6ebebd", overlay: "rgba(8,36,54,0.48)",
     success: "#196b47", warning: "#795000", danger: "#bb2a12",
-    btnBg: "#edc02c", btnBorder: "#27b46e",
-    panelBg: "#f3e2b3", cellBorder: "#8bd4d1", accentSubtle: "rgba(0,93,116,0.10)",
+    btnBg: "#f3e2b3", btnBorder: "#27b46e",
+    panelBg: "#edc02c", cellBorder: "#8bd4d1", accentSubtle: "rgba(0,93,116,0.10)",
     histBar: "#007fba", histBarHover: "#005f98", histGrid: "#d5c593",
-    primaryBtn: "#edc02c", primaryBtnHover: "#f3e2b3", onPrimary: "#0a1017",
-    fillAccent: "#edc02c", fillAccentHover: "#f3e2b3", fillWarning: "#edc02c", fillDanger: "#f03613",
-    toolbarBg: "rgba(237,192,44,0.98)", glassBg: "rgba(243,226,179,0.30)", glassBorder: "rgba(0,93,116,0.20)", glassHover: "rgba(240,54,19,0.10)",
+    primaryBtn: "#f3e2b3", primaryBtnHover: "#edc02c", onPrimary: "#0a1017",
+    fillAccent: "#f3e2b3", fillAccentHover: "#edc02c", fillWarning: "#f3e2b3", fillDanger: "#f03613",
+    toolbarBg: "rgba(243,226,179,0.98)", glassBg: "rgba(237,192,44,0.30)", glassBorder: "rgba(0,93,116,0.20)", glassHover: "rgba(240,54,19,0.10)",
     sev: { critical: "#bb2a12", high: "#ad420c", med: "#795000", low: "#3b535b", custom: "#74519b", clean: "#196b47", info: "#005d74" },
   },
   // Autumn reference: https://branding-lab.net/wp-content/uploads/2026/11/japanese-fall-color-palette.jpg
   // Momiji red, orange, yellow, leaf green, plum and brown, with cream text.
   autumn: {
     base: "dark",
-    bg: "#6b3c2c", bgAlt: "#6b3c2c", bgInput: "#4b2a1f", border: "#a34c66", borderAccent: "#e9b626",
+    bg: "#c93036", bgAlt: "#c93036", bgInput: "#4b2a1f", border: "#a34c66", borderAccent: "#e9b626",
     text: "#fff8ed", textDim: "#fff1d8", textMuted: "#ffedd0", accent: "#fff4de", accentHover: "#fff8ed", onAccent: "#21120b",
-    rowOdd: "#6b3c2c", rowEven: "#6b3c2c", headerBg: "#c93036", headerText: "#fff8ed",
+    rowOdd: "#c93036", rowEven: "#c93036", headerBg: "#6b3c2c", headerText: "#fff8ed",
     selection: "rgba(240,131,0,0.12)", bookmark: "rgba(131,163,60,0.13)",
-    modalBg: "#6b3c2c", modalBorder: "#f08300", overlay: "rgba(15,8,5,0.83)",
-    success: "#83a33c", warning: "#e9b626", danger: "#ffb2a6",
+    modalBg: "#c93036", modalBorder: "#f08300", overlay: "rgba(15,8,5,0.83)",
+    success: "#d9e7b8", warning: "#ffdd7c", danger: "#ffb2a6",
     btnBg: "#a34c66", btnBorder: "#e9b626",
     panelBg: "#3b2018", cellBorder: "#a34c66", accentSubtle: "rgba(240,131,0,0.12)",
     histBar: "#c93036", histBarHover: "#f08300", histGrid: "#6b3c2c",
     primaryBtn: "#f08300", primaryBtnHover: "#e9b626", onPrimary: "#21120b",
     fillAccent: "#f08300", fillAccentHover: "#e9b626", fillWarning: "#e9b626", fillDanger: "#f08300",
-    toolbarBg: "rgba(201,48,54,0.98)", glassBg: "rgba(233,182,38,0.06)", glassBorder: "rgba(233,182,38,0.25)", glassHover: "rgba(240,131,0,0.12)",
-    sev: { critical: "#ffb2a6", high: "#f08300", med: "#e9b626", low: "#ffedd0", custom: "#f1d7e0", clean: "#83a33c", info: "#d4e0ee" },
+    toolbarBg: "rgba(107,60,44,0.98)", glassBg: "rgba(233,182,38,0.06)", glassBorder: "rgba(233,182,38,0.25)", glassHover: "rgba(240,131,0,0.12)",
+    sev: { critical: "#ffb2a6", high: "#ffd0a0", med: "#ffdd7c", low: "#ffedd0", custom: "#f1d7e0", clean: "#d9e7b8", info: "#d4e0ee" },
   },
   // Winter — blue ice, snow-white rows and pale glacier-blue controls. Christmas
   // has its own scheme below; red and green here are reserved for status meanings.
@@ -143,23 +143,23 @@ export const THEMES = {
     sev: { critical: "#b33445", high: "#ad4c17", med: "#856000", low: "#456478", custom: "#685895", clean: "#276f62", info: "#16678d" },
   },
   // Christmas reference: https://letmeorganiseyou.co.uk/wp-content/uploads/2025/12/Xmas-Colours-Hex-Codes-LMOU.png
-  // Exact Grinch Green lettering and solid chart bars. This requested decorative
-  // palette has low text contrast on bright red and white; do not claim WCAG AA.
+  // Reversed roles: Grinch Green backgrounds, Candy Cane Red lettering and bars.
+  // This decorative palette has low body-text contrast; white controls stay readable.
   christmas: {
-    base: "dark",
-    bg: "#d00000", bgAlt: "#b11226", bgInput: "#f8f8ff", border: "#c0c0c0", borderAccent: "#e8d9b5",
-    text: "#58d130", textDim: "#58d130", textMuted: "#58d130", accent: "#58d130", accentHover: "#58d130", onAccent: "#58d130",
-    rowOdd: "#b11226", rowEven: "#d00000", headerBg: "#f8f8ff", headerText: "#58d130",
-    selection: "rgba(139,0,0,0.55)", bookmark: "rgba(46,83,57,0.35)",
-    modalBg: "#8b0000", modalBorder: "#e8d9b5", overlay: "rgba(46,83,57,0.65)",
-    success: "#58d130", warning: "#58d130", danger: "#58d130",
-    btnBg: "#f8f8ff", btnBorder: "#0b6b3a",
-    panelBg: "#8b0000", cellBorder: "#8b0000", accentSubtle: "rgba(88,209,48,0.10)",
-    histBar: "#58d130", histBarHover: "#58d130", histGrid: "#b11226",
-    primaryBtn: "#8b0000", primaryBtnHover: "#8b0000", onPrimary: "#58d130",
-    fillAccent: "#8b0000", fillAccentHover: "#8b0000", fillWarning: "#8b0000", fillDanger: "#8b0000",
-    toolbarBg: "rgba(244,0,9,1)", glassBg: "rgba(139,0,0,0.14)", glassBorder: "rgba(232,217,181,0.35)", glassHover: "rgba(139,0,0,0.20)",
-    sev: { critical: "#58d130", high: "#58d130", med: "#58d130", low: "#58d130", custom: "#58d130", clean: "#58d130", info: "#58d130" },
+    base: "light",
+    bg: "#58d130", bgAlt: "#58d130", bgInput: "#f8f8ff", border: "#c0c0c0", borderAccent: "#e8d9b5",
+    text: "#d00000", textDim: "#d00000", textMuted: "#d00000", accent: "#d00000", accentHover: "#d00000", onAccent: "#d00000",
+    rowOdd: "#58d130", rowEven: "#58d130", headerBg: "#f8f8ff", headerText: "#d00000",
+    selection: "rgba(248,248,255,0.28)", bookmark: "rgba(232,217,181,0.24)",
+    modalBg: "#58d130", modalBorder: "#e8d9b5", overlay: "rgba(139,0,0,0.65)",
+    success: "#d00000", warning: "#d00000", danger: "#d00000",
+    btnBg: "#f8f8ff", btnBorder: "#8b0000",
+    panelBg: "#58d130", cellBorder: "#0b6b3a", accentSubtle: "rgba(208,0,0,0.10)",
+    histBar: "#d00000", histBarHover: "#d00000", histGrid: "#0b6b3a",
+    primaryBtn: "#f8f8ff", primaryBtnHover: "#f8f8ff", onPrimary: "#d00000",
+    fillAccent: "#f8f8ff", fillAccentHover: "#f8f8ff", fillWarning: "#f8f8ff", fillDanger: "#f8f8ff",
+    toolbarBg: "rgba(88,209,48,1)", glassBg: "rgba(248,248,255,0.14)", glassBorder: "rgba(232,217,181,0.35)", glassHover: "rgba(248,248,255,0.24)",
+    sev: { critical: "#d00000", high: "#d00000", med: "#d00000", low: "#d00000", custom: "#d00000", clean: "#d00000", info: "#d00000" },
   },
 };
 
@@ -183,10 +183,10 @@ export const THEME_OPTIONS = [
   { id: "light", label: "Light Mode", icon: "☀️", description: "Soft gray and white, navy text, teal and blue accents" },
   { id: "spring", label: "Spring", icon: "🌱", description: "Uplifting Spring: light forest green, blue green and floral accents" },
   { id: "sakura", label: "Sakura", icon: "🌸", description: "Reference Sakura pinks, cream, pale blue and plum text" },
-  { id: "summer", label: "Summer", icon: "🌊", description: "Aqua blue and sunny yellow with citrus, leaf green and sand accents" },
-  { id: "autumn", label: "Autumn", icon: "🍂", description: "Japanese autumn: momiji red, orange, yellow, green, plum and brown" },
+  { id: "summer", label: "Summer", icon: "🌊", description: "Aqua blue, pale-yellow headers and sunny-yellow chart panels" },
+  { id: "autumn", label: "Autumn", icon: "🍂", description: "Japanese autumn: bright-red timeline and dark-red headers" },
   { id: "winter", label: "Winter", icon: "❄️", description: "Snow white and pale glacier blue" },
-  { id: "christmas", label: "Christmas", icon: "🎄", description: "Christmas reds, exact Grinch Green lettering and white headers" },
+  { id: "christmas", label: "Christmas", icon: "🎄", description: "Grinch Green backgrounds, Candy Cane Red text and white headers" },
 ];
 
 export const THEME_IDS = THEME_OPTIONS.map((option) => option.id);

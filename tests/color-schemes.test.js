@@ -54,11 +54,12 @@ test("standard schemes keep readable text; the exact Christmas palette is report
   for (const [name, th] of Object.entries(THEMES)) {
     const at = (fg, bg, min, what) => assert.ok(contrast(fg, bg) >= min, `${name}: ${what} ${contrast(fg, bg).toFixed(2)} < ${min}`);
     if (name === "christmas") {
-      assert.equal(th.base, "dark");
-      t.diagnostic(`Exact reference Christmas palette: text/background ${contrast(th.text, th.bg).toFixed(2)}:1; header ${contrast(th.headerText, th.headerBg).toFixed(2)}:1. This decorative palette is not WCAG AA.`);
+      assert.equal(th.base, "light");
+      t.diagnostic(`Reversed Christmas palette: text/background ${contrast(th.text, th.bg).toFixed(2)}:1; header ${contrast(th.headerText, th.headerBg).toFixed(2)}:1. This decorative palette is not WCAG AA.`);
       continue;
     }
-    at(th.text, th.bg, 7, "text on bg");
+    // Autumn's brighter red working surface targets AA; the other standard palettes retain AAA.
+    at(th.text, th.bg, name === "autumn" ? 4.5 : 7, "text on bg");
     at(th.textDim, th.bg, 4.5, "textDim on bg");
     at(th.textMuted, th.bg, 4.5, "textMuted on bg");
     at(th.textMuted, th.bgAlt, 4.5, "textMuted on bgAlt");
@@ -79,7 +80,7 @@ test("resolveTheme falls back to the default for unknown names and isDarkTheme f
   assert.equal(isThemeName("toString"), false);
   assert.equal(isThemeName("autumn"), true);
   assert.equal(isDarkTheme("summer"), false);
-  assert.equal(isDarkTheme("christmas"), true);
+  assert.equal(isDarkTheme("christmas"), false);
   assert.equal(isDarkTheme("spring"), false);
   assert.equal(isDarkTheme("bogus"), true, "unknown names resolve to the dark default");
 });
@@ -201,7 +202,7 @@ test("light and seasonal text stays readable on panels, controls and selected/bo
     }
     for (const row of [th.rowOdd, th.rowEven]) {
       for (const highlight of [th.selection, th.bookmark]) {
-        assert.ok(contrast(th.text, composite(highlight, row)) >= 7, `${name}: highlighted row text`);
+        assert.ok(contrast(th.text, composite(highlight, row)) >= (name === "autumn" ? 4.5 : 7), `${name}: highlighted row text`);
       }
     }
   }
