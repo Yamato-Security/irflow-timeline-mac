@@ -4,7 +4,9 @@
 // DuckDB's Node package ships its native library as one optional package per platform, and
 // npm installs only the one for the machine it runs on. A universal macOS build packs the
 // same node_modules into its x64 and arm64 halves, so both @duckdb/node-bindings-darwin-x64
-// and -darwin-arm64 must be present. This fetches whichever is missing, at the exact
+// and -darwin-arm64 must be present; an Intel app built on an Apple-silicon Mac (or the
+// reverse) needs the one npm did not install. Single-architecture apps leave the other one
+// out (IRFLOW_MAC_ARCH in electron-builder.config.cjs). This fetches whichever is missing, at the exact
 // version and SHA-512 recorded in package-lock.json, and unpacks it in place.
 //
 // Runs on macOS only (other platforms build their own installers); --force runs it anywhere.

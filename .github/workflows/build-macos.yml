@@ -1,8 +1,9 @@
-# Yamato Security fork — unsigned (ad-hoc signed) universal macOS builds.
+# Yamato Security fork — unsigned (ad-hoc signed) macOS builds.
 #
 # Every pull request and every push to main builds the renderer, runs the test suite,
-# bundles Hayabusa + bmc-tools and packages IRFlow Timeline as a universal
-# (Apple silicon + Intel) app: a zip and a dmg under the run's Artifacts.
+# bundles Hayabusa + bmc-tools and packages IRFlow Timeline twice: an Apple silicon (arm64)
+# app and an Intel (x64) app, each as a zip and a dmg. The run's Artifacts hold one download
+# per architecture. (One universal app for both would be about twice the size of either.)
 #
 # Releases — two ways, both end in a DRAFT GitHub release `v<package.json version>` that
 # you review and publish:
@@ -40,9 +41,9 @@ concurrency:
 
 jobs:
   build:
-    name: Build universal app
-    # macos-14 is an Apple-silicon runner; electron-builder produces the x64 and arm64
-    # sub-builds and merges them, and `lipo` makes the bundled Hayabusa universal too.
+    name: Build Apple silicon and Intel apps
+    # macos-14 is an Apple-silicon runner; electron-builder packages the Intel app there too.
+    # `lipo` makes the bundled Hayabusa universal, and each app keeps its own half of it.
     runs-on: macos-14
     timeout-minutes: 60
     outputs:
@@ -119,21 +120,35 @@ jobs:
           echo "Building ${version}${suffix} (release=${release}${tag:+, tag ${tag}})"
           {
             echo "suffix=${suffix}"
-            echo "artifact=irflow-timeline-mac-${version}${suffix//+/-}-macos-universal"
+            echo "artifact=irflow-timeline-mac-${version}${suffix//+/-}-macos"
             echo "release=${release}"
             echo "tag=${tag}"
           } >> "${GITHUB_OUTPUT}"
 
-      - name: Package unsigned universal app (zip + dmg)
+      - name: Package unsigned Apple silicon and Intel apps (zip + dmg)
         env:
           BUILD_SUFFIX: ${{ steps.meta.outputs.suffix }}
-        run: bash scripts/package-unsigned-mac.sh
+        run: bash scripts/package-unsigned-mac.sh x64 arm64
 
-      - name: Upload artifacts
+      - name: Upload Apple silicon build
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
-          name: ${{ steps.meta.outputs.artifact }}
-          path: release/unsigned/
+          name: ${{ steps.meta.outputs.artifact }}-arm64
+          path: |
+            release/unsigned/*-mac-arm64.zip
+            release/unsigned/*-mac-arm64.dmg
+            release/unsigned/SHA256SUMS.txt
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Upload Intel build
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: ${{ steps.meta.outputs.artifact }}-x64
+          path: |
+            release/unsigned/*-mac-x64.zip
+            release/unsigned/*-mac-x64.dmg
+            release/unsigned/SHA256SUMS.txt
           if-no-files-found: error
           retention-days: 30
 
@@ -148,7 +163,9 @@ jobs:
       - name: Download build artifacts
         uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
         with:
-          name: ${{ needs.build.outputs.artifact }}
+          # Both architectures; each artifact carries the same SHA256SUMS.txt for all four files.
+          pattern: ${{ needs.build.outputs.artifact }}-*
+          merge-multiple: true
           path: release-files
 
       - name: Create or update the draft release

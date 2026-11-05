@@ -9,6 +9,15 @@ const updateChannel =
   process.env.TLE_UPDATE_CHANNEL ||
   "latest";
 
+// Added by Yamato Security, 2026-11-05: scripts/package-unsigned-mac.sh builds one app per
+// architecture and sets IRFLOW_MAC_ARCH (arm64 or x64) for each. Such an app leaves out the
+// other architecture's DuckDB package, which universal builds need in both halves.
+const singleMacArch = process.env.IRFLOW_MAC_ARCH || "";
+if (singleMacArch && !["arm64", "x64"].includes(singleMacArch)) {
+  throw new Error(`IRFLOW_MAC_ARCH must be arm64 or x64, not "${singleMacArch}"`);
+}
+const otherMacArch = { arm64: "x64", x64: "arm64" }[singleMacArch];
+
 const config = {
   appId: "com.dfir.irflow-timeline",
   productName: "IRFlow Timeline",
@@ -60,6 +69,7 @@ const config = {
     "dist/**/*",
     "electron/**/*",
     "assets/**/*",
+    ...(otherMacArch ? [`!node_modules/@duckdb/node-bindings-darwin-${otherMacArch}{,/**}`] : []),
   ],
   extraResources: [
     {

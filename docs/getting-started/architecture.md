@@ -236,11 +236,12 @@ External binaries bundled as `extraResources`: **Hayabusa** (Sigma over raw EVTX
 | **Bundle tools** | `npm run bundle:tools` | Download Hayabusa + bmc-tools |
 | **DMG** | `npm run dist:dmg` | macOS installer |
 | **Universal** | `npm run dist:universal` | Intel + Apple Silicon |
+| **Unsigned test builds** | `npm run dist:unsigned` | Ad-hoc-signed Apple Silicon and Intel apps, zip + dmg each |
 | **Smoke build** | `npm run dist:smoke` | Unsigned local build (`SKIP_NOTARIZE=1`) |
 | **Runtime smoke** | `npm run smoke:electron` | Electron + DuckDB engine + SQLite + EVTX-message ABI check |
 | **Tests** | `npm test` | `node --test tests/*.test.js` |
 
-`npm run dist*` runs `bundle:tools` first, which also fetches both macOS DuckDB binaries for the universal build (`bundle:duckdb`). After `npm install`, run `npm run rebuild` to rebuild `better-sqlite3` against Electron's ABI; DuckDB ships prebuilt binaries and needs no rebuild.
+`npm run dist*` runs `bundle:tools` first, which also fetches both macOS DuckDB binaries (`bundle:duckdb`): a universal app needs both, and an Intel app built on an Apple Silicon Mac (or the reverse) needs the one npm did not install. An Apple Silicon or Intel app keeps only its own architecture's DuckDB library and Hayabusa. After `npm install`, run `npm run rebuild` to rebuild `better-sqlite3` against Electron's ABI; DuckDB ships prebuilt binaries and needs no rebuild.
 
 ## Security Model
 
