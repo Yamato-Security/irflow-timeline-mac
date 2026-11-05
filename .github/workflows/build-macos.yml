@@ -42,9 +42,10 @@ concurrency:
 jobs:
   build:
     name: Build Apple silicon and Intel apps
-    # macos-14 is an Apple-silicon runner; electron-builder packages the Intel app there too.
+    # macos-15 is an Apple-silicon runner; electron-builder packages the Intel app there too.
+    # (GitHub no longer accepts macos-14 here: "The configuration 'macos-14-arm64-us-default' is not supported".)
     # `lipo` makes the bundled Hayabusa universal, and each app keeps its own half of it.
-    runs-on: macos-14
+    runs-on: macos-15
     timeout-minutes: 60
     outputs:
       artifact: ${{ steps.meta.outputs.artifact }}
