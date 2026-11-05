@@ -13,7 +13,7 @@
  * Palette text-contrast guarantees, enforced by tests/color-schemes.test.js (WCAG 2.x ratios):
  *   text, textDim and textMuted / bg ≥ 4.5, headerText / headerBg ≥ 4.5,
  *   accent, success, warning, danger and every severity color / bg ≥ 3.
- * Autumn and Christmas target 4.5:1 for main text; the other schemes target 7:1.
+ * Autumn targets 4.5:1 for main text; the other schemes target 7:1.
  * Reference header and control fills use their own contrasting foregrounds.
  */
 export const THEMES = {
@@ -142,29 +142,9 @@ export const THEMES = {
     toolbarBg: "rgba(218,239,252,0.96)", glassBg: "rgba(255,255,255,0.42)", glassBorder: "rgba(37,95,132,0.16)", glassHover: "rgba(77,153,199,0.12)",
     sev: { critical: "#b33445", high: "#ad4c17", med: "#856000", low: "#456478", custom: "#685895", clean: "#276f62", info: "#16678d" },
   },
-  // Christmas-1 reference: https://stitchpalettes.com/palette/merry-christmas-spa0153/
-  // Keep the original `christmas` id so saved Christmas preferences select Christmas-1.
-  // Dark Khaki Green dominates, Red Ruby frames headers/actions, and warm golds support.
-  // Cream lettering on green and near-black lettering on ruby keep both surfaces readable.
-  christmas: {
-    base: "dark",
-    bg: "#66582f", bgAlt: "#5a4e29", bgInput: "#392515", border: "#956b3a", borderAccent: "#ce4c4b",
-    text: "#f0d4a8", textDim: "#e9cfa7", textMuted: "#ead0a6", accent: "#f0d4a8", accentHover: "#ffe8c5", onAccent: "#070803",
-    rowOdd: "#62552d", rowEven: "#66582f", headerBg: "#ce4c4b", headerText: "#070803",
-    selection: "rgba(206,76,75,0.12)", bookmark: "rgba(222,163,105,0.05)",
-    modalBg: "#66582f", modalBorder: "#dea369", overlay: "rgba(57,37,21,0.82)",
-    success: "#d6e4ae", warning: "#f0d4a8", danger: "#ffb2a6",
-    btnBg: "#5a4e29", btnBorder: "#956b3a",
-    panelBg: "#392515", cellBorder: "#956b3a", accentSubtle: "rgba(206,76,75,0.10)",
-    histBar: "#ce4c4b", histBarHover: "#dea369", histGrid: "#956b3a",
-    primaryBtn: "#ce4c4b", primaryBtnHover: "#dea369", onPrimary: "#070803",
-    fillAccent: "#ce4c4b", fillAccentHover: "#dea369", fillWarning: "#dea369", fillDanger: "#ce4c4b",
-    toolbarBg: "rgba(102,88,47,0.98)", glassBg: "rgba(240,212,168,0.06)", glassBorder: "rgba(222,163,105,0.30)", glassHover: "rgba(206,76,75,0.12)",
-    sev: { critical: "#ffb2a6", high: "#dea369", med: "#f0d4a8", low: "#ead0a6", custom: "#e4b9c5", clean: "#d6e4ae", info: "#cfdddf" },
-  },
-  // Christmas-2 reference: https://www.schemecolor.com/christmas-hex-color-codes.php
+  // Christmas reference: https://www.schemecolor.com/christmas-hex-color-codes.php
   // Both greens frame the workspace; red headers/actions and vermillion/gold bars add contrast.
-  "christmas-2": {
+  christmas: {
     base: "dark",
     bg: "#165b33", bgAlt: "#146b3a", bgInput: "#0d371f", border: "#367c4e", borderAccent: "#f8b229",
     text: "#fff8ed", textDim: "#f2e3d1", textMuted: "#e7d9c3", accent: "#ffe2a1", accentHover: "#fff0cd", onAccent: "#fff8ed",
@@ -205,8 +185,7 @@ export const THEME_OPTIONS = [
   { id: "summer", label: "Summer", icon: "🌊", description: "Aqua blue, pale-yellow headers and sunny-yellow chart panels" },
   { id: "autumn", label: "Autumn", icon: "🍂", description: "Japanese autumn: bright-red timeline and dark-red headers" },
   { id: "winter", label: "Winter", icon: "❄️", description: "Snow white and pale glacier blue" },
-  { id: "christmas", label: "Christmas-1", icon: "🎄", description: "Merry Christmas: khaki-green workspace, ruby-red headers and warm gold accents" },
-  { id: "christmas-2", label: "Christmas-2", icon: "🎄", description: "Forest and jewel greens, festive red headers and controls, vermillion and gold charts" },
+  { id: "christmas", label: "Christmas", icon: "🎄", description: "Forest and jewel greens, festive red headers and controls, vermillion and gold charts" },
 ];
 
 export const THEME_IDS = THEME_OPTIONS.map((option) => option.id);

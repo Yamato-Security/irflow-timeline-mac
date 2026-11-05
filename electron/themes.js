@@ -14,19 +14,23 @@ const THEME_OPTIONS = Object.freeze([
   Object.freeze({ id: "summer", label: "Summer", windowBackground: "#a2eeeb" }),
   Object.freeze({ id: "autumn", label: "Autumn", windowBackground: "#c93036" }),
   Object.freeze({ id: "winter", label: "Winter", windowBackground: "#f4fbff" }),
-  Object.freeze({ id: "christmas", label: "Christmas-1", windowBackground: "#66582f" }),
-  Object.freeze({ id: "christmas-2", label: "Christmas-2", windowBackground: "#165b33" }),
+  Object.freeze({ id: "christmas", label: "Christmas", windowBackground: "#165b33" }),
 ]);
 
 const DEFAULT_THEME = "dark";
+
+// Older previews stored the surviving palette as `christmas-2`.
+function normalizeThemeId(value) {
+  return value === "christmas-2" ? "christmas" : value;
+}
 
 function isThemeId(value) {
   return typeof value === "string" && THEME_OPTIONS.some((option) => option.id === value);
 }
 
 function windowBackgroundFor(themeId) {
-  const option = THEME_OPTIONS.find((o) => o.id === themeId) || THEME_OPTIONS.find((o) => o.id === DEFAULT_THEME);
+  const option = THEME_OPTIONS.find((o) => o.id === normalizeThemeId(themeId)) || THEME_OPTIONS.find((o) => o.id === DEFAULT_THEME);
   return option.windowBackground;
 }
 
-module.exports = { THEME_OPTIONS, DEFAULT_THEME, isThemeId, windowBackgroundFor };
+module.exports = { THEME_OPTIONS, DEFAULT_THEME, normalizeThemeId, isThemeId, windowBackgroundFor };

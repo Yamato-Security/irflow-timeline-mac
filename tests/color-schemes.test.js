@@ -1,4 +1,4 @@
-// Color schemes (Yamato Security fork): the nine-scheme catalog, its WCAG contrast guarantees,
+// Color schemes (Yamato Security fork): the eight-scheme catalog, its WCAG contrast guarantees,
 // the main-process mirror that paints the window and builds the native menu, the persisted
 // preference store, and the source contracts that keep dark/light branching on `base`.
 const test = require("node:test");
@@ -28,10 +28,10 @@ function tokenKeys(theme) {
   return Object.keys(theme).sort().map((key) => (key === "sev" ? `sev{${Object.keys(theme.sev).sort().join(",")}}` : key));
 }
 
-test("the catalog lists the nine schemes in menu order and every scheme has a complete token set", async () => {
+test("the catalog lists the eight schemes in menu order and every scheme has a complete token set", async () => {
   const { THEMES, THEME_OPTIONS, THEME_IDS, DEFAULT_THEME } = await themesModule();
-  assert.deepEqual(THEME_IDS, ["dark", "light", "spring", "sakura", "summer", "autumn", "winter", "christmas", "christmas-2"]);
-  assert.deepEqual(THEME_OPTIONS.map((o) => o.label), ["Dark Mode", "Light Mode", "Spring", "Sakura", "Summer", "Autumn", "Winter", "Christmas-1", "Christmas-2"]);
+  assert.deepEqual(THEME_IDS, ["dark", "light", "spring", "sakura", "summer", "autumn", "winter", "christmas"]);
+  assert.deepEqual(THEME_OPTIONS.map((o) => o.label), ["Dark Mode", "Light Mode", "Spring", "Sakura", "Summer", "Autumn", "Winter", "Christmas"]);
   assert.deepEqual(Object.keys(THEMES), THEME_IDS);
   assert.equal(DEFAULT_THEME, "dark");
   const reference = tokenKeys(THEMES.dark);
@@ -53,8 +53,8 @@ test("every scheme keeps readable text and distinct severity colors", async () =
   const { THEMES } = await themesModule();
   for (const [name, th] of Object.entries(THEMES)) {
     const at = (fg, bg, min, what) => assert.ok(contrast(fg, bg) >= min, `${name}: ${what} ${contrast(fg, bg).toFixed(2)} < ${min}`);
-    // The Autumn and Christmas reference backgrounds target AA; other palettes retain AAA.
-    at(th.text, th.bg, ["autumn", "christmas"].includes(name) ? 4.5 : 7, "text on bg");
+    // The Autumn reference background targets AA; other palettes retain AAA.
+    at(th.text, th.bg, name === "autumn" ? 4.5 : 7, "text on bg");
     at(th.textDim, th.bg, 4.5, "textDim on bg");
     at(th.textMuted, th.bg, 4.5, "textMuted on bg");
     at(th.textMuted, th.bgAlt, 4.5, "textMuted on bgAlt");
@@ -77,7 +77,7 @@ test("resolveTheme falls back to the default for unknown names and isDarkTheme f
   assert.equal(isThemeName("autumn"), true);
   assert.equal(isDarkTheme("summer"), false);
   assert.equal(isDarkTheme("christmas"), true);
-  assert.equal(isDarkTheme("christmas-2"), true);
+  assert.equal(isThemeName("christmas-2"), false, "retired names must not be selectable");
   assert.equal(isDarkTheme("spring"), false);
   assert.equal(isDarkTheme("bogus"), true, "unknown names resolve to the dark default");
 });
@@ -95,6 +95,8 @@ test("the main-process catalog mirrors the renderer catalog", async () => {
   assert.equal(main.windowBackgroundFor("nope"), renderer.THEMES.dark.bg);
   assert.equal(main.isThemeId("winter"), true);
   assert.equal(main.isThemeId("constructor"), false);
+  assert.equal(main.isThemeId("christmas-2"), false);
+  assert.equal(main.windowBackgroundFor("christmas-2"), renderer.THEMES.christmas.bg);
 });
 
 test("ui-prefs store round-trips the scheme and sanitizes missing, corrupt and unknown values", () => {
@@ -109,8 +111,10 @@ test("ui-prefs store round-trips the scheme and sanitizes missing, corrupt and u
     assert.deepEqual(createUiPrefsStore(file).load(), { themeName: "autumn" }, "a fresh store reads it back");
     assert.deepEqual(store.save({ themeName: "christmas" }), { themeName: "christmas" });
     assert.deepEqual(createUiPrefsStore(file).load(), { themeName: "christmas" });
-    assert.deepEqual(store.save({ themeName: "christmas-2" }), { themeName: "christmas-2" });
-    assert.deepEqual(createUiPrefsStore(file).load(), { themeName: "christmas-2" });
+    fs.writeFileSync(file, JSON.stringify({ themeName: "christmas-2" }));
+    assert.deepEqual(createUiPrefsStore(file).load(), { themeName: "christmas" }, "older Christmas-2 preferences select Christmas");
+    assert.deepEqual(store.save({ themeName: "christmas-2" }), { themeName: "christmas" });
+    assert.deepEqual(JSON.parse(fs.readFileSync(file, "utf8")), { themeName: "christmas" }, "subsequent saves use the canonical name");
     assert.deepEqual(store.save({ themeName: "sakura" }), { themeName: "sakura" });
     assert.deepEqual(createUiPrefsStore(file).load(), { themeName: "sakura" });
     assert.deepEqual(store.save({ themeName: "light" }), { themeName: "light" });
@@ -187,7 +191,7 @@ test("light and seasonal text stays readable on panels, controls and selected/bo
     const under = background.match(/[0-9a-f]{2}/gi).map((part) => parseInt(part, 16));
     return "#" + [r, g, b].map((v, i) => Math.round(v * a + under[i] * (1 - a)).toString(16).padStart(2, "0")).join("");
   };
-  for (const name of ["light", "spring", "sakura", "summer", "autumn", "winter", "christmas", "christmas-2"]) {
+  for (const name of ["light", "spring", "sakura", "summer", "autumn", "winter", "christmas"]) {
     const th = THEMES[name];
     for (const surface of ["bg", "bgAlt", "bgInput", "modalBg", "rowOdd", "rowEven", "panelBg", "btnBg"]) {
       for (const foreground of ["text", "textDim", "textMuted", "accent"]) {
@@ -202,7 +206,7 @@ test("light and seasonal text stays readable on panels, controls and selected/bo
     }
     for (const row of [th.rowOdd, th.rowEven]) {
       for (const highlight of [th.selection, th.bookmark]) {
-        assert.ok(contrast(th.text, composite(highlight, row)) >= (["autumn", "christmas"].includes(name) ? 4.5 : 7), `${name}: highlighted row text`);
+        assert.ok(contrast(th.text, composite(highlight, row)) >= (name === "autumn" ? 4.5 : 7), `${name}: highlighted row text`);
       }
     }
   }

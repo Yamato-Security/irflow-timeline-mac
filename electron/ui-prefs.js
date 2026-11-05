@@ -8,12 +8,13 @@
  */
 const fs = require("fs");
 const path = require("path");
-const { DEFAULT_THEME, isThemeId } = require("./themes");
+const { DEFAULT_THEME, normalizeThemeId, isThemeId } = require("./themes");
 
 function sanitizeUiPrefs(raw) {
   const source = raw && typeof raw === "object" ? raw : {};
+  const themeName = normalizeThemeId(source.themeName);
   return {
-    themeName: isThemeId(source.themeName) ? source.themeName : DEFAULT_THEME,
+    themeName: isThemeId(themeName) ? themeName : DEFAULT_THEME,
   };
 }
 
