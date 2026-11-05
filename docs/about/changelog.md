@@ -19,7 +19,7 @@ description: IRFlow Timeline changelog — version history, new features, perfor
 
 ### Build
 
-- **Separate Apple silicon and Intel downloads** — the unsigned builds (workflow artifacts and releases) are now an Apple silicon app (`…-mac-arm64`) and an Intel app (`…-mac-x64`) instead of one universal app. Each keeps only its own architecture's code, so it is about half the size a universal app would be with the DuckDB engine. `npm run dist:unsigned` builds both; `scripts/package-unsigned-mac.sh universal` still makes a universal app
+- **Separate Apple silicon and Intel downloads** — the unsigned builds (workflow artifacts and releases) are now an Apple silicon app (`…-mac-arm64.zip`) and an Intel app (`…-mac-x64.zip`) instead of one universal app, and they come as zip files only (no disk image). Each keeps only its own architecture's code, so it is about half the size a universal app would be with the DuckDB engine. `npm run dist:unsigned` builds both; `scripts/package-unsigned-mac.sh universal` still makes a universal app
 - **Both macOS DuckDB binaries are fetched for packaging** (`npm run bundle:duckdb`, part of `bundle:tools`) at the version and SHA-512 recorded in `package-lock.json`, so either app, or a universal one, can be built on any Mac; the packaging script and the Electron smoke test check the engine
 
 ## v1.0.14 — Yamato Security fork

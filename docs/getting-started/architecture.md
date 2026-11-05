@@ -236,7 +236,7 @@ External binaries bundled as `extraResources`: **Hayabusa** (Sigma over raw EVTX
 | **Bundle tools** | `npm run bundle:tools` | Download Hayabusa + bmc-tools |
 | **DMG** | `npm run dist:dmg` | macOS installer |
 | **Universal** | `npm run dist:universal` | Intel + Apple Silicon |
-| **Unsigned test builds** | `npm run dist:unsigned` | Ad-hoc-signed Apple Silicon and Intel apps, zip + dmg each |
+| **Unsigned test builds** | `npm run dist:unsigned` | Ad-hoc-signed Apple Silicon and Intel apps, one zip each |
 | **Smoke build** | `npm run dist:smoke` | Unsigned local build (`SKIP_NOTARIZE=1`) |
 | **Runtime smoke** | `npm run smoke:electron` | Electron + DuckDB engine + SQLite + EVTX-message ABI check |
 | **Tests** | `npm test` | `node --test tests/*.test.js` |

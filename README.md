@@ -14,7 +14,7 @@
 >   remembered across launches.
 > - **Unsigned builds from GitHub Actions** — the `Build macOS (unsigned)` workflow builds an
 >   Apple silicon app and an Intel app for every pull request and push to `main`; download the
->   zip or dmg for your Mac from the workflow run's **Artifacts**. To cut a release, run the workflow by hand on
+>   zip for your Mac from the workflow run's **Artifacts**. To cut a release, run the workflow by hand on
 >   `main` with **Create draft release** ticked (or push a `v<version>` tag): the files land on a
 >   draft GitHub release for you to publish. Bump `version` in `package.json` first for a new number.
 >
@@ -28,7 +28,7 @@
 The test builds are ad-hoc signed and not notarized, so macOS blocks the first launch.
 
 1. Download the build for your Mac: `irflow-timeline-mac-…-mac-arm64.zip` for Apple silicon
-   (M1 or later), `irflow-timeline-mac-…-mac-x64.zip` for Intel (or the `.dmg` of either).
+   (M1 or later), `irflow-timeline-mac-…-mac-x64.zip` for Intel.
    Not sure which? **Apple menu → About This Mac** shows **Chip: Apple M…** on Apple silicon and
    **Processor: … Intel …** on Intel. Unzip it and drag **IRFlow Timeline.app** to **Applications**.
 2. Either open **System Settings → Privacy & Security** after the blocked launch and click
@@ -90,7 +90,7 @@ npm run start
 # Package as universal DMG (needs a Developer ID certificate)
 npm run dist:universal
 
-# Package ad-hoc-signed Apple silicon and Intel apps (zip + dmg each) for testing
+# Package ad-hoc-signed Apple silicon and Intel apps (one zip each) for testing
 # (no certificate needed); `bash scripts/package-unsigned-mac.sh arm64` builds one only
 npm run dist:unsigned
 ```

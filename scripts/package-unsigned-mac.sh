@@ -2,17 +2,15 @@
 # package-unsigned-mac.sh — Build ad-hoc-signed macOS apps for testing.
 #
 # Added by Yamato Security, 2026-11-04 (2026-11-05: checks the DuckDB bindings; one app per
-# architecture instead of one universal app).
+# architecture instead of one universal app; zip only, no disk image).
 #
 # Usage: scripts/package-unsigned-mac.sh [arm64] [x64] [universal]     (default: x64 arm64)
 #   arm64      Apple silicon Macs
 #   x64        Intel Macs
 #   universal  one app for both, about twice the size of either
 #
-# Writes to release/unsigned/, for each architecture <arch>:
-#   <name>-<version><suffix>-mac-<arch>.zip   the .app, ad-hoc signed, zipped with ditto
-#   <name>-<version><suffix>-mac-<arch>.dmg   the same app on a read-only disk image
-# and SHA256SUMS.txt for all of them. <name>/<version> come from package.json; BUILD_SUFFIX
+# Writes to release/unsigned/ one zip per architecture <arch>, plus SHA256SUMS.txt for all:
+#   <name>-<version><suffix>-mac-<arch>.zip   the .app, ad-hoc signed, zipped with ditto <name>/<version> come from package.json; BUILD_SUFFIX
 # (optional, e.g. "+g1a2b3c4") marks development builds. Run `npm run build:renderer` and
 # `npm run bundle:tools` first, or use `npm run dist:unsigned`, which does both.
 #
@@ -23,7 +21,7 @@
 # the first launch. Allow it once under System Settings → Privacy & Security → Open Anyway,
 # or clear the quarantine flag:
 #   xattr -dr com.apple.quarantine "/Applications/IRFlow Timeline.app"
-# Needs macOS with the Xcode command-line tools (codesign, ditto, hdiutil, lipo).
+# Needs macOS with the Xcode command-line tools (codesign, ditto, lipo).
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
@@ -130,14 +128,6 @@ package_one() {
   mkdir -p "$OUT_DIR"
   echo "==> Zipping"
   ditto -c -k --sequesterRsrc --keepParent "$app" "$OUT_DIR/${label}.zip"
-
-  echo "==> Creating disk image"
-  local stage
-  stage="$(mktemp -d)"
-  cp -R "$app" "$stage/"
-  ln -s /Applications "$stage/Applications"
-  hdiutil create -volname "$PRODUCT_NAME" -srcfolder "$stage" -ov -format UDZO -quiet "$OUT_DIR/${label}.dmg"
-  rm -rf "$stage"
   du -h "$app" | tail -1 | sed 's/^/==> App size: /'
 }
 
@@ -146,6 +136,6 @@ for target in "${TARGETS[@]}"; do
   package_one "$target"
 done
 
-(cd "$OUT_DIR" && shasum -a 256 ./*.zip ./*.dmg | sed 's#\./##' > SHA256SUMS.txt && cat SHA256SUMS.txt)
+(cd "$OUT_DIR" && shasum -a 256 ./*.zip | sed 's#\./##' > SHA256SUMS.txt && cat SHA256SUMS.txt)
 ls -l "$OUT_DIR"
 echo "==> Done: $OUT_DIR"

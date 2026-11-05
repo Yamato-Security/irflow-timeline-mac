@@ -2,8 +2,8 @@
 #
 # Every pull request and every push to main builds the renderer, runs the test suite,
 # bundles Hayabusa + bmc-tools and packages IRFlow Timeline twice: an Apple silicon (arm64)
-# app and an Intel (x64) app, each as a zip and a dmg. The run's Artifacts hold one download
-# per architecture. (One universal app for both would be about twice the size of either.)
+# app and an Intel (x64) app, one zip each. The run's Artifacts hold one download per
+# architecture. (One universal app for both would be about twice the size of either.)
 #
 # Releases — two ways, both end in a DRAFT GitHub release `v<package.json version>` that
 # you review and publish:
@@ -125,7 +125,7 @@ jobs:
             echo "tag=${tag}"
           } >> "${GITHUB_OUTPUT}"
 
-      - name: Package unsigned Apple silicon and Intel apps (zip + dmg)
+      - name: Package unsigned Apple silicon and Intel apps (one zip each)
         env:
           BUILD_SUFFIX: ${{ steps.meta.outputs.suffix }}
         run: bash scripts/package-unsigned-mac.sh x64 arm64
@@ -136,7 +136,6 @@ jobs:
           name: ${{ steps.meta.outputs.artifact }}-arm64
           path: |
             release/unsigned/*-mac-arm64.zip
-            release/unsigned/*-mac-arm64.dmg
             release/unsigned/SHA256SUMS.txt
           if-no-files-found: error
           retention-days: 30
@@ -147,7 +146,6 @@ jobs:
           name: ${{ steps.meta.outputs.artifact }}-x64
           path: |
             release/unsigned/*-mac-x64.zip
-            release/unsigned/*-mac-x64.dmg
             release/unsigned/SHA256SUMS.txt
           if-no-files-found: error
           retention-days: 30
@@ -163,7 +161,7 @@ jobs:
       - name: Download build artifacts
         uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
         with:
-          # Both architectures; each artifact carries the same SHA256SUMS.txt for all four files.
+          # Both architectures; each artifact carries the same SHA256SUMS.txt for both zips.
           pattern: ${{ needs.build.outputs.artifact }}-*
           merge-multiple: true
           path: release-files
