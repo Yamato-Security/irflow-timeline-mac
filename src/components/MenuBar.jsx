@@ -1,4 +1,4 @@
-// Modified by Yamato Security, 2026-11-04: the dark/light toggle became a six-scheme Color Scheme picker.
+// Modified by Yamato Security, 2026-11-04: the dark/light toggle became a eight-scheme Color Scheme picker.
 import { Fragment, useEffect, useState } from "react";
 import useUIStore from "../store/useUIStore.js";
 import { THEME_OPTIONS } from "../constants/themes.js";

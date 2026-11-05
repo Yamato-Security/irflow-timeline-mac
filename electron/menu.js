@@ -1,7 +1,7 @@
 /**
  * menu.js — Native macOS menu builder
  *
- * Modified by Yamato Security, 2026-11-04: Tools → Theme became Tools → Color Scheme with six radio items.
+ * Modified by Yamato Security, 2026-11-04: Tools → Theme became Tools → Color Scheme with eight radio items.
  *
  * Extracted from main.js. Builds the application menu template
  * with recent files, keyboard shortcuts, and all menu actions.

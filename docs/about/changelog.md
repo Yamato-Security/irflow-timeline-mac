@@ -4,6 +4,20 @@ description: IRFlow Timeline changelog — version history, new features, perfor
 
 # Changelog
 
+## Unreleased — Light Mode and seasonal palettes
+
+- Refine **Light Mode** with neutral surfaces, navy text, teal/blue accents, blue selections and amber bookmarks
+- Apply the supplied **Spring**, **Sakura**, **Summer**, **Autumn** and **Christmas** reference palettes; document their source hex codes in Preferences
+- Make Spring's backgrounds predominantly Light Forest Green and the requested `#678215` green, with floral accents and darker text for readability
+- Keep Summer predominantly aqua blue and sunny yellow, using the supplied citrus red, leaf green and sand as supporting accents
+- Add Sakura's cream, pale blue and blossom pinks; use Japanese autumn red, orange, yellow, leaf green, plum and brown for Autumn
+- Reverse Summer's sunny yellow and pale-yellow roles; use pale headers and sunny chart panels
+- Reverse Autumn's brighter red and darker red-brown surfaces: brighter timeline backgrounds and darker headers, with readable cream text
+- Apply the **Merry Christmas (SPA0153)** palette: predominantly **Dark Khaki Green `#66582F`**, secondary **Red Ruby `#CE4C4B`** headers/actions, and gold/cream accents. Cream body text and near-black control labels meet the 4.5:1 contrast checks; severity colors remain distinct
+- Separate opaque control fills from accent lettering so labels and checkmarks remain visible with the reference palettes
+- Make histogram bars and context menus follow the theme; retain saved preferences and both color-scheme menus
+- Validate standard-palette text contrast, all palettes' primary-control contrast, and menu/catalog parity
+
 ## v1.0.14 — Yamato Security fork
 
 `irflow-timeline-mac` is Yamato Security's fork of r3nzsec/irflow-timeline. First fork release; changes on top of upstream v1.0.13:

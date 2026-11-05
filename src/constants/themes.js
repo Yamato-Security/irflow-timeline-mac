@@ -1,6 +1,7 @@
-// Modified by Yamato Security, 2026-11-04: added the Spring, Summer, Autumn and Winter
-// color schemes, the `base` token on every theme, and the THEME_OPTIONS catalog/helpers
-// that drive the Color Scheme menus (see electron/themes.js for the main-process mirror).
+// Modified by Yamato Security, 2026-11-04: redesigned the seasonal palettes, added Christmas,
+// and defined onAccent/onPrimary foregrounds for readable filled controls. The `base` token
+// and THEME_OPTIONS catalog drive the Color Scheme menus; electron/themes.js is the
+// main-process mirror.
 
 /**
  * Color schemes.
@@ -9,15 +10,17 @@
  * light design — components that only know two moods (context-menu glass, the
  * `color-scheme` CSS property, the timeline palettes) branch on `base`, never on the name.
  *
- * Text-contrast guarantees, enforced by tests/color-schemes.test.js (WCAG 2.x ratios):
- *   text / bg ≥ 7, textDim / bg ≥ 4.5, textMuted / bg ≥ 4.5, headerText / headerBg ≥ 4.5,
+ * Palette text-contrast guarantees, enforced by tests/color-schemes.test.js (WCAG 2.x ratios):
+ *   text, textDim and textMuted / bg ≥ 4.5, headerText / headerBg ≥ 4.5,
  *   accent, success, warning, danger and every severity color / bg ≥ 3.
+ * Autumn targets 4.5:1 for main text; the other schemes target 7:1.
+ * Reference header and control fills use their own contrasting foregrounds.
  */
 export const THEMES = {
   dark: {
     base: "dark",
     bg: "#0f1114", bgAlt: "#181b20", bgInput: "#12151a", border: "#2a2d33", borderAccent: "#E85D2A",
-    text: "#e0ddd8", textDim: "#b0aaa4", textMuted: "#948e88", accent: "#E85D2A", accentHover: "#F47B50",
+    text: "#e0ddd8", textDim: "#b0aaa4", textMuted: "#948e88", accent: "#E85D2A", accentHover: "#F47B50", onAccent: "#151311",
     rowOdd: "#141720", rowEven: "#0f1114", headerBg: "#181b20", headerText: "#E85D2A",
     selection: "rgba(232,93,42,0.14)", bookmark: "rgba(232,93,42,0.06)",
     modalBg: "#181b20", modalBorder: "#333639", overlay: "rgba(5,5,8,0.85)",
@@ -26,7 +29,7 @@ export const THEMES = {
     // Unit 42 extended palette
     panelBg: "#0b0d10", cellBorder: "#12151a", accentSubtle: "rgba(232,93,42,0.12)",
     histBar: "#E85D2A", histBarHover: "#F47B50", histGrid: "#1e2028",
-    primaryBtn: "#E85D2A", primaryBtnHover: "#C44D1E",
+    primaryBtn: "#E85D2A", primaryBtnHover: "#F47B50", onPrimary: "#151311",
     toolbarBg: "rgba(24,27,32,0.82)", glassBg: "rgba(255,255,255,0.05)", glassBorder: "rgba(255,255,255,0.08)", glassHover: "rgba(255,255,255,0.10)",
     // Severity palette — used by SUS_COLORS, INT_COLOR, PI_SEV_COLORS, IOC verdicts.
     // Distinct from brand `accent` (which is #E85D2A): severity needs cooler reds, deeper amber, etc.
@@ -34,88 +37,139 @@ export const THEMES = {
   },
   light: {
     base: "light",
-    bg: "#ffffff", bgAlt: "#f7f5f3", bgInput: "#ffffff", border: "#e0dbd6", borderAccent: "#B84317",
-    text: "#1c1917", textDim: "#554f4a", textMuted: "#6f6862", accent: "#B84317", accentHover: "#963512",
-    rowOdd: "#faf8f6", rowEven: "#ffffff", headerBg: "#f7f5f3", headerText: "#B84317",
-    selection: "rgba(232,93,42,0.10)", bookmark: "rgba(232,93,42,0.06)",
-    modalBg: "#ffffff", modalBorder: "#e0dbd6", overlay: "rgba(28,25,23,0.5)",
-    success: "#15803d", warning: "#9A5B00", danger: "#dc2626",
-    btnBg: "#f0ebe6", btnBorder: "#e0dbd6",
-    // Unit 42 extended palette
-    panelBg: "#f0ebe6", cellBorder: "#ebe6e0", accentSubtle: "rgba(232,93,42,0.08)",
-    histBar: "#B84317", histBarHover: "#963512", histGrid: "#e0dbd6",
-    primaryBtn: "#B84317", primaryBtnHover: "#963512",
-    toolbarBg: "rgba(247,245,243,0.82)", glassBg: "rgba(0,0,0,0.03)", glassBorder: "rgba(0,0,0,0.06)", glassHover: "rgba(0,0,0,0.08)",
-    sev: { critical: "#dc2626", high: "#cc4400", med: "#92400e", low: "#554f4a", custom: "#6d28d9", clean: "#15803d", info: "#1d4ed8" },
+    // A neutral workspace: soft gray chrome, white paper, navy ink and restrained
+    // teal/blue controls. Amber bookmarks stay distinct from blue selections.
+    bg: "#f5f7fa", bgAlt: "#edf2f7", bgInput: "#ffffff", border: "#c4cfdc", borderAccent: "#2563a6",
+    text: "#172536", textDim: "#34465b", textMuted: "#506176", accent: "#0b6274", accentHover: "#084b5c", onAccent: "#ffffff",
+    rowOdd: "#f4f7fb", rowEven: "#ffffff", headerBg: "#e2eaf3", headerText: "#233e5b",
+    selection: "rgba(37,99,166,0.14)", bookmark: "rgba(210,144,24,0.13)",
+    modalBg: "#ffffff", modalBorder: "#b7c5d5", overlay: "rgba(19,35,54,0.42)",
+    success: "#187345", warning: "#925800", danger: "#c12c3e",
+    btnBg: "#f8fafc", btnBorder: "#aebed0",
+    panelBg: "#eaf0f6", cellBorder: "#e1e7ef", accentSubtle: "rgba(11,98,116,0.08)",
+    histBar: "#337f9a", histBarHover: "#175c7a", histGrid: "#c4d0de",
+    primaryBtn: "#2563a6", primaryBtnHover: "#1c4e86", onPrimary: "#ffffff",
+    toolbarBg: "rgba(237,242,247,0.97)", glassBg: "rgba(255,255,255,0.55)", glassBorder: "rgba(48,74,105,0.16)", glassHover: "rgba(37,99,166,0.08)",
+    sev: { critical: "#bd2035", high: "#b04b0a", med: "#895900", low: "#506176", custom: "#7045a2", clean: "#187345", info: "#2563a6" },
   },
   // ── Seasonal schemes ─────────────────────────────────────────────────────────
-  // Spring — new leaves on a pale, sunlit background; a touch of cherry blossom for
-  // bookmarks and custom tags.
+  // Spring reference: https://stitchpalettes.com/palette/uplifting-spring-spa1006/
+  // Light Forest Green and the requested #678215 green dominate; floral accents remain.
   spring: {
     base: "light",
-    bg: "#f6fbf3", bgAlt: "#e9f4e3", bgInput: "#ffffff", border: "#c9dfc0", borderAccent: "#2e8b3d",
-    text: "#172315", textDim: "#3d5739", textMuted: "#53704f", accent: "#2e8b3d", accentHover: "#246f31",
-    rowOdd: "#eff7ea", rowEven: "#f6fbf3", headerBg: "#e3f0dc", headerText: "#1f6e36",
-    selection: "rgba(46,139,61,0.16)", bookmark: "rgba(217,83,138,0.10)",
-    modalBg: "#ffffff", modalBorder: "#c9dfc0", overlay: "rgba(23,35,21,0.5)",
-    success: "#1f7a33", warning: "#9a6200", danger: "#bf3a2b",
-    btnBg: "#e9f4e3", btnBorder: "#c9dfc0",
-    panelBg: "#e9f4e3", cellBorder: "#dcebd5", accentSubtle: "rgba(46,139,61,0.12)",
-    histBar: "#3fa34d", histBarHover: "#2e8b3d", histGrid: "#d6e8cf",
-    primaryBtn: "#2e8b3d", primaryBtnHover: "#246f31",
-    toolbarBg: "rgba(233,244,227,0.85)", glassBg: "rgba(46,139,61,0.05)", glassBorder: "rgba(46,139,61,0.14)", glassHover: "rgba(46,139,61,0.10)",
-    sev: { critical: "#b3261e", high: "#b9410a", med: "#8a5a00", low: "#5b6b5a", custom: "#b4336f", clean: "#1f7a33", info: "#1f5fa8" },
+    bg: "#a6b784", bgAlt: "#678215", bgInput: "#fae3a0", border: "#678215", borderAccent: "#6f5497",
+    text: "#010500", textDim: "#040602", textMuted: "#070803", accent: "#0f060a", accentHover: "#010500", onAccent: "#fae3a0",
+    rowOdd: "#a6b784", rowEven: "#a6b784", headerBg: "#a6b784", headerText: "#102015",
+    selection: "rgba(178,165,205,0.22)", bookmark: "rgba(226,166,190,0.20)",
+    modalBg: "#a6b784", modalBorder: "#6f5497", overlay: "rgba(36,51,41,0.55)",
+    success: "#27462e", warning: "#604c0f", danger: "#732f4b",
+    btnBg: "#b2a5cd", btnBorder: "#6f5497",
+    panelBg: "#a6b784", cellBorder: "#678215", accentSubtle: "rgba(111,84,151,0.10)",
+    histBar: "#6f5497", histBarHover: "#6f5497", histGrid: "#678215",
+    primaryBtn: "#6f5497", primaryBtnHover: "#6f5497", onPrimary: "#fae3a0",
+    fillAccent: "#6f5497", fillAccentHover: "#6f5497", fillWarning: "#6f5497", fillDanger: "#6f5497",
+    toolbarBg: "rgba(103,130,21,0.98)", glassBg: "rgba(166,183,132,0.30)", glassBorder: "rgba(111,84,151,0.30)", glassHover: "rgba(250,227,160,0.10)",
+    sev: { critical: "#732f4b", high: "#7e3e19", med: "#604c0f", low: "#142017", custom: "#614786", clean: "#27462e", info: "#24475c" },
   },
-  // Summer — deep ocean water with bright surf, seafoam and sand.
+  // Sakura reference: https://img.magnific.com/premium-vector/color-element-trendy-pallete-color-sakura-color-pallete-swatch-summer-shade-tone-with-hex-code_615232-1235.jpg
+  // Exact reference surfaces and accents, with plum foregrounds for readability.
+  sakura: {
+    base: "light",
+    bg: "#fff4f3", bgAlt: "#ffdbdb", bgInput: "#fff4f3", border: "#d4e0ee", borderAccent: "#ec275f",
+    text: "#432336", textDim: "#563647", textMuted: "#634153", accent: "#84264d", accentHover: "#70203f", onAccent: "#100810",
+    rowOdd: "#ffdbdb", rowEven: "#fff4f3", headerBg: "#ffa7a6", headerText: "#432336",
+    selection: "rgba(212,224,238,0.72)", bookmark: "rgba(255,167,166,0.28)",
+    modalBg: "#fff4f3", modalBorder: "#f25477", overlay: "rgba(58,22,43,0.45)",
+    success: "#286b4c", warning: "#8c5900", danger: "#ac294d",
+    btnBg: "#ffdbdb", btnBorder: "#f25477",
+    panelBg: "#fff4f3", cellBorder: "#d4e0ee", accentSubtle: "rgba(236,39,95,0.10)",
+    histBar: "#f25477", histBarHover: "#ec275f", histGrid: "#d4e0ee",
+    primaryBtn: "#ec275f", primaryBtnHover: "#f25477", onPrimary: "#100810",
+    fillAccent: "#ec275f", fillAccentHover: "#f25477", fillWarning: "#ffa7a6", fillDanger: "#f25477",
+    toolbarBg: "rgba(255,219,219,0.98)", glassBg: "rgba(255,244,243,0.30)", glassBorder: "rgba(236,39,95,0.18)", glassHover: "rgba(236,39,95,0.08)",
+    sev: { critical: "#b32445", high: "#ab4c16", med: "#856000", low: "#634153", custom: "#81509b", clean: "#286b4c", info: "#37628c" },
+  },
+  // Summer reference: https://avemateiu.com/wp-content/uploads/2019/06/summer-color-palette-6.png
+  // Aqua and sunny yellow dominate; citrus red, leaf green and sand are accents.
   summer: {
-    base: "dark",
-    bg: "#06192b", bgAlt: "#0b2540", bgInput: "#082036", border: "#164366", borderAccent: "#22b8e6",
-    text: "#e6f4fb", textDim: "#a9cde0", textMuted: "#7fa8c0", accent: "#22b8e6", accentHover: "#5ad0f5",
-    rowOdd: "#09213a", rowEven: "#06192b", headerBg: "#0b2540", headerText: "#4fd1ff",
-    selection: "rgba(34,184,230,0.16)", bookmark: "rgba(245,199,106,0.10)",
-    modalBg: "#0b2540", modalBorder: "#1b4d75", overlay: "rgba(2,10,20,0.85)",
-    success: "#3ddc97", warning: "#f5c76a", danger: "#ff6b6b",
-    btnBg: "#10304d", btnBorder: "#1b4d75",
-    panelBg: "#04121f", cellBorder: "#0d2a45", accentSubtle: "rgba(34,184,230,0.12)",
-    histBar: "#22b8e6", histBarHover: "#5ad0f5", histGrid: "#123a5a",
-    primaryBtn: "#1aa3d1", primaryBtnHover: "#22b8e6",
-    toolbarBg: "rgba(11,37,64,0.82)", glassBg: "rgba(120,200,255,0.06)", glassBorder: "rgba(120,200,255,0.12)", glassHover: "rgba(120,200,255,0.12)",
-    sev: { critical: "#ff6b6b", high: "#ff9f43", med: "#f5c76a", low: "#8fb3c9", custom: "#c792ea", clean: "#3ddc97", info: "#4fd1ff" },
+    base: "light",
+    bg: "#a2eeeb", bgAlt: "#a2eeeb", bgInput: "#edc02c", border: "#6ebebd", borderAccent: "#f03613",
+    text: "#101b24", textDim: "#304e5c", textMuted: "#3b535b", accent: "#005166", accentHover: "#004355", onAccent: "#0a1017",
+    rowOdd: "#a2eeeb", rowEven: "#d1f6f4", headerBg: "#f3e2b3", headerText: "#23474d",
+    selection: "rgba(39,180,110,0.16)", bookmark: "rgba(240,54,19,0.16)",
+    modalBg: "#edc02c", modalBorder: "#6ebebd", overlay: "rgba(8,36,54,0.48)",
+    success: "#196b47", warning: "#795000", danger: "#bb2a12",
+    btnBg: "#f3e2b3", btnBorder: "#27b46e",
+    panelBg: "#edc02c", cellBorder: "#8bd4d1", accentSubtle: "rgba(0,93,116,0.10)",
+    histBar: "#007fba", histBarHover: "#005f98", histGrid: "#d5c593",
+    primaryBtn: "#f3e2b3", primaryBtnHover: "#edc02c", onPrimary: "#0a1017",
+    fillAccent: "#f3e2b3", fillAccentHover: "#edc02c", fillWarning: "#f3e2b3", fillDanger: "#f03613",
+    toolbarBg: "rgba(243,226,179,0.98)", glassBg: "rgba(237,192,44,0.30)", glassBorder: "rgba(0,93,116,0.20)", glassHover: "rgba(240,54,19,0.10)",
+    sev: { critical: "#bb2a12", high: "#ad420c", med: "#795000", low: "#3b535b", custom: "#74519b", clean: "#196b47", info: "#005d74" },
   },
-  // Autumn — pumpkin orange and harvest gold on dark roasted browns, with a Halloween
-  // purple for custom tags.
+  // Autumn reference: https://branding-lab.net/wp-content/uploads/2026/11/japanese-fall-color-palette.jpg
+  // Momiji red, orange, yellow, leaf green, plum and brown, with cream text.
   autumn: {
     base: "dark",
-    bg: "#1a110b", bgAlt: "#251911", bgInput: "#1f140d", border: "#3d2a1c", borderAccent: "#ff7a1a",
-    text: "#f5e9d8", textDim: "#d2b89a", textMuted: "#ab8d6b", accent: "#ff7a1a", accentHover: "#ff9640",
-    rowOdd: "#20150e", rowEven: "#1a110b", headerBg: "#251911", headerText: "#ff8c33",
-    selection: "rgba(255,122,26,0.16)", bookmark: "rgba(230,168,35,0.10)",
-    modalBg: "#251911", modalBorder: "#4a3322", overlay: "rgba(10,6,3,0.85)",
-    success: "#8fbf3f", warning: "#e6a823", danger: "#e5484d",
-    btnBg: "#2e1f15", btnBorder: "#4a3322",
-    panelBg: "#140d08", cellBorder: "#2a1c12", accentSubtle: "rgba(255,122,26,0.12)",
-    histBar: "#ff7a1a", histBarHover: "#ff9640", histGrid: "#33231a",
-    primaryBtn: "#e0680f", primaryBtnHover: "#ff7a1a",
-    toolbarBg: "rgba(37,25,17,0.82)", glassBg: "rgba(255,170,90,0.06)", glassBorder: "rgba(255,170,90,0.12)", glassHover: "rgba(255,170,90,0.12)",
-    sev: { critical: "#e5484d", high: "#ff7a1a", med: "#e6a823", low: "#a68b6f", custom: "#b388eb", clean: "#8fbf3f", info: "#8fb4d9" },
+    bg: "#c93036", bgAlt: "#c93036", bgInput: "#4b2a1f", border: "#a34c66", borderAccent: "#e9b626",
+    text: "#fff8ed", textDim: "#fff1d8", textMuted: "#ffedd0", accent: "#fff4de", accentHover: "#fff8ed", onAccent: "#21120b",
+    rowOdd: "#c93036", rowEven: "#c93036", headerBg: "#6b3c2c", headerText: "#fff8ed",
+    selection: "rgba(240,131,0,0.12)", bookmark: "rgba(131,163,60,0.13)",
+    modalBg: "#c93036", modalBorder: "#f08300", overlay: "rgba(15,8,5,0.83)",
+    success: "#d9e7b8", warning: "#ffdd7c", danger: "#ffb2a6",
+    btnBg: "#a34c66", btnBorder: "#e9b626",
+    panelBg: "#3b2018", cellBorder: "#a34c66", accentSubtle: "rgba(240,131,0,0.12)",
+    histBar: "#c93036", histBarHover: "#f08300", histGrid: "#6b3c2c",
+    primaryBtn: "#f08300", primaryBtnHover: "#e9b626", onPrimary: "#21120b",
+    fillAccent: "#f08300", fillAccentHover: "#e9b626", fillWarning: "#e9b626", fillDanger: "#f08300",
+    toolbarBg: "rgba(107,60,44,0.98)", glassBg: "rgba(233,182,38,0.06)", glassBorder: "rgba(233,182,38,0.25)", glassHover: "rgba(240,131,0,0.12)",
+    sev: { critical: "#ffb2a6", high: "#ffd0a0", med: "#ffdd7c", low: "#ffedd0", custom: "#f1d7e0", clean: "#d9e7b8", info: "#d4e0ee" },
   },
-  // Winter — fresh snow and ice with Christmas red, pine green and a little gold.
+  // Winter — blue ice, snow-white rows and pale glacier-blue controls. Christmas
+  // has its own scheme below; red and green here are reserved for status meanings.
   winter: {
     base: "light",
-    bg: "#fbfdff", bgAlt: "#eef4fa", bgInput: "#ffffff", border: "#cfdceb", borderAccent: "#c41e3a",
-    text: "#15202b", textDim: "#3d4f61", textMuted: "#56687a", accent: "#c41e3a", accentHover: "#a3172f",
-    rowOdd: "#f3f7fb", rowEven: "#fbfdff", headerBg: "#e4efe8", headerText: "#146b3a",
-    selection: "rgba(20,107,58,0.14)", bookmark: "rgba(196,30,58,0.08)",
-    modalBg: "#ffffff", modalBorder: "#cfdceb", overlay: "rgba(21,32,43,0.5)",
-    success: "#146b3a", warning: "#9c6a00", danger: "#b3122e",
-    btnBg: "#eef4fa", btnBorder: "#cfdceb",
-    panelBg: "#eef4fa", cellBorder: "#e1eaf3", accentSubtle: "rgba(196,30,58,0.08)",
-    histBar: "#146b3a", histBarHover: "#0f5a30", histGrid: "#d9e4ee",
-    primaryBtn: "#c41e3a", primaryBtnHover: "#a3172f",
-    toolbarBg: "rgba(238,244,250,0.85)", glassBg: "rgba(20,60,120,0.04)", glassBorder: "rgba(20,60,120,0.10)", glassHover: "rgba(20,60,120,0.08)",
-    sev: { critical: "#b3122e", high: "#b9410a", med: "#8a5a00", low: "#56687a", custom: "#6f3bb0", clean: "#146b3a", info: "#1d5fb4" },
+    bg: "#f4fbff", bgAlt: "#e3f3fc", bgInput: "#ffffff", border: "#b1cedf", borderAccent: "#6baccd",
+    text: "#183749", textDim: "#365568", textMuted: "#456478", accent: "#16678d", accentHover: "#0a5276", onAccent: "#ffffff",
+    rowOdd: "#ecf7fd", rowEven: "#ffffff", headerBg: "#d0eafa", headerText: "#24536e",
+    selection: "rgba(66,139,185,0.18)", bookmark: "rgba(120,187,227,0.18)",
+    modalBg: "#f8fcff", modalBorder: "#a6c8dc", overlay: "rgba(19,46,66,0.43)",
+    success: "#276f62", warning: "#856000", danger: "#b33445",
+    btnBg: "#ebf8ff", btnBorder: "#a6c8dc",
+    panelBg: "#dff2ff", cellBorder: "#d5e9f5", accentSubtle: "rgba(65,141,183,0.10)",
+    histBar: "#418db7", histBarHover: "#22688c", histGrid: "#b6d6e9",
+    primaryBtn: "#b8e5fa", primaryBtnHover: "#9ddaf5", onPrimary: "#163e52",
+    toolbarBg: "rgba(218,239,252,0.96)", glassBg: "rgba(255,255,255,0.42)", glassBorder: "rgba(37,95,132,0.16)", glassHover: "rgba(77,153,199,0.12)",
+    sev: { critical: "#b33445", high: "#ad4c17", med: "#856000", low: "#456478", custom: "#685895", clean: "#276f62", info: "#16678d" },
+  },
+  // Christmas reference: https://www.schemecolor.com/christmas-hex-color-codes.php
+  // Both greens frame the workspace; red headers/actions and vermillion/gold bars add contrast.
+  christmas: {
+    base: "dark",
+    bg: "#165b33", bgAlt: "#146b3a", bgInput: "#0d371f", border: "#367c4e", borderAccent: "#f8b229",
+    text: "#fff8ed", textDim: "#f2e3d1", textMuted: "#e7d9c3", accent: "#ffe2a1", accentHover: "#fff0cd", onAccent: "#fff8ed",
+    rowOdd: "#165b33", rowEven: "#14532f", headerBg: "#bb2528", headerText: "#fff8ed",
+    selection: "rgba(248,178,41,0.04)", bookmark: "rgba(234,70,48,0.12)",
+    modalBg: "#165b33", modalBorder: "#f8b229", overlay: "rgba(6,26,15,0.82)",
+    success: "#a5e5b3", warning: "#f8b229", danger: "#ffaaa0",
+    btnBg: "#104829", btnBorder: "#367c4e",
+    panelBg: "#0d371f", cellBorder: "#146b3a", accentSubtle: "rgba(248,178,41,0.10)",
+    histBar: "#ea4630", histBarHover: "#f8b229", histGrid: "#367c4e",
+    primaryBtn: "#bb2528", primaryBtnHover: "#9e1f23", onPrimary: "#fff8ed",
+    fillAccent: "#bb2528", fillAccentHover: "#9e1f23", fillWarning: "#bb2528", fillDanger: "#bb2528",
+    toolbarBg: "rgba(20,107,58,0.98)", glassBg: "rgba(255,248,237,0.06)", glassBorder: "rgba(248,178,41,0.25)", glassHover: "rgba(248,178,41,0.10)",
+    sev: { critical: "#ffaaa0", high: "#ffc087", med: "#f8b229", low: "#e7d9c3", custom: "#dfc3ee", clean: "#a5e5b3", info: "#b8e5fa" },
   },
 };
+
+// Separate foreground accents from opaque control fills. Existing palettes keep
+// their original fills; reference palettes may need a different button background.
+for (const th of Object.values(THEMES)) {
+  th.fillAccent ??= th.accent;
+  th.fillAccentHover ??= th.accentHover;
+  th.fillWarning ??= th.warning;
+  th.fillDanger ??= th.danger;
+}
 
 export const DEFAULT_THEME = "dark";
 
@@ -125,11 +179,13 @@ export const DEFAULT_THEME = "dark";
  */
 export const THEME_OPTIONS = [
   { id: "dark", label: "Dark Mode", icon: "🌙", description: "Charcoal with the orange accent (default)" },
-  { id: "light", label: "Light Mode", icon: "☀️", description: "White with the orange accent" },
-  { id: "spring", label: "Spring", icon: "🌱", description: "Fresh leaf greens on a pale background" },
-  { id: "summer", label: "Summer", icon: "🌊", description: "Deep ocean blues with bright surf" },
-  { id: "autumn", label: "Autumn", icon: "🍂", description: "Pumpkin orange and harvest gold on dark brown" },
-  { id: "winter", label: "Winter", icon: "🎄", description: "Snow white with Christmas red and pine green" },
+  { id: "light", label: "Light Mode", icon: "☀️", description: "Soft gray and white, navy text, teal and blue accents" },
+  { id: "spring", label: "Spring", icon: "🌱", description: "Light forest green, fresh #678215 green and floral accents" },
+  { id: "sakura", label: "Sakura", icon: "🌸", description: "Reference Sakura pinks, cream, pale blue and plum text" },
+  { id: "summer", label: "Summer", icon: "🌊", description: "Aqua blue, pale-yellow headers and sunny-yellow chart panels" },
+  { id: "autumn", label: "Autumn", icon: "🍂", description: "Japanese autumn: bright-red timeline and dark-red headers" },
+  { id: "winter", label: "Winter", icon: "❄️", description: "Snow white and pale glacier blue" },
+  { id: "christmas", label: "Christmas", icon: "🎄", description: "Forest and jewel greens, festive red headers and controls, vermillion and gold charts" },
 ];
 
 export const THEME_IDS = THEME_OPTIONS.map((option) => option.id);
@@ -147,4 +203,15 @@ export function resolveTheme(name) {
 /** Whether `name` resolves to a dark-based scheme. */
 export function isDarkTheme(name) {
   return resolveTheme(name).base === "dark";
+}
+
+/** Build once per histogram render; interpolate the theme's two density endpoints. */
+export function createHistogramColorScale(theme) {
+  const rgb = (hex) => hex.match(/[0-9a-f]{2}/gi).map((part) => parseInt(part, 16));
+  const low = rgb(theme.histBar);
+  const high = rgb(theme.histBarHover);
+  return (ratio) => {
+    const t = Math.max(0, Math.min(1, ratio));
+    return `rgb(${low.map((channel, i) => Math.round(channel + (high[i] - channel) * t)).join(",")})`;
+  };
 }

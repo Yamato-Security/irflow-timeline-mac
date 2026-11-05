@@ -1,4 +1,4 @@
-// Modified by Yamato Security, 2026-11-04: themeName accepts the six color schemes and rejects unknown names.
+// Modified by Yamato Security, 2026-11-04: themeName accepts known color schemes and rejects unknown names.
 import { create } from "zustand";
 import { updateModal as buildModalUpdate } from "../modals/modalRegistry.js";
 import { DEFAULT_THEME, isThemeName } from "../constants/themes.js";

@@ -8,22 +8,29 @@
  */
 const THEME_OPTIONS = Object.freeze([
   Object.freeze({ id: "dark", label: "Dark Mode", windowBackground: "#0f1114" }),
-  Object.freeze({ id: "light", label: "Light Mode", windowBackground: "#ffffff" }),
-  Object.freeze({ id: "spring", label: "Spring", windowBackground: "#f6fbf3" }),
-  Object.freeze({ id: "summer", label: "Summer", windowBackground: "#06192b" }),
-  Object.freeze({ id: "autumn", label: "Autumn", windowBackground: "#1a110b" }),
-  Object.freeze({ id: "winter", label: "Winter", windowBackground: "#fbfdff" }),
+  Object.freeze({ id: "light", label: "Light Mode", windowBackground: "#f5f7fa" }),
+  Object.freeze({ id: "spring", label: "Spring", windowBackground: "#a6b784" }),
+  Object.freeze({ id: "sakura", label: "Sakura", windowBackground: "#fff4f3" }),
+  Object.freeze({ id: "summer", label: "Summer", windowBackground: "#a2eeeb" }),
+  Object.freeze({ id: "autumn", label: "Autumn", windowBackground: "#c93036" }),
+  Object.freeze({ id: "winter", label: "Winter", windowBackground: "#f4fbff" }),
+  Object.freeze({ id: "christmas", label: "Christmas", windowBackground: "#165b33" }),
 ]);
 
 const DEFAULT_THEME = "dark";
+
+// Older previews stored the surviving palette as `christmas-2`.
+function normalizeThemeId(value) {
+  return value === "christmas-2" ? "christmas" : value;
+}
 
 function isThemeId(value) {
   return typeof value === "string" && THEME_OPTIONS.some((option) => option.id === value);
 }
 
 function windowBackgroundFor(themeId) {
-  const option = THEME_OPTIONS.find((o) => o.id === themeId) || THEME_OPTIONS.find((o) => o.id === DEFAULT_THEME);
+  const option = THEME_OPTIONS.find((o) => o.id === normalizeThemeId(themeId)) || THEME_OPTIONS.find((o) => o.id === DEFAULT_THEME);
   return option.windowBackground;
 }
 
-module.exports = { THEME_OPTIONS, DEFAULT_THEME, isThemeId, windowBackgroundFor };
+module.exports = { THEME_OPTIONS, DEFAULT_THEME, normalizeThemeId, isThemeId, windowBackgroundFor };
