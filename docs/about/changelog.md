@@ -20,6 +20,13 @@ description: IRFlow Timeline changelog — version history, new features, perfor
 - **Unsigned universal builds** — the `Build macOS (unsigned)` workflow (pull requests, pushes to `main`, tags, manual runs) packages an ad-hoc-signed universal app as zip + dmg. Running it by hand with **Create draft release** ticked, or pushing a `v<version>` tag, attaches the files to a draft GitHub release. `npm run dist:unsigned` does the same locally
 - Upstream's signed/notarized release workflow and the GitHub Pages docs deployment are not part of this fork (they need Apple and S3 credentials and a Pages site)
 
+### Fixes
+
+- **The first search or filter on a newly opened file is applied** — it was ignored until the filter was cleared and set again. Jumping to another tab with a search (**Find across tabs**, the AI Workspace correlate filter) also showed rows for the old query
+- **Search-box Equals, Starts with and Like compare the whole input**, as Edit Filter does: Equals `Local Settings` finds cells that are exactly `Local Settings` instead of looking for one cell equal to `Local` and another equal to `Settings`
+- **Double quotes group a phrase in every match mode** and are not part of the value. In Mixed mode, `Col:"phrase"`, `-"phrase"` and `+"phrase"` work as well
+- **A quoted phrase no longer matches across two neighbouring cells** while the search index is still being built
+
 ## v1.0.13 — September 8, 2026
 
 ### Process Inspector — correct process identity and lower-noise promotion
