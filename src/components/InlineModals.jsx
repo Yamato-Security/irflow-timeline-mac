@@ -1,4 +1,5 @@
 // Modified by Yamato Security, 2026-11-04: theme-aware foregrounds for filled controls.
+// Modified by Yamato Security, 2026-11-05: the timeline engine is DuckDB, not SQLite.
 import { useState, useMemo, useRef, useEffect } from "react";
 import useUIStore from "../store/useUIStore.js";
 import useTabStore from "../store/useTabStore.js";
@@ -288,7 +289,7 @@ export function ImportProgress({ th, info }) {
   const phaseLabel = info?.statusDetail
     ? info.statusDetail
     : phase === "finalizing"
-      ? "Finalizing SQLite timeline..."
+      ? "Finalizing DuckDB timeline..."
       : phase === "extracting"
         ? "Extracting AI history sources..."
         : phase === "loading"
