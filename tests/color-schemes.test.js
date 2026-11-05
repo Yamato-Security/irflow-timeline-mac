@@ -49,12 +49,16 @@ test("the catalog lists the eight schemes in menu order and every scheme has a c
   }
 });
 
-test("every scheme keeps text readable (WCAG ratios) and its base matches its background", async () => {
+test("standard schemes keep readable text; the exact Christmas palette is reported separately", async (t) => {
   const { THEMES } = await themesModule();
   for (const [name, th] of Object.entries(THEMES)) {
     const at = (fg, bg, min, what) => assert.ok(contrast(fg, bg) >= min, `${name}: ${what} ${contrast(fg, bg).toFixed(2)} < ${min}`);
-    // Vivid scarlet with green text targets WCAG AA; the other palettes retain AAA main text.
-    at(th.text, th.bg, name === "christmas" ? 4.5 : 7, "text on bg");
+    if (name === "christmas") {
+      assert.equal(th.base, "dark");
+      t.diagnostic(`Exact reference Christmas palette: text/background ${contrast(th.text, th.bg).toFixed(2)}:1; header ${contrast(th.headerText, th.headerBg).toFixed(2)}:1. This decorative palette is not WCAG AA.`);
+      continue;
+    }
+    at(th.text, th.bg, 7, "text on bg");
     at(th.textDim, th.bg, 4.5, "textDim on bg");
     at(th.textMuted, th.bg, 4.5, "textMuted on bg");
     at(th.textMuted, th.bgAlt, 4.5, "textMuted on bgAlt");
@@ -75,7 +79,7 @@ test("resolveTheme falls back to the default for unknown names and isDarkTheme f
   assert.equal(isThemeName("toString"), false);
   assert.equal(isThemeName("autumn"), true);
   assert.equal(isDarkTheme("summer"), false);
-  assert.equal(isDarkTheme("christmas"), false);
+  assert.equal(isDarkTheme("christmas"), true);
   assert.equal(isDarkTheme("spring"), false);
   assert.equal(isDarkTheme("bogus"), true, "unknown names resolve to the dark default");
 });
@@ -183,7 +187,7 @@ test("light and seasonal text stays readable on panels, controls and selected/bo
     const under = background.match(/[0-9a-f]{2}/gi).map((part) => parseInt(part, 16));
     return "#" + [r, g, b].map((v, i) => Math.round(v * a + under[i] * (1 - a)).toString(16).padStart(2, "0")).join("");
   };
-  for (const name of ["light", "spring", "sakura", "summer", "autumn", "winter", "christmas"]) {
+  for (const name of ["light", "spring", "sakura", "summer", "autumn", "winter"]) {
     const th = THEMES[name];
     for (const surface of ["bg", "bgAlt", "bgInput", "modalBg", "rowOdd", "rowEven", "panelBg", "btnBg", "headerBg"]) {
       for (const foreground of ["text", "textDim", "textMuted", "accent"]) {
@@ -197,7 +201,7 @@ test("light and seasonal text stays readable on panels, controls and selected/bo
     }
     for (const row of [th.rowOdd, th.rowEven]) {
       for (const highlight of [th.selection, th.bookmark]) {
-        assert.ok(contrast(th.text, composite(highlight, row)) >= (name === "christmas" ? 4.5 : 7), `${name}: highlighted row text`);
+        assert.ok(contrast(th.text, composite(highlight, row)) >= 7, `${name}: highlighted row text`);
       }
     }
   }
@@ -207,7 +211,7 @@ test("filled controls pair the foreground with the actual accent or primary surf
   const { THEMES } = await themesModule();
   const { buttonStyles } = await import("../src/components/primitives/buttonStyles.js");
   for (const [name, th] of Object.entries(THEMES)) {
-    for (const [fg, bg] of [["onAccent", "accent"], ["onAccent", "accentHover"], ["onAccent", "warning"], ["onAccent", "danger"], ["onPrimary", "primaryBtn"], ["onPrimary", "primaryBtnHover"]]) {
+    for (const [fg, bg] of [["onAccent", "fillAccent"], ["onAccent", "fillAccentHover"], ["onAccent", "fillWarning"], ["onAccent", "fillDanger"], ["onPrimary", "primaryBtn"], ["onPrimary", "primaryBtnHover"]]) {
       assert.ok(contrast(th[fg], th[bg]) >= 4.5, `${name}: ${fg} on ${bg}`);
     }
     const style = buttonStyles(th);

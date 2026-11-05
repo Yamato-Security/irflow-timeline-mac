@@ -413,7 +413,7 @@ strong{color:${c.text}}
 
   const cbStyle = (checked) => ({
     width: 14, height: 14, borderRadius: 4, flexShrink: 0, cursor: "pointer",
-    background: checked ? (th.accent) : "transparent",
+    background: checked ? (th.fillAccent) : "transparent",
     border: `1.5px solid ${checked ? th.accent : th.border}`,
     display: "flex", alignItems: "center", justifyContent: "center", transition: "all var(--m-base)",
   });
@@ -616,7 +616,7 @@ strong{color:${c.text}}
                     return (
                       <div key={i} onClick={() => toggleExt(c.extension)}
                         style={{ display: "flex", alignItems: "center", gap: 8, padding: "7px 12px", fontSize: 11, borderBottom: `1px solid ${th.border}15`, cursor: "pointer", background: sel ? `${th.accent}12` : (i % 2 === 0 ? "transparent" : `${th.border}08`), transition: "all var(--m-base)" }}>
-                        <div style={{ width: 14, height: 14, borderRadius: 4, flexShrink: 0, background: sel ? th.accent : "transparent", border: `1.5px solid ${sel ? th.accent : th.border}`, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                        <div style={{ width: 14, height: 14, borderRadius: 4, flexShrink: 0, background: sel ? th.fillAccent : "transparent", border: `1.5px solid ${sel ? th.accent : th.border}`, display: "flex", alignItems: "center", justifyContent: "center" }}>
                           {sel && <svg width="10" height="10" viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3" fill="none" stroke={th.onAccent} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>}
                         </div>
                         <span style={{ padding: "2px 6px", borderRadius: 4, fontSize: 9, fontWeight: 700, background: `${scoreColor}22`, color: scoreColor, fontFamily: "'SF Mono',Menlo,monospace", minWidth: 28, textAlign: "center" }}>{Math.round(c.score * 100)}</span>
@@ -670,7 +670,7 @@ strong{color:${c.text}}
                   <div style={{ display: "flex", gap: 4, marginTop: 6, flexWrap: "wrap" }}>
                     {[".locked", ".encrypted", ".enc", ".crypt", ".WNCRY", ".cerber", ".locky", ".ryuk"].map((ext) => (
                       <button key={ext} onClick={() => setModal((p) => ({ ...p, encryptedExt: ext }))}
-                        style={{ padding: "3px 8px", background: encryptedExt === ext ? th.accent : th.btnBg, color: encryptedExt === ext ? th.onAccent : th.textDim, border: `1px solid ${encryptedExt === ext ? th.accent : th.btnBorder}`, borderRadius: 4, fontSize: 10, cursor: "pointer", fontFamily: "'SF Mono',Menlo,monospace" }}>
+                        style={{ padding: "3px 8px", background: encryptedExt === ext ? th.fillAccent : th.btnBg, color: encryptedExt === ext ? th.onAccent : th.textDim, border: `1px solid ${encryptedExt === ext ? th.accent : th.btnBorder}`, borderRadius: 4, fontSize: 10, cursor: "pointer", fontFamily: "'SF Mono',Menlo,monospace" }}>
                         {ext}
                       </button>
                     ))}
@@ -1518,7 +1518,7 @@ strong{color:${c.text}}
                         <span style={{ flex: 1, color: th.textDim, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{sf.parentPath}</span>
                         <span style={{ width: suspW[3], flexShrink: 0, color: th.textMuted, fontSize: 10, whiteSpace: "nowrap" }}>{(sf.created || "").slice(0, 19)}</span>
                         <div style={{ display: "flex", gap: 3, width: 78, flexShrink: 0, justifyContent: "flex-end" }}>
-                          {sf.executionConfirmed && <span title={`Process-creation observed in EVTX${sf.execContext?.time ? ` @ ${(sf.execContext.time || "").slice(0, 19)}` : ""}`} style={{ padding: "1px 4px", borderRadius: 3, fontSize: 7, fontWeight: 800, color: th.onAccent, background: th.accent }}>▶RAN</span>}
+                          {sf.executionConfirmed && <span title={`Process-creation observed in EVTX${sf.execContext?.time ? ` @ ${(sf.execContext.time || "").slice(0, 19)}` : ""}`} style={{ padding: "1px 4px", borderRadius: 3, fontSize: 7, fontWeight: 800, color: th.onAccent, background: th.fillAccent }}>▶RAN</span>}
                           {sf.zoneId && <span style={{ padding: "1px 4px", borderRadius: 3, fontSize: 7, fontWeight: 700, color: "#fff", background: th.danger }}>WEB</span>}
                           {sf.inUse === "False" && <span style={{ padding: "1px 4px", borderRadius: 3, fontSize: 7, fontWeight: 700, color: "#fff", background: th.warning }}>DEL</span>}
                           {sf.siFN === "True" && <span style={{ padding: "1px 4px", borderRadius: 3, fontSize: 7, fontWeight: 700, color: "#fff", background: "#a855f7" }}>TS</span>}
@@ -1939,7 +1939,7 @@ strong{color:${c.text}}
               <span style={{ fontSize: 10, color: th.accent, fontWeight: 500, fontFamily: "-apple-system, sans-serif", animation: "tle-overlay-in var(--m-base) var(--ease-out-soft)" }}>{modal.rwPivotMsg}</span>
             )}
             <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
-              {totalSelected > 0 && <button onClick={copySelected} style={{ ...ms.bs, display: "flex", alignItems: "center", gap: 4 }}>Copy Selected <span style={{ fontSize: 9, padding: "1px 5px", borderRadius: 8, background: th.accent, color: th.onAccent, fontWeight: 700, lineHeight: "14px" }}>{totalSelected}</span></button>}
+              {totalSelected > 0 && <button onClick={copySelected} style={{ ...ms.bs, display: "flex", alignItems: "center", gap: 4 }}>Copy Selected <span style={{ fontSize: 9, padding: "1px 5px", borderRadius: 8, background: th.fillAccent, color: th.onAccent, fontWeight: 700, lineHeight: "14px" }}>{totalSelected}</span></button>}
               {data && data.encryptedCount > 0 && <button onClick={copyReport} style={ms.bs}>Copy Summary</button>}
               {data && data.encryptedCount > 0 && <button onClick={exportPdf} style={{ ...ms.bs, display: "flex", alignItems: "center", gap: 4 }}><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 18 15 15"/></svg>Export PDF</button>}
               <button onClick={() => setModal(null)} style={ms.bp}>Done</button>

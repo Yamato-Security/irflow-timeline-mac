@@ -6,13 +6,15 @@ description: IRFlow Timeline changelog — version history, new features, perfor
 
 ## Unreleased — Light Mode and seasonal palettes
 
-- Rework **Spring** around 新緑 (fresh green leaves) with a white timeline and cream histogram panel, **Summer** around a bright beach palette, **Autumn** around stronger momiji-red headers and chart bars with orange and brown, and **Winter** around pale blue ice and white snow
-- Add a separate **Sakura** (桜) scheme with light pink timeline rows, petal-pink headers, rose accents and warm plum text
-- Refine **Light Mode** with soft gray and white surfaces, navy text, teal and blue accents, blue selections and amber bookmarks
-- Add a separate **Christmas** scheme with saturated scarlet surfaces, green lettering and white headers/controls. The vivid red and green combination meets WCAG AA (4.5:1) text contrast; other palettes retain their 7:1 main-text target
-- Summer now uses a light base; existing saved Summer preferences pick up the redesigned palette
-- Histogram bars and context menus follow the selected scheme. Filled controls use contrasting text instead of always assuming white
-- Extend contrast checks to Light Mode and seasonal surfaces, selections and button states; verify saved preferences including Sakura and Christmas
+- Refine **Light Mode** with neutral surfaces, navy text, teal/blue accents, blue selections and amber bookmarks
+- Apply the supplied **Spring**, **Sakura**, **Summer**, **Autumn** and **Christmas** reference palettes; document their source hex codes in Preferences
+- Make Spring's backgrounds predominantly Light Forest Green and Blue Green, with floral accent colors
+- Keep Summer predominantly aqua blue and sunny yellow, using the supplied citrus red, leaf green and sand as supporting accents
+- Add Sakura's cream, pale blue and blossom pinks; use Japanese autumn red, orange, yellow, leaf green, plum and brown for Autumn
+- Use exact **Grinch Green `#58D130`** for Christmas lettering and solid histogram bars. Preserve the reference reds and Candy Cane White headers. This decorative palette's lower text contrast is documented rather than described as WCAG AA
+- Separate opaque control fills from accent lettering so labels and checkmarks remain visible with the reference palettes
+- Make histogram bars and context menus follow the theme; retain saved preferences and both color-scheme menus
+- Validate standard-palette text contrast, all palettes' primary-control contrast, and menu/catalog parity
 
 ## v1.0.14 — Yamato Security fork
 

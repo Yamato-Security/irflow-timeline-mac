@@ -3533,7 +3533,7 @@ export default function App() {
                   {autoRestorable.tabs?.length || 0} tab{autoRestorable.tabs?.length === 1 ? "" : "s"} · auto-saved {(() => { try { const d = new Date(autoRestorable.savedAt); const mins = Math.round((Date.now() - d.getTime()) / 60000); return mins < 1 ? "just now" : mins < 60 ? `${mins} min ago` : `${Math.round(mins/60)} hr ago`; } catch { return "recently"; } })()}
                 </div>
               </div>
-              <button onClick={handleAutoRestore} style={{ padding: "6px 14px", background: th.warning, color: th.onAccent, border: "none", borderRadius: 6, fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: "-apple-system, sans-serif", transition: "background var(--m-base) var(--ease-out)", flexShrink: 0 }}>Restore</button>
+              <button onClick={handleAutoRestore} style={{ padding: "6px 14px", background: th.fillWarning, color: th.onAccent, border: "none", borderRadius: 6, fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: "-apple-system, sans-serif", transition: "background var(--m-base) var(--ease-out)", flexShrink: 0 }}>Restore</button>
               <button onClick={handleDismissAutoRestore} aria-label="Dismiss" style={{ background: "none", border: "none", color: th.textMuted, cursor: "pointer", fontSize: 16, padding: "4px 6px", lineHeight: 1, flexShrink: 0 }}>✕</button>
             </div>
           )}

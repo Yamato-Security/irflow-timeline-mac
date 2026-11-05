@@ -1700,7 +1700,7 @@ export default function UsnAnalysisModal() {
                           return { ...p, usnCheckboxFilters: newF, usnSelected: { ...p.usnSelected, [fd.secKey]: new Set() } };
                         });
                         setUsnFd(null);
-                      }} style={{ padding: "3px 12px", background: fdSec?.color || th.accent, color: fdSec?.color ? "#fff" : th.onAccent, border: "none", borderRadius: 6, fontSize: 10, cursor: "pointer", fontWeight: 600, fontFamily: "-apple-system, sans-serif" }}>Apply</button>
+                      }} style={{ padding: "3px 12px", background: fdSec?.color || th.fillAccent, color: fdSec?.color ? th.onAccent : th.onAccent, border: "none", borderRadius: 6, fontSize: 10, cursor: "pointer", fontWeight: 600, fontFamily: "-apple-system, sans-serif" }}>Apply</button>
                     </div>
                   </div>
                 </>
