@@ -3,6 +3,7 @@
 // Modified by Yamato Security, 2026-11-05: DuckDB engine — search checks each column instead of a
 // chr(31)-joined row and has no FTS prefilter, regex/fuzzy conditions run natively (sql-match.js),
 // and count orderings break ties on the value.
+// Modified by Yamato Security, 2026-11-05: getColumnLongestValues for View → Full-width / Narrow-width cells.
 const { dbg } = require("../logger");
 const { normalizeTimestamp } = require("../utils/forensic-normalize");
 const { AI_HISTORY_TOOLS } = require("../parsers/ai-history/schema");
@@ -1056,6 +1057,35 @@ class QueryStoreMethods {
   /**
    * Get columns that are entirely empty (NULL or '')
    */
+  /**
+   * Longest value of every column over the rows the grid shows (the standard filters in
+   * `options`), for View → Full-width cells / Narrow-width cells. Returns
+   * { [header]: { maxLen, longest } }: maxLen in characters (0 when the column is empty), and
+   * the longest value itself when it is at most LONGEST_VALUE_LIMIT characters, so the renderer
+   * can measure it as displayed (timestamps are reformatted); longer values come back as null.
+   */
+  getColumnLongestValues(tabId, options = {}) {
+    const meta = this.databases.get(tabId);
+    if (!meta) return {};
+    const cols = meta.safeCols;
+    if (!cols.length) return {};
+    const params = [];
+    const whereConditions = [];
+    this._applyStandardFilters(options, meta, whereConditions, params);
+    const whereClause = whereConditions.length > 0 ? `WHERE ${whereConditions.join(" AND ")}` : "";
+    const LONGEST_VALUE_LIMIT = 4000;
+    const selects = cols.map((c, i) => (
+      `MAX(LENGTH(${c.safe})) AS l${i}, ` +
+      `CASE WHEN MAX(LENGTH(${c.safe})) <= ${LONGEST_VALUE_LIMIT} THEN arg_max(${c.safe}, LENGTH(${c.safe})) END AS v${i}`
+    ));
+    const row = meta.db.prepare(`SELECT ${selects.join(", ")} FROM data ${whereClause}`).get(...params) || {};
+    const out = {};
+    cols.forEach((c, i) => {
+      out[c.original] = { maxLen: Number(row[`l${i}`]) || 0, longest: row[`v${i}`] ?? null };
+    });
+    return out;
+  }
+
   getEmptyColumns(tabId, options = {}) {
     const meta = this.databases.get(tabId);
     if (!meta) return [];
