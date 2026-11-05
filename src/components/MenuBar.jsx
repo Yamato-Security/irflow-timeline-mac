@@ -1,5 +1,6 @@
 // Modified by Yamato Security, 2026-11-04: the dark/light toggle became a eight-scheme Color Scheme picker.
 // Modified by Yamato Security, 2026-11-05: View → Full-width cells / Narrow-width cells; menu items show their shortcut.
+// Modified by Yamato Security, 2026-11-05: View → Freeze First Column / Unfreeze First Column.
 import { Fragment, useEffect, useState } from "react";
 import useUIStore from "../store/useUIStore.js";
 import { THEME_OPTIONS } from "../constants/themes.js";
@@ -85,6 +86,9 @@ export default function MenuBar({
   closeTab,
   resetColumnWidths,
   fitCellWidths,
+  freezeFirstColumn,
+  unfreezeFirstColumn,
+  firstColumnFrozen,
   up,
   activeFilters,
   // Selection state
@@ -521,6 +525,8 @@ export default function MenuBar({
     { type: "separator" },
     { label: "Full-width cells", shortcut: "⌥⌘F", icon: ic(<><path d="M21 12H3M21 12l-4-4M21 12l-4 4M3 12l4-4M3 12l4 4"/></>), action: () => fitCellWidths?.("full"), disabled: !ct?.dataReady },
     { label: "Narrow-width cells", shortcut: "⌥⌘N", icon: ic(<><path d="M3 12h6M21 12h-6M9 12l-3-3M9 12l-3 3M15 12l3-3M15 12l3 3M12 5v14"/></>), action: () => fitCellWidths?.("narrow"), disabled: !ct?.dataReady },
+    { label: "Freeze First Column", icon: ic(<><rect x="3" y="4" width="7" height="16" rx="1" fill={th.accent} opacity="0.3"/><rect x="3" y="4" width="18" height="16" rx="1"/><line x1="10" y1="4" x2="10" y2="20"/></>), action: () => freezeFirstColumn?.(), disabled: !ct?.dataReady || firstColumnFrozen },
+    { label: "Unfreeze First Column", icon: ic(<><rect x="3" y="4" width="18" height="16" rx="1"/><line x1="10" y1="4" x2="10" y2="20" strokeDasharray="2,2"/></>), action: () => unfreezeFirstColumn?.(), disabled: !ct?.dataReady || !firstColumnFrozen },
     { type: "separator" },
     { label: "Color Rules", icon: ic(<><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18" fill={th.accent} opacity="0.3"/></>), action: () => setModal(openSimpleModal("colors")) },
     { label: "Tags", icon: ic(<><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><circle cx="7" cy="7" r="1" fill={th.accent}/></>), action: () => setModal(openSimpleModal("tags")) },
