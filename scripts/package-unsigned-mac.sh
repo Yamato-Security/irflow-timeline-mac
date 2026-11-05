@@ -10,8 +10,9 @@
 #   universal  one app for both, about twice the size of either
 #
 # Writes to release/unsigned/ one zip per architecture <arch>, plus SHA256SUMS.txt for all:
-#   <name>-<version><suffix>-mac-<arch>.zip   the .app, ad-hoc signed, zipped with ditto <name>/<version> come from package.json; BUILD_SUFFIX
-# (optional, e.g. "+g1a2b3c4") marks development builds. Run `npm run build:renderer` and
+#   <name>-<version><suffix>-mac-<arch>.zip   the .app, ad-hoc signed, zipped with ditto
+# <name>/<version> come from package.json; BUILD_SUFFIX (optional, e.g. "+g1a2b3c4") marks
+# development builds. Run `npm run build:renderer` and
 # `npm run bundle:tools` first, or use `npm run dist:unsigned`, which does both.
 #
 # The bundled Hayabusa and DuckDB's native library are universal files. An arm64 or x64 app

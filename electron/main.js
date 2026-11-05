@@ -374,8 +374,9 @@ async function _buildIndexesAndFtsInWorker(tabId) {
   }
 
   // No full-text index with DuckDB: search scans the columns directly (query-store
-  // _applySearch), so there is nothing to build. Dismiss the search-index overlay.
-  safeSend("fts-progress", { tabId, indexed: 0, total: 0, done: true, skipped: true });
+  // _applySearch), so there is nothing to build. Dismiss the search-index overlay. No
+  // `skipped` flag: the renderer reads it as "skipped because the file is large" and warns.
+  safeSend("fts-progress", { tabId, indexed: 0, total: 0, done: true });
 }
 
 async function runImportJob(filePath, tabId, sheetName, fileSize) {
