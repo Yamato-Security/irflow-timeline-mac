@@ -12,9 +12,9 @@
 >   **Winter** (icy blue and white), and **Christmas** (forest/jewel greens, festive reds and gold).
 >   Pick one from the toolbar's color-scheme dropdown or **Tools → Color Scheme**; the choice is
 >   remembered across launches.
-> - **Unsigned builds from GitHub Actions** — the `Build macOS (unsigned)` workflow builds a
->   universal (Apple silicon + Intel) app for every pull request and push to `main`; download the
->   zip or dmg from the workflow run's **Artifacts**. To cut a release, run the workflow by hand on
+> - **Unsigned builds from GitHub Actions** — the `Build macOS (unsigned)` workflow builds an
+>   Apple silicon app and an Intel app for every pull request and push to `main`; download the
+>   zip for your Mac from the workflow run's **Artifacts**. To cut a release, run the workflow by hand on
 >   `main` with **Create draft release** ticked (or push a `v<version>` tag): the files land on a
 >   draft GitHub release for you to publish. Bump `version` in `package.json` first for a new number.
 >
@@ -27,8 +27,10 @@
 
 The test builds are ad-hoc signed and not notarized, so macOS blocks the first launch.
 
-1. Download `irflow-timeline-mac-…-mac-universal.zip` (or the `.dmg`), unzip it and drag
-   **IRFlow Timeline.app** to **Applications**.
+1. Download the build for your Mac: `irflow-timeline-mac-…-mac-arm64.zip` for Apple silicon
+   (M1 or later), `irflow-timeline-mac-…-mac-x64.zip` for Intel.
+   Not sure which? **Apple menu → About This Mac** shows **Chip: Apple M…** on Apple silicon and
+   **Processor: … Intel …** on Intel. Unzip it and drag **IRFlow Timeline.app** to **Applications**.
 2. Either open **System Settings → Privacy & Security** after the blocked launch and click
    **Open Anyway**, or clear the quarantine flag in Terminal:
 
@@ -48,7 +50,7 @@ To build the same package locally on a Mac: `npm install && npm run dist:unsigne
 
 ![IRFlow Timeline home screen — capability launcher with Process Inspector, Lateral Movement, Persistence, Sigma, Collect AI Artifacts, Master File Table, USN Journal, and Open & Explore](assets/IRFlow-Timeline-Home.png)
 
-Native macOS forensic timeline analysis. Import, search, and investigate EVTX, CSV, XLSX, Plaso, `$MFT`, `$J`, and local AI assistant artifacts — with **AI Secret Hunt** and the analytics DFIR professionals actually need. Built on Electron + SQLite to handle millions of rows without breaking a sweat.
+Native macOS forensic timeline analysis. Import, search, and investigate EVTX, CSV, XLSX, Plaso, `$MFT`, `$J`, and local AI assistant artifacts — with **AI Secret Hunt** and the analytics DFIR professionals actually need. Built on Electron + DuckDB to handle millions of rows without breaking a sweat.
 
 Inspired by Eric Zimmerman's Timeline Explorer for Windows.
 
@@ -88,7 +90,8 @@ npm run start
 # Package as universal DMG (needs a Developer ID certificate)
 npm run dist:universal
 
-# Package an ad-hoc-signed universal zip + dmg for testing (no certificate needed)
+# Package ad-hoc-signed Apple silicon and Intel apps (one zip each) for testing
+# (no certificate needed); `bash scripts/package-unsigned-mac.sh arm64` builds one only
 npm run dist:unsigned
 ```
 
@@ -103,7 +106,8 @@ Inspired by [Eric Zimmerman's Timeline Explorer](https://ericzimmerman.github.io
 | Project | Usage | Link |
 |---------|-------|------|
 | **Electron** | Application framework | [electron/electron](https://github.com/electron/electron) |
-| **better-sqlite3** | High-performance SQLite engine with WAL mode, FTS5 | [WiseLibs/better-sqlite3](https://github.com/WiseLibs/better-sqlite3) |
+| **DuckDB** | Columnar, multi-threaded SQL engine that stores and queries every timeline tab | [duckdb/duckdb-node-neo](https://github.com/duckdb/duckdb-node-neo) |
+| **better-sqlite3** | Reads SQLite evidence (Plaso, AI app stores); Sigma result store and VirusTotal cache | [WiseLibs/better-sqlite3](https://github.com/WiseLibs/better-sqlite3) |
 | **@ts-evtx/core** | Native Windows EVTX event log parsing | [NickSmet/ts-evtx](https://github.com/NickSmet/ts-evtx) |
 | **Plaso (log2timeline)** | Forensic timeline generation (we import Plaso SQLite output) | [log2timeline/plaso](https://github.com/log2timeline/plaso) |
 | **ExcelJS** | XLSX streaming reader | [exceljs/exceljs](https://github.com/exceljs/exceljs) |
