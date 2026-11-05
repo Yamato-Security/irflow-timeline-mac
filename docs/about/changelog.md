@@ -25,6 +25,10 @@ description: IRFlow Timeline changelog — version history, new features, perfor
 - **The Tags column can be hidden**, from the header menu or the Column Manager, which now lists it; **Show All** brings it back
 - The status bar, start screen and Quick Help say **DuckDB-backed** instead of SQLite-backed
 
+### Fixes
+
+- **Toolbar menus close when you click outside them.** File, View, Actions, Tools and Help stayed open until their own button was clicked again; a click on the grid, the menu bar or the search box now closes them
+
 ### Build
 
 - **Separate Apple silicon and Intel downloads** — the unsigned builds (workflow artifacts and releases) are now an Apple silicon app (`…-mac-arm64.zip`) and an Intel app (`…-mac-x64.zip`) instead of one universal app, and they come as zip files only (no disk image). Each keeps only its own architecture's code, so it is about half the size a universal app would be with the DuckDB engine. `npm run dist:unsigned` builds both; `scripts/package-unsigned-mac.sh universal` still makes a universal app
