@@ -17,6 +17,11 @@ description: IRFlow Timeline changelog — version history, new features, perfor
 - SQLite is still used to read SQLite evidence (Plaso storage, browser, VS Code, Codex and other AI app databases, the EVTX message database), for saved Sigma scan results (`results.sqlite`), and for the VirusTotal cache, so scan history and caches from earlier versions keep working
 - Tab databases from earlier versions are not reused; sessions re-import their files as before
 
+### Grid
+
+- **View → Full-width cells** (`Cmd+Option+F`) makes every column as wide as its widest entry, and **View → Narrow-width cells** (`Cmd+Option+N`) as wide as its widest entry but at most 30 characters, so short columns take no more room than they need. Both size the columns from the rows the grid shows, as displayed (timestamps in the chosen date format), and keep each column at least as wide as its name
+- The status bar, start screen and Quick Help say **DuckDB-backed** instead of SQLite-backed
+
 ### Build
 
 - **Separate Apple silicon and Intel downloads** — the unsigned builds (workflow artifacts and releases) are now an Apple silicon app (`…-mac-arm64.zip`) and an Intel app (`…-mac-x64.zip`) instead of one universal app, and they come as zip files only (no disk image). Each keeps only its own architecture's code, so it is about half the size a universal app would be with the DuckDB engine. `npm run dist:unsigned` builds both; `scripts/package-unsigned-mac.sh universal` still makes a universal app
