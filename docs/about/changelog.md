@@ -4,30 +4,18 @@ description: IRFlow Timeline changelog — version history, new features, perfor
 
 # Changelog
 
-## Unreleased — Light Mode and seasonal palettes
-
-- Refine **Light Mode** with neutral surfaces, navy text, teal/blue accents, blue selections and amber bookmarks
-- Apply the supplied **Spring**, **Sakura**, **Summer**, **Autumn** and **Christmas** reference palettes; document their source hex codes in Preferences
-- Make Spring's backgrounds predominantly Light Forest Green and the requested `#678215` green, with floral accents and darker text for readability
-- Keep Summer predominantly aqua blue and sunny yellow, using the supplied citrus red, leaf green and sand as supporting accents
-- Add Sakura's cream, pale blue and blossom pinks; use Japanese autumn red, orange, yellow, leaf green, plum and brown for Autumn
-- Reverse Summer's sunny yellow and pale-yellow roles; use pale headers and sunny chart panels
-- Reverse Autumn's brighter red and darker red-brown surfaces: brighter timeline backgrounds and darker headers, with readable cream text
-- Apply the **Merry Christmas (SPA0153)** palette: predominantly **Dark Khaki Green `#66582F`**, secondary **Red Ruby `#CE4C4B`** headers/actions, and gold/cream accents. Cream body text and near-black control labels meet the 4.5:1 contrast checks; severity colors remain distinct
-- Separate opaque control fills from accent lettering so labels and checkmarks remain visible with the reference palettes
-- Make histogram bars and context menus follow the theme; retain saved preferences and both color-scheme menus
-- Validate standard-palette text contrast, all palettes' primary-control contrast, and menu/catalog parity
-
 ## v1.0.14 — Yamato Security fork
 
 `irflow-timeline-mac` is Yamato Security's fork of r3nzsec/irflow-timeline. First fork release; changes on top of upstream v1.0.13:
 
 ### Color schemes
 
-- **Four seasonal color schemes** join Dark Mode and Light Mode: **Spring** (leaf greens on a pale background), **Summer** (deep ocean blues), **Autumn** (pumpkin orange and harvest gold on dark brown) and **Winter** (snow white with Christmas red and pine green). Choose one from the toolbar dropdown or **Tools → Color Scheme**
+- **Six seasonal color schemes** join Dark Mode and Light Mode: **Spring** (light forest green and fresh `#678215` green with floral accents), **Sakura** (blossom pinks, cream and pale blue), **Summer** (aqua blue with pale-yellow headers and sunny-yellow chart panels), **Autumn** (Japanese autumn reds: a bright-red timeline under dark red-brown headers), **Winter** (snow white and pale glacier blue) and **Christmas** (forest and jewel greens, festive red headers and controls, vermillion and gold charts). Choose one from the toolbar dropdown or **Tools → Color Scheme**
+- **Refined Light Mode** — soft gray chrome, white rows, navy text, teal and blue controls, blue selections and amber bookmarks
 - **The choice is remembered** across launches, the native menu shows the active scheme, and the window is painted in the scheme's background before the interface loads
-- Scrollbars, text selection and native form controls follow the scheme; the Ransomware report follows the scheme's dark or light base
-- Every scheme keeps its text at WCAG AA contrast, enforced by the test suite
+- Scrollbars, text selection, histogram bars, context menus and native form controls follow the scheme; the Ransomware report follows the scheme's dark or light base
+- Text, headers, filled controls and selected or bookmarked rows stay readable in every scheme (main text at least 7:1, 4.5:1 on Autumn's red), and severity colors stay distinct — all enforced by the test suite
+- The reference palettes behind the seasonal schemes and their hex codes are listed in [Preferences → Color Scheme](/reference/preferences#color-scheme)
 
 ### Build
 
