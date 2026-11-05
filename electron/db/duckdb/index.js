@@ -77,13 +77,19 @@ function flattenParams(args) {
 
 // sort_datetime(c3) → c3__sdt when the tab has stored that column's sort key. Matches a
 // plain or table-qualified column argument only; anything else keeps the function call.
+// A replacement may also be a function of (qualifier, column), such as a call to another
+// SQL function (a day-first column's sort_datetime_dmy; Yamato Security, 2026-11-06).
 function rewriteComputed(sql, computed) {
   if (!computed || computed.size === 0) return sql;
   let out = sql;
   for (const [fn, map] of computed) {
     if (!map.size || !out.includes(fn)) continue;
     const re = new RegExp(`\\b${fn}\\(\\s*((?:[A-Za-z_][A-Za-z0-9_]*\\.)?)([A-Za-z_][A-Za-z0-9_]*)\\s*\\)`, "g");
-    out = out.replace(re, (whole, qual, col) => (map.has(col) ? `${qual}${map.get(col)}` : whole));
+    out = out.replace(re, (whole, qual, col) => {
+      if (!map.has(col)) return whole;
+      const to = map.get(col);
+      return typeof to === "function" ? to(qual, col) : `${qual}${to}`;
+    });
   }
   return out;
 }

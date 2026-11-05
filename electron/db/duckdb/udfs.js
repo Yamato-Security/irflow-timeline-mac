@@ -15,6 +15,10 @@ const RETURN_TYPES = {
   extract_date: "VARCHAR",
   extract_datetime_minute: "VARCHAR",
   sort_datetime: "VARCHAR",
+  // Day-first (European) columns; added by Yamato Security, 2026-11-06.
+  extract_date_dmy: "VARCHAR",
+  extract_datetime_minute_dmy: "VARCHAR",
+  sort_datetime_dmy: "VARCHAR",
   norm_guid: "VARCHAR",
   norm_logon_id: "VARCHAR",
   norm_host: "VARCHAR",

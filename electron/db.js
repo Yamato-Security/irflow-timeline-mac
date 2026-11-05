@@ -7,6 +7,9 @@
  * and the background "index" build now stores each timestamp column's sort key instead.
  * Modified by Yamato Security, 2026-11-06: a file that matches a format template (Juntei's
  * CSV outputs, electron/format-templates.js) takes its timestamp columns from the template.
+ * Modified by Yamato Security, 2026-11-06: a timestamp column of day-first dates (European
+ * format, such as Hayabusa's --european-time) is detected on import, recorded in the tab's
+ * database and read with the *_dmy date functions.
  *
  * Architecture:
  *   1. Streaming import: CSV/XLSX rows are appended in batches
@@ -82,11 +85,58 @@ function sortKeyColsFromTable(db) {
   }
 }
 
-/** Let the tab's SQL read stored sort keys instead of calling sort_datetime() per row. */
+// Timestamp columns whose numeric dates are day first ("31-08-2017"), kept in the tab's own
+// database so every thread that opens the tab reads them the same way.
+const DAY_FIRST_TABLE = "day_first_columns";
+
+function dayFirstColsFromTable(db) {
+  try {
+    return db.prepare(`SELECT col FROM ${DAY_FIRST_TABLE}`).all().map((r) => r.col);
+  } catch {
+    return [];
+  }
+}
+
+// A timestamp column is day first when some of its dates can only be read day first (first
+// number over 12) and none can only be read month first. Ambiguous columns stay month first.
+const DMY_ONLY = String.raw`^\s*(1[3-9]|2[0-9]|3[01])[/.-](0?[1-9]|1[0-2])[/.-][0-9]{4}`;
+const MDY_ONLY = String.raw`^\s*(0?[1-9]|1[0-2])[/.-](1[3-9]|2[0-9]|3[01])[/.-][0-9]{4}`;
+
+function detectDayFirstColumns(meta) {
+  const found = new Set();
+  for (const col of meta.safeCols) {
+    if (!meta.tsColumns.has(col.original)) continue;
+    try {
+      const first = meta.db.prepare(
+        `SELECT ${col.safe} AS v FROM data WHERE TRIM(COALESCE(${col.safe}, '')) != '' LIMIT 1`
+      ).get();
+      if (!first || !/^\s*\d{1,2}[/.-]\d{1,2}[/.-]\d{4}/.test(String(first.v))) continue;
+      const r = meta.db.prepare(
+        `SELECT SUM(CASE WHEN regexp_matches(v, '${DMY_ONLY}') THEN 1 ELSE 0 END) AS dmy,
+                SUM(CASE WHEN regexp_matches(v, '${MDY_ONLY}') THEN 1 ELSE 0 END) AS mdy
+           FROM (SELECT ${col.safe} AS v FROM data) s`
+      ).get();
+      if (r && Number(r.dmy) > 0 && Number(r.mdy || 0) === 0) found.add(col.original);
+    } catch (e) { dbg("DB", `day-first check skipped for ${col.original}`, { error: e.message }); }
+  }
+  return found;
+}
+
+/**
+ * Let the tab's SQL read stored sort keys instead of calling sort_datetime() per row, and
+ * read day-first columns with the *_dmy date functions.
+ */
 function applySortKeys(meta) {
+  const dayFirst = new Set();
+  for (const c of meta.safeCols || []) if (meta.dayFirstCols?.has(c.original)) dayFirst.add(c.safe);
+  const viaDmy = (fn) => (qual, col) => `${fn}_dmy(${qual}${col})`;
   const map = new Map();
+  for (const safe of dayFirst) map.set(safe, viaDmy("sort_datetime"));
   for (const safe of meta.sortKeyCols || []) map.set(safe, `${safe}${SORT_KEY_SUFFIX}`);
   meta.db.setComputedColumns("sort_datetime", map);
+  for (const fn of ["extract_date", "extract_datetime_minute"]) {
+    meta.db.setComputedColumns(fn, new Map([...dayFirst].map((safe) => [safe, viaDmy(fn)])));
+  }
 }
 
 class TimelineDB {
@@ -306,6 +356,17 @@ class TimelineDB {
       } catch (e) { dbg("DB", `ts validation skipped for ${col.original}`, { error: e.message }); }
     }
 
+    // Day-first (European) dates: decided over the whole column, then every query of the tab
+    // reads them day first.
+    meta.dayFirstCols = detectDayFirstColumns(meta);
+    if (meta.dayFirstCols.size) {
+      db.exec(`CREATE TABLE IF NOT EXISTS ${DAY_FIRST_TABLE} (col VARCHAR)`);
+      const add = db.prepare(`INSERT INTO ${DAY_FIRST_TABLE} VALUES (?)`);
+      for (const c of meta.dayFirstCols) add.run(c);
+      dbg("DB", `day-first timestamp columns`, { tabId, columns: [...meta.dayFirstCols] });
+    }
+    applySortKeys(meta);
+
     meta.numericColumns = new Set();
     meta.safeCols.forEach((col) => {
       // Skip columns already detected as timestamps — parseFloat("2026-01-17 01:26:27")
@@ -333,6 +394,7 @@ class TimelineDB {
       headers: meta.headers,
       tsColumns: [...meta.tsColumns],
       numericColumns: [...meta.numericColumns],
+      dayFirstColumns: [...meta.dayFirstCols],
     };
   }
 
@@ -379,6 +441,7 @@ class TimelineDB {
       indexedCols: new Set(indexedCols),
       // Read from the file, not the descriptor: another thread may have stored them since.
       sortKeyCols: new Set(sortKeyColsFromTable(db)),
+      dayFirstCols: new Set(dayFirstColsFromTable(db)),
       isLargeFile: !!isLargeFile,
       colMap: Object.fromEntries(safeCols.map((c) => [c.original, c.safe])),
       reverseColMap: Object.fromEntries(safeCols.map((c) => [c.safe, c.original])),
