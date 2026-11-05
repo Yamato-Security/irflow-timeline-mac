@@ -5,6 +5,8 @@
 // tab switch, which ignored the first filter on a newly opened tab and the filter of a cross-tab jump.
 // Modified by Yamato Security, 2026-11-05: the timeline engine is DuckDB, not SQLite.
 // Modified by Yamato Security, 2026-11-05: View → Full-width cells (⌥⌘F) / Narrow-width cells (⌥⌘N).
+// Modified by Yamato Security, 2026-11-05: View → Freeze / Unfreeze First Column, Hide Column on any
+// header (also by right-click), and a hideable Tags column.
 import { lazy, Suspense, useState, useEffect, useRef, useCallback, useMemo, Fragment } from "react";
 import { createPortal } from "react-dom";
 // ── Extracted constants ──────────────────────────────────────────
@@ -423,6 +425,7 @@ export default function App() {
   const fetchId = useRef(0); // Monotonic counter to discard stale query results
   const ctRef = useRef(null);
   const fitCellWidthsRef = useRef(null);
+  const firstColumnRef = useRef({ freeze: null, unfreeze: null });
   const lastCellWidthsRef = useRef({ mode: null, at: 0 });
   // Latest-closure refs for handlers invoked by the mount-only native-menu IPC effect
   // (deps [tle]). Without these, that effect captures the FIRST render's handlers (when
@@ -534,6 +537,10 @@ export default function App() {
   themeNameRef.current = themeName;
 
   const ct = tabs.find((t) => t.id === activeTab);
+  // The Tags column hides like a data column (Column Manager, header menu): hiddenColumns holds it
+  // under its internal name "__tags__". Hidden, it takes no width anywhere in the grid.
+  const tagsHidden = !!ct?.hiddenColumns?.has("__tags__");
+  const visibleTagColWidth = tagsHidden ? 0 : tagColWidth;
   ctRef.current = ct;
   const tle = typeof window !== "undefined" ? window.tle : null;
   const runOpenFileDialog = useCallback(async () => {
@@ -1587,6 +1594,7 @@ export default function App() {
     });
     listen(tle.onTriggerResetColumns, () => resetColumnWidthsRef.current?.());
     listen(tle.onTriggerCellWidths, (mode) => fitCellWidthsRef.current?.(mode));
+    listen(tle.onTriggerFirstColumn, (action) => firstColumnRef.current?.[action]?.());
     listen(tle.onSetTheme, (name) => setThemeName(name));
     listen(tle.onTriggerHistogram, () => setHistogramVisible((v) => !v));
     listen(tle.onTriggerVtSettings, () => {
@@ -1638,8 +1646,8 @@ export default function App() {
 
     if (relX < stickyCursor) return null;
 
-    const tagW = layout.tagColWidth || TAG_COL_WIDTH_DEFAULT;
-    if (relX >= stickyCursor && relX < stickyCursor + tagW) return "__tags__";
+    const tagW = layout.tagColWidth ?? TAG_COL_WIDTH_DEFAULT; // 0 while the Tags column is hidden
+    if (tagW > 0 && relX >= stickyCursor && relX < stickyCursor + tagW) return "__tags__";
     stickyCursor += tagW;
 
     if (tab.vtEnrichment) stickyCursor += tab.columnWidths?.["__vt__"] || VT_COL_WIDTH;
@@ -2143,6 +2151,7 @@ export default function App() {
     handleLoadSessionRef.current = handleLoadSession;
     resetColumnWidthsRef.current = resetColumnWidths;
     fitCellWidthsRef.current = fitCellWidths;
+    firstColumnRef.current = { freeze: freezeFirstColumn, unfreeze: unfreezeFirstColumn };
     handleCheckForUpdatesRef.current = handleCheckForUpdates;
   });
 
@@ -2241,19 +2250,31 @@ export default function App() {
     const offsets = {};
     const vtW = ct?.columnWidths?.["__vt__"] || VT_COL_WIDTH;
     const evW = ct?.columnWidths?.["__evidence__"] || EVIDENCE_COL_WIDTH;
-    let x = (isGrouped ? (16 + 26 + CHECKBOX_COL_WIDTH) : (BKMK_COL_WIDTH + CHECKBOX_COL_WIDTH)) + tagColWidth + (ct?.vtEnrichment ? vtW : 0) + (hasEvidencePills ? evW : 0); // after # + checkbox + Tags + VT + Evidence
+    let x = (isGrouped ? (16 + 26 + CHECKBOX_COL_WIDTH) : (BKMK_COL_WIDTH + CHECKBOX_COL_WIDTH)) + visibleTagColWidth + (ct?.vtEnrichment ? vtW : 0) + (hasEvidencePills ? evW : 0); // after # + checkbox + Tags + VT + Evidence
     for (const h of pinnedH) {
       offsets[h] = x;
       x += (ct?.columnWidths[h] || 150);
     }
     return { offsets, totalWidth: x };
-  }, [pinnedH, ct?.columnWidths, tagColWidth, isGrouped, ct?.vtEnrichment, hasEvidencePills]);
+  }, [pinnedH, ct?.columnWidths, visibleTagColWidth, isGrouped, ct?.vtEnrichment, hasEvidencePills]);
+
+  // View → Freeze First Column pins the first data column (the one right of Tags), so it stays in
+  // view while the grid scrolls sideways. Unfreeze First Column unpins whichever pinned column is
+  // first. Freezing is pinning: the 📌 in the header and the header menu's Unpin undo it too.
+  const firstColumnFrozen = pinnedH.length > 0;
+  const freezeFirstColumn = useCallback(() => {
+    if (!ct?.dataReady || pinnedH.length > 0 || !scrollH[0]) return;
+    pinColumn(scrollH[0]);
+  }, [ct?.dataReady, pinnedH, scrollH, pinColumn]);
+  const unfreezeFirstColumn = useCallback(() => {
+    if (pinnedH.length > 0) unpinColumn(pinnedH[0]);
+  }, [pinnedH, unpinColumn]);
 
   gridLayoutRef.current = {
     pinnedH,
     scrollH,
     pinnedOffsets,
-    tagColWidth,
+    tagColWidth: visibleTagColWidth,
     hasEvidencePills,
   };
 
@@ -2803,7 +2824,7 @@ export default function App() {
     leadingWidth: isGrouped
       ? (16 + 26 + CHECKBOX_COL_WIDTH)
       : (BKMK_COL_WIDTH + CHECKBOX_COL_WIDTH),
-    tagWidth: tagColWidth,
+    tagWidth: visibleTagColWidth,
     vtWidth: ct?.vtEnrichment
       ? (ct?.columnWidths?.["__vt__"] || VT_COL_WIDTH)
       : 0,
@@ -2813,7 +2834,7 @@ export default function App() {
   }), [
     allVisH,
     ct?.columnWidths,
-    tagColWidth,
+    visibleTagColWidth,
     isGrouped,
     ct?.vtEnrichment,
     hasEvidencePills,
@@ -3881,7 +3902,7 @@ export default function App() {
           th={th} ct={ct} tabs={tabs} tle={tle}
           handleExport={handleExport} handleSaveSession={handleSaveSession} handleLoadSession={handleLoadSession}
           handleCheckForUpdates={handleCheckForUpdates} handleExtractResident={handleExtractResident}
-          closeTab={closeTab} resetColumnWidths={resetColumnWidths} fitCellWidths={fitCellWidths} up={up} activeFilters={activeFilters}
+          closeTab={closeTab} resetColumnWidths={resetColumnWidths} fitCellWidths={fitCellWidths} freezeFirstColumn={freezeFirstColumn} unfreezeFirstColumn={unfreezeFirstColumn} firstColumnFrozen={firstColumnFrozen} up={up} activeFilters={activeFilters}
           allFilteredRowsSelected={allFilteredRowsSelected} selectedRowData={selectedRowData} isGrouped={isGrouped}
           handleSelectAllRows={handleSelectAllRows}
           proximityFilter={proximityFilter} setProximityFilter={setProximityFilter}
@@ -4044,7 +4065,7 @@ export default function App() {
           resizingCol={resizingCol} setResizingCol={setResizingCol}
           resizeX={resizeX} setResizeX={setResizeX}
           resizeW={resizeW} setResizeW={setResizeW}
-          tagColWidth={tagColWidth} setTagColWidth={setTagColWidth}
+          tagColWidth={visibleTagColWidth} tagsHidden={tagsHidden} setTagColWidth={setTagColWidth}
           histogramVisible={histogramVisible} histogramCol={histogramCol} setHistogramCol={setHistogramCol}
           histogramData={histogramData} histogramLoaded={histogramLoaded}
           histContainerRef={histContainerRef} histContainerWidth={histContainerWidth}
@@ -4848,11 +4869,12 @@ export default function App() {
                 { label: (ct?.pinnedColumns || []).includes(contextMenu.colName) ? "Unpin Column" : "Pin Column",
                   icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={th.accent} strokeWidth="2" strokeLinecap="round"><path d="M12 17v5M9 11l-4 4h14l-4-4V5a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v6z"/></svg>,
                   action: () => (ct?.pinnedColumns || []).includes(contextMenu.colName) ? unpinColumn(contextMenu.colName) : pinColumn(contextMenu.colName) },
-                { label: "Hide Column",
-                  icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={th.textDim} strokeWidth="2" strokeLinecap="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>,
-                  action: () => up("hiddenColumns", new Set([...(ct?.hiddenColumns || []), contextMenu.colName])) },
-                null,
               ] : []),
+              // Every header can be hidden, the Tags column included.
+              { label: "Hide Column",
+                icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={th.textDim} strokeWidth="2" strokeLinecap="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>,
+                action: () => up("hiddenColumns", new Set([...(ct?.hiddenColumns || []), contextMenu.colName])) },
+              null,
               { label: "Best Fit",
                 icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={th.textDim} strokeWidth="2" strokeLinecap="round"><path d="M21 12H3M21 12l-4-4M21 12l-4 4M3 12l4-4M3 12l4 4"/></svg>,
                 action: () => autoFitColumn(contextMenu.colName) },

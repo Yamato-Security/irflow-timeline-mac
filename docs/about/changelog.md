@@ -20,6 +20,9 @@ description: IRFlow Timeline changelog — version history, new features, perfor
 ### Grid
 
 - **View → Full-width cells** (`Cmd+Option+F`) makes every column as wide as its widest entry, and **View → Narrow-width cells** (`Cmd+Option+N`) as wide as its widest entry but at most 30 characters, so short columns take no more room than they need. Both size the columns from the rows the grid shows, as displayed (timestamps in the chosen date format), and keep each column at least as wide as its name
+- **View → Freeze First Column** keeps the first column, the one right of Tags, in view while the grid scrolls sideways; **View → Unfreeze First Column** releases it
+- **Right-click a column header** to open the column menu (as `Cmd+Click` does), and **Hide Column** works on every header, the Tags column included
+- **The Tags column can be hidden**, from the header menu or the Column Manager, which now lists it; **Show All** brings it back
 - The status bar, start screen and Quick Help say **DuckDB-backed** instead of SQLite-backed
 
 ### Build
