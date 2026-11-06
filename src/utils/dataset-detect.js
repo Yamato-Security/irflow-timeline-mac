@@ -7,7 +7,7 @@ import HAYABUSA_TEMPLATES from "../../electron/hayabusa-templates.json" with { t
 
 const FORMAT_TEMPLATES = [...JUNTEI_TEMPLATES.templates, ...HAYABUSA_TEMPLATES.templates];
 
-/** Hayabusa's level colors (its config/level_color.txt): [{ level, values, color }]. */
+/** Row colors by Hayabusa rule level: [{ level, values, background, text }]. */
 export const HAYABUSA_LEVEL_COLORS = HAYABUSA_TEMPLATES.levelColors.levels;
 
 /**

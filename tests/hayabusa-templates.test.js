@@ -3,7 +3,7 @@
 //
 // electron/hayabusa-templates.json lists each dfir-timeline profile and the search,
 // logon-summary, metrics and extract-base64 outputs with their timestamp columns. Timelines
-// color each row by its rule level in Hayabusa's colors (config/level_color.txt). Hayabusa can
+// color each row by its rule level, the same in every color scheme. Hayabusa can
 // write timestamps in eight formats; every one must display, sort and bucket as the same instant.
 
 const test = require("node:test");
@@ -75,41 +75,23 @@ test("the grid picks the same templates, and timelines get level colors", async 
   assert.equal(HAYABUSA_LEVEL_COLORS, DATA.levelColors.levels);
 });
 
-test("level colors are Hayabusa's: critical red, high orange, medium yellow, low green, informational none", async () => {
-  const colorOf = (v) => DATA.levelColors.levels.find((l) => l.values.includes(v))?.color;
-  assert.equal(colorOf("emer"), "#ff0000");
-  assert.equal(colorOf("crit"), "#ff0000");
-  assert.equal(colorOf("critical"), "#ff0000");
-  assert.equal(colorOf("high"), "#ffc100");
-  assert.equal(colorOf("med"), "#ffff00");
-  assert.equal(colorOf("medium"), "#ffff00");
-  assert.equal(colorOf("low"), "#00ff00");
-  assert.equal(colorOf("info"), undefined);
-  assert.equal(colorOf("informational"), undefined);
-
-  const { buildLevelColorRules, recolorLevelRules, compileColorRules, applyColors } = await import("../src/utils/color-rules.js");
-  const { resolveTheme } = await import("../src/constants/themes.js");
-  const dark = resolveTheme("dark");
-  const light = resolveTheme("light");
-  const rules = buildLevelColorRules("Level", DATA.levelColors.levels, dark);
-  const compiled = compileColorRules(rules);
-  // Dark themes color the text like Hayabusa's terminal output.
-  assert.equal(applyColors({ Level: "crit" }, compiled).fg, "#ff0000");
-  assert.equal(applyColors({ Level: "high" }, compiled).fg, "#ffc100");
-  assert.equal(applyColors({ Level: "med" }, compiled).fg, "#ffff00");
-  assert.equal(applyColors({ Level: "low" }, compiled).fg, "#00ff00");
-  assert.equal(applyColors({ Level: "critical" }, compiled).fg, "#ff0000", "-b (no abbreviations)");
-  assert.equal(applyColors({ Level: "info" }, compiled), null, "informational rows keep the default colors");
-  assert.equal(applyColors({ Level: "informational" }, compiled), null);
-  for (const r of rules) assert.match(r.bgColor, /^#[0-9a-f]{6}$/, "opaque backgrounds (frozen columns paint over the grid)");
-  // Light themes tint the row with the level color and keep the theme's text color.
-  const lightRules = recolorLevelRules(rules, light);
-  const lc = compileColorRules(lightRules);
-  assert.equal(applyColors({ Level: "med" }, lc).fg, light.text);
-  assert.notEqual(applyColors({ Level: "med" }, lc).bg, applyColors({ Level: "low" }, lc).bg);
-  // Other rules are left alone.
-  const mine = { column: "RuleTitle", condition: "contains", value: "x", bgColor: "#000000", fgColor: "#ffffff" };
-  assert.equal(recolorLevelRules([mine, ...rules], light)[0], mine);
+test("level colors: white info, green low, yellow medium, orange high, red critical and emergency, in every theme", async () => {
+  const { buildLevelColorRules, compileColorRules, applyColors } = await import("../src/utils/color-rules.js");
+  const compiled = compileColorRules(buildLevelColorRules("Level", DATA.levelColors.levels));
+  const want = {
+    info: ["#ffffff", "#000000"], informational: ["#ffffff", "#000000"],
+    low: ["#00ff00", "#000000"],
+    med: ["#ffff00", "#000000"], medium: ["#ffff00", "#000000"],
+    high: ["#ffc100", "#000000"],
+    crit: ["#ff0000", "#ffffff"], critical: ["#ff0000", "#ffffff"],
+    emer: ["#ff0000", "#ffffff"], emergency: ["#ff0000", "#ffffff"],
+  };
+  for (const [level, [bg, fg]] of Object.entries(want)) {
+    assert.deepEqual(applyColors({ Level: level }, compiled), { bg, fg }, level);
+  }
+  assert.equal(applyColors({ Level: "undef" }, compiled), null, "unknown levels keep the default colors");
+  // The rules depend on nothing but the levels, so every color scheme shows the same colors.
+  assert.equal(buildLevelColorRules.length, 2);
 });
 
 // One instant, 2017-08-30T19:13:38.198Z, in each of Hayabusa's time formats.
@@ -225,5 +207,8 @@ test("the Hayabusa Templates page lists every template, its timestamp columns an
     assert.equal(cells[cells.length - 2], ts, t.name);
     assert.equal(cells[cells.length - 1], `${t.levelColorColumn ? "Yes" : "No"} |`, t.name);
   }
-  for (const l of DATA.levelColors.levels) assert.ok(page.includes(`\`${l.color}\``), l.level);
+  for (const l of DATA.levelColors.levels) {
+    const row = page.split("\n").find((x) => x.startsWith(`| ${l.level} |`));
+    assert.ok(row && row.includes(`\`${l.background}\``) && row.includes(`\`${l.text}\``), l.level);
+  }
 });

@@ -1,8 +1,8 @@
 {
-  "description": "Column templates for every CSV output of Hayabusa (https://github.com/Yamato-Security/hayabusa): each dfir-timeline profile and the search, logon-summary, metrics and extract-base64 outputs. Matching works as for juntei-templates.json. timestampColumns are the timestamp columns, exactly; levelColorColumn colors each row by its rule level with levelColors.",
+  "description": "Column templates for every CSV output of Hayabusa (https://github.com/Yamato-Security/hayabusa): each dfir-timeline profile and the search, logon-summary, metrics and extract-base64 outputs. Matching works as for juntei-templates.json. timestampColumns are the timestamp columns, exactly; levelColorColumn colors each row by its rule level with levelColors (background and text, the same in every color scheme).",
   "hayabusaVersion": "4.3.1",
   "levelColors": {
-    "source": "Hayabusa config/level_color.txt (informational has no color)",
+    "source": "Hayabusa's level colors (config/level_color.txt) as row backgrounds, the same in every color scheme; informational is white",
     "levels": [
       {
         "level": "emergency",
@@ -10,7 +10,8 @@
           "emer",
           "emergency"
         ],
-        "color": "#ff0000"
+        "background": "#ff0000",
+        "text": "#ffffff"
       },
       {
         "level": "critical",
@@ -18,14 +19,16 @@
           "crit",
           "critical"
         ],
-        "color": "#ff0000"
+        "background": "#ff0000",
+        "text": "#ffffff"
       },
       {
         "level": "high",
         "values": [
           "high"
         ],
-        "color": "#ffc100"
+        "background": "#ffc100",
+        "text": "#000000"
       },
       {
         "level": "medium",
@@ -33,14 +36,25 @@
           "med",
           "medium"
         ],
-        "color": "#ffff00"
+        "background": "#ffff00",
+        "text": "#000000"
       },
       {
         "level": "low",
         "values": [
           "low"
         ],
-        "color": "#00ff00"
+        "background": "#00ff00",
+        "text": "#000000"
+      },
+      {
+        "level": "informational",
+        "values": [
+          "info",
+          "informational"
+        ],
+        "background": "#ffffff",
+        "text": "#000000"
       }
     ]
   },

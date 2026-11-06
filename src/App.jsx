@@ -8,8 +8,8 @@
 // Modified by Yamato Security, 2026-11-05: View → Freeze / Unfreeze First Column, Hide Column on any
 // header (also by right-click), and a hideable Tags column.
 // Modified by Yamato Security, 2026-11-05: the cell popup's copy controls show that they copied.
-// Modified by Yamato Security, 2026-11-06: Hayabusa outputs get Hayabusa's level colors (redone on a
-// theme change), and day-first (European) timestamp columns display and convert day first.
+// Modified by Yamato Security, 2026-11-06: Hayabusa outputs get Hayabusa's level colors, and day-first
+// (European) timestamp columns display and convert day first.
 import { lazy, Suspense, useState, useEffect, useRef, useCallback, useMemo, Fragment } from "react";
 import { createPortal } from "react-dom";
 // ── Extracted constants ──────────────────────────────────────────
@@ -23,7 +23,7 @@ import { formatBytes, formatNumber } from "./utils/format.js";
 import { formatDateTime, UNSET_TIMESTAMP_LABEL, UNSET_TIMESTAMP_TITLE } from "./utils/datetime.js";
 import { isUnsetWindowsTimestamp, normalizeTimestamp } from "./utils/forensic-normalize.js";
 import { isIpcCancelled, isIpcError, ipcErrorMessage } from "./utils/ipc-result";
-import { compileColorRules, applyColors, buildTimelineColorRules, buildLevelColorRules, recolorLevelRules } from "./utils/color-rules.js";
+import { compileColorRules, applyColors, buildTimelineColorRules, buildLevelColorRules } from "./utils/color-rules.js";
 import { buildDiffColorRules, DIFF_COLUMN_ORDER } from "./utils/diff-tabs.js";
 import { detectKapeProfile, isChainsawDataset, isChainsawProcessDataset, isChainsawLogonDataset, HAYABUSA_LEVEL_COLORS } from "./utils/dataset-detect.js";
 import {
@@ -538,20 +538,6 @@ export default function App() {
   const importPathsRef = useRef({});
   const themeNameRef = useRef(themeName);
   themeNameRef.current = themeName;
-  // Level colors (Hayabusa) follow the theme: dark themes color the text, light ones the row.
-  useEffect(() => {
-    const th = resolveTheme(themeName);
-    setTabs((prev) => {
-      let changed = false;
-      const next = prev.map((t) => {
-        const rules = recolorLevelRules(t.colorRules, th);
-        if (rules === t.colorRules) return t;
-        changed = true;
-        return { ...t, colorRules: rules };
-      });
-      return changed ? next : prev;
-    });
-  }, [themeName]);
 
   const ct = tabs.find((t) => t.id === activeTab);
   // The Tags column hides like a data column (Column Manager, header menu): hiddenColumns holds it
@@ -1362,7 +1348,7 @@ export default function App() {
             const rest = headers.filter((h) => !order.includes(h));
             // Hayabusa outputs: rows colored by rule level, in Hayabusa's colors.
             const autoRules = kp.levelColorColumn && headers.includes(kp.levelColorColumn)
-              ? buildLevelColorRules(kp.levelColorColumn, HAYABUSA_LEVEL_COLORS, resolveTheme(themeNameRef.current))
+              ? buildLevelColorRules(kp.levelColorColumn, HAYABUSA_LEVEL_COLORS)
               : kp.autoColorColumn && headers.includes(kp.autoColorColumn)
                 ? buildTimelineColorRules(initialRows, kp.autoColorColumn, true)
                 : [];

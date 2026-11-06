@@ -10,26 +10,22 @@ When you open a Hayabusa CSV:
 
 - The status bar shows the format, for example **Hayabusa standard** or **Hayabusa logon-summary (failed)**.
 - **Only the template's timestamp columns are timestamps**, in any of Hayabusa's timestamp formats (below).
-- **Timelines are colored by rule level**, in Hayabusa's colors.
+- **Timelines are colored by rule level**: white, green, yellow, orange and red rows.
 
 ## Level colors
 
-Every `dfir-timeline` profile colors each row by its `Level`, with the colors Hayabusa uses in its terminal output (`config/level_color.txt`):
+Every `dfir-timeline` profile colors each row by its `Level`. The colors are the same in every color scheme:
 
-| Level | Written as | Color |
-|---|---|---|
-| emergency | `emer`, `emergency` | <span style="display:inline-block;width:0.9em;height:0.9em;border-radius:2px;vertical-align:middle;background:#ff0000"></span> `#ff0000` |
-| critical | `crit`, `critical` | <span style="display:inline-block;width:0.9em;height:0.9em;border-radius:2px;vertical-align:middle;background:#ff0000"></span> `#ff0000` |
-| high | `high` | <span style="display:inline-block;width:0.9em;height:0.9em;border-radius:2px;vertical-align:middle;background:#ffc100"></span> `#ffc100` |
-| medium | `med`, `medium` | <span style="display:inline-block;width:0.9em;height:0.9em;border-radius:2px;vertical-align:middle;background:#ffff00"></span> `#ffff00` |
-| low | `low` | <span style="display:inline-block;width:0.9em;height:0.9em;border-radius:2px;vertical-align:middle;background:#00ff00"></span> `#00ff00` |
-| informational | `info`, `informational` | none: the row keeps the default colors |
+| Level | Written as | Background | Text |
+|---|---|---|---|
+| emergency | `emer`, `emergency` | <span style="display:inline-block;width:0.9em;height:0.9em;border:1px solid #8888;border-radius:2px;vertical-align:middle;background:#ff0000"></span> `#ff0000` red | <span style="display:inline-block;width:0.9em;height:0.9em;border:1px solid #8888;border-radius:2px;vertical-align:middle;background:#ffffff"></span> `#ffffff` white |
+| critical | `crit`, `critical` | <span style="display:inline-block;width:0.9em;height:0.9em;border:1px solid #8888;border-radius:2px;vertical-align:middle;background:#ff0000"></span> `#ff0000` red | <span style="display:inline-block;width:0.9em;height:0.9em;border:1px solid #8888;border-radius:2px;vertical-align:middle;background:#ffffff"></span> `#ffffff` white |
+| high | `high` | <span style="display:inline-block;width:0.9em;height:0.9em;border:1px solid #8888;border-radius:2px;vertical-align:middle;background:#ffc100"></span> `#ffc100` orange | <span style="display:inline-block;width:0.9em;height:0.9em;border:1px solid #8888;border-radius:2px;vertical-align:middle;background:#000000"></span> `#000000` black |
+| medium | `med`, `medium` | <span style="display:inline-block;width:0.9em;height:0.9em;border:1px solid #8888;border-radius:2px;vertical-align:middle;background:#ffff00"></span> `#ffff00` yellow | <span style="display:inline-block;width:0.9em;height:0.9em;border:1px solid #8888;border-radius:2px;vertical-align:middle;background:#000000"></span> `#000000` black |
+| low | `low` | <span style="display:inline-block;width:0.9em;height:0.9em;border:1px solid #8888;border-radius:2px;vertical-align:middle;background:#00ff00"></span> `#00ff00` green | <span style="display:inline-block;width:0.9em;height:0.9em;border:1px solid #8888;border-radius:2px;vertical-align:middle;background:#000000"></span> `#000000` black |
+| informational | `info`, `informational` | <span style="display:inline-block;width:0.9em;height:0.9em;border:1px solid #8888;border-radius:2px;vertical-align:middle;background:#ffffff"></span> `#ffffff` white | <span style="display:inline-block;width:0.9em;height:0.9em;border:1px solid #8888;border-radius:2px;vertical-align:middle;background:#000000"></span> `#000000` black |
 
-- **Dark themes** color the row's text, as Hayabusa does in a terminal, over a dark tint of the same color.
-- **Light themes** tint the row with the color and keep the theme's text color, because yellow or green text isn't readable on a light background.
-- **Switching the theme recolors the rows.** The colors are ordinary color rules, so you can edit or remove them in **Color Rules**.
-
-Both the abbreviated levels and the full names that `-b` (`--disable-abbreviations`) writes are colored. A CSV from a custom profile gets the same colors when it matches the **Hayabusa (Standard)** or **Hayabusa (Verbose)** [KAPE profile](/reference/kape-profiles#hayabusa-standard).
+The red, orange, yellow and green are the colors Hayabusa uses for these levels in its terminal output (`config/level_color.txt`). Both the abbreviated levels and the full names that `-b` (`--disable-abbreviations`) writes are colored. The colors are ordinary color rules, so you can edit or remove them in **Color Rules**. A CSV from a custom profile gets the same colors when it matches the **Hayabusa (Standard)** or **Hayabusa (Verbose)** [KAPE profile](/reference/kape-profiles#hayabusa-standard).
 
 ## Timestamp formats
 
