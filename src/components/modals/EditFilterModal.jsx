@@ -1,3 +1,4 @@
+// Modified by Yamato Security, 2026-11-06: Enter applies the filter once (it no longer reopens the dialog).
 import { useCallback } from "react";
 import useUIStore from "../../store/useUIStore.js";
 import useTabStore from "../../store/useTabStore.js";
@@ -135,7 +136,7 @@ export default function EditFilterModal() {
               type="text"
               value={c.value}
               onChange={(e) => updateCondition(c.id, "value", e.target.value)}
-              onKeyDown={(e) => { if (e.key === "Enter") handleApply(); }}
+              onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); handleApply(); } }}
               placeholder="Value..."
               style={{ flex: 1, minWidth: 80 }}
             />

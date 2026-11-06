@@ -39,6 +39,7 @@ description: IRFlow Timeline changelog — version history, new features, perfor
 ### Fixes
 
 - **Copying from a cell's detail popup shows that it worked.** The popup's Copy buttons fill in solid for a second (near-black on light themes, near-white on dark ones) and say "✓ Copied", with a quick press, and Timestamp Converter values show "✓ Copied" beside the value; a copy the clipboard refuses says "Copy failed"
+- **Enter in Edit Filter applies the filter once.** Opened from the status bar, the dialog closed on Enter and opened again at once, so a second Enter was needed; closing any dialog now returns focus to the button that opened it only after the key press
 - **Toolbar menus close when you click outside them.** File, View, Actions, Tools and Help stayed open until their own button was clicked again; a click on the grid, the menu bar or the search box now closes them
 
 ### Build
