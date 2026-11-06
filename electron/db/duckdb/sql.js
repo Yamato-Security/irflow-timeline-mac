@@ -1,4 +1,4 @@
-// Added by Yamato Security, 2026-11-05: rewrites the SQLite idioms the app's SQL relies on
+// Added by Yamato Security, 2026-11-05 (day-first variants 2026-11-06): rewrites the SQLite idioms the app's SQL relies on
 // into their DuckDB equivalents, so the analyzers' queries keep their meaning unchanged.
 //
 //   LIKE / NOT LIKE        → ILIKE / NOT ILIKE   (SQLite's LIKE ignores case; DuckDB's does not)
@@ -88,18 +88,19 @@ function rewriteCode(rawCode, out) {
 // only accepts digits, ':', '.' and ',' after "YYYY-MM-DD HH:MM", so it never sees the
 // zones, whitespace or 1600/1601/0001 "unset" values the JavaScript handles specially.
 const NAIVE_ISO = "'\\d{4}-\\d{2}-\\d{2}[T ]\\d{2}:\\d{2}[0-9:.,]*'";
-const DATE_FN_RE = /\b(sort_datetime|extract_date|extract_datetime_minute)\(\s*((?:[A-Za-z_][A-Za-z0-9_]*\.)?[A-Za-z_][A-Za-z0-9_]*)\s*\)/g;
+// The *_dmy variants (day-first columns) read plain ISO values the same way.
+const DATE_FN_RE = /\b(sort_datetime|extract_date|extract_datetime_minute)(_dmy)?\(\s*((?:[A-Za-z_][A-Za-z0-9_]*\.)?[A-Za-z_][A-Za-z0-9_]*)\s*\)/g;
 
-function nativeDateExpr(fn, x) {
+function nativeDateExpr(fn, x, variant = "") {
   let native;
   if (fn === "sort_datetime") native = `CASE WHEN substr(${x}, 11, 1) = 'T' THEN substr(${x}, 1, 10) || ' ' || substr(${x}, 12) ELSE ${x} END`;
   else if (fn === "extract_date") native = `substr(${x}, 1, 10)`;
   else native = `substr(${x}, 1, 10) || ' ' || substr(${x}, 12, 5)`;
-  return `(CASE WHEN regexp_full_match(${x}, ${NAIVE_ISO}) THEN (CASE WHEN substr(${x}, 1, 4) IN ('1600', '1601', '0001') THEN NULL ELSE ${native} END) ELSE ${fn}(${x}) END)`;
+  return `(CASE WHEN regexp_full_match(${x}, ${NAIVE_ISO}) THEN (CASE WHEN substr(${x}, 1, 4) IN ('1600', '1601', '0001') THEN NULL ELSE ${native} END) ELSE ${fn}${variant}(${x}) END)`;
 }
 
 function rewriteDateFunctions(code) {
-  return code.replace(DATE_FN_RE, (whole, fn, arg) => nativeDateExpr(fn, arg));
+  return code.replace(DATE_FN_RE, (whole, fn, variant, arg) => nativeDateExpr(fn, arg, variant || ""));
 }
 
 function translateSql(sql) {
