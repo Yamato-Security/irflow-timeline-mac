@@ -1,4 +1,5 @@
-// Modified by Yamato Security, 2026-11-06: the search box text and placeholder use the scheme's input colors.
+// Modified by Yamato Security, 2026-11-06: the search box text and placeholder, and the match mode dropdown, use
+// the scheme's input colors.
 import { useState, useEffect } from "react";
 import useUIStore from "../store/useUIStore.js";
 import { formatNumber } from "../utils/format.js";
@@ -162,6 +163,8 @@ export default function FilterBar({
  */
 export function SearchOptionsBar({ th, ct, up }) {
   if (!ct || !ct.searchTerm) return null;
+  // The match mode dropdown can have its own colors (`bars.inputs`).
+  const inputTh = barTheme(th, "inputs");
   const shortSearch = isSearchTooShort(ct.searchTerm);
 
   return (
@@ -186,7 +189,7 @@ export function SearchOptionsBar({ th, ct, up }) {
       <span style={{ color: th.textMuted, fontSize: 11, whiteSpace: "nowrap" }}>Match:</span>
       <select value={ct.searchMode || "mixed"} onChange={(e) => up("searchMode", e.target.value)}
         aria-label="Search match mode"
-        style={{ background: th.btnBg, border: `1px solid ${th.btnBorder}`, color: th.textDim, fontSize: 11, padding: "3px 6px", borderRadius: 3, cursor: "pointer", outline: "none" }}>
+        style={{ background: inputTh.btnBg, border: `1px solid ${inputTh.btnBorder}`, color: inputTh.textDim, fontSize: 11, padding: "3px 6px", borderRadius: 3, cursor: "pointer", outline: "none" }}>
         {SEARCH_MATCH_MODES.map((mode) => <option key={mode.value} value={mode.value}>{mode.label}</option>)}
       </select>
     </div>
