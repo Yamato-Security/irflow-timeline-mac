@@ -75,7 +75,7 @@ test("the grid picks the same templates, and timelines get level colors", async 
   assert.equal(HAYABUSA_LEVEL_COLORS, DATA.levelColors.levels);
 });
 
-test("level colors: white info, green low, yellow medium, orange high, red critical and emergency, in every theme", async () => {
+test("level colors: white info, green low, yellow medium, orange high, red critical and emergency, black text, in every theme", async () => {
   const { buildLevelColorRules, compileColorRules, applyColors } = await import("../src/utils/color-rules.js");
   const compiled = compileColorRules(buildLevelColorRules("Level", DATA.levelColors.levels));
   const want = {
@@ -83,8 +83,8 @@ test("level colors: white info, green low, yellow medium, orange high, red criti
     low: ["#00ff00", "#000000"],
     med: ["#ffff00", "#000000"], medium: ["#ffff00", "#000000"],
     high: ["#ffc100", "#000000"],
-    crit: ["#ff0000", "#ffffff"], critical: ["#ff0000", "#ffffff"],
-    emer: ["#ff0000", "#ffffff"], emergency: ["#ff0000", "#ffffff"],
+    crit: ["#ff0000", "#000000"], critical: ["#ff0000", "#000000"],
+    emer: ["#ff0000", "#000000"], emergency: ["#ff0000", "#000000"],
   };
   for (const [level, [bg, fg]] of Object.entries(want)) {
     assert.deepEqual(applyColors({ Level: level }, compiled), { bg, fg }, level);

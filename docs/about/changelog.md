@@ -33,7 +33,7 @@ description: IRFlow Timeline changelog — version history, new features, perfor
 ### Hayabusa
 
 - **Every CSV that Hayabusa writes is recognized**: each `dfir-timeline` profile (minimal, standard, verbose, all-field-info, all-field-info-verbose, super-verbose, timesketch-minimal, timesketch-verbose) and the `search`, `logon-summary`, `eid-metrics`, `computer-metrics`, `log-metrics` and `extract-base64` outputs, with or without GeoIP columns: 15 templates in `electron/hayabusa-templates.json`, each listing its timestamp columns. The status bar names the format (for example **Hayabusa standard**)
-- **Timelines are colored by rule level**, the same in every color scheme: informational rows white, low green, medium yellow, high orange (black text), and critical and emergency red (white text), in the colors Hayabusa uses for these levels
+- **Timelines are colored by rule level**, the same in every color scheme: informational rows white, low green, medium yellow, high orange, and critical and emergency red, all with black text, in the colors Hayabusa uses for these levels
 - **Every Hayabusa timestamp format is read correctly.** `--us-time` lost its UTC offset, fractional seconds and `PM`; `--us-military-time` lost its offset; `--european-time` was read month first, so `03-08-2017` (3 August) became 8 March. A timestamp column whose dates can only be day first is now read day first for display, sorting, date filters and the histogram. See [Hayabusa Templates](/reference/hayabusa-templates)
 
 ### Fixes

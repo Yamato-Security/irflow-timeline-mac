@@ -11,7 +11,7 @@
           "emergency"
         ],
         "background": "#ff0000",
-        "text": "#ffffff"
+        "text": "#000000"
       },
       {
         "level": "critical",
@@ -20,7 +20,7 @@
           "critical"
         ],
         "background": "#ff0000",
-        "text": "#ffffff"
+        "text": "#000000"
       },
       {
         "level": "high",

@@ -14,12 +14,12 @@ When you open a Hayabusa CSV:
 
 ## Level colors
 
-Every `dfir-timeline` profile colors each row by its `Level`. The colors are the same in every color scheme:
+Every `dfir-timeline` profile colors each row by its `Level`, with black text. The colors are the same in every color scheme:
 
 | Level | Written as | Background | Text |
 |---|---|---|---|
-| emergency | `emer`, `emergency` | <span style="display:inline-block;width:0.9em;height:0.9em;border:1px solid #8888;border-radius:2px;vertical-align:middle;background:#ff0000"></span> `#ff0000` red | <span style="display:inline-block;width:0.9em;height:0.9em;border:1px solid #8888;border-radius:2px;vertical-align:middle;background:#ffffff"></span> `#ffffff` white |
-| critical | `crit`, `critical` | <span style="display:inline-block;width:0.9em;height:0.9em;border:1px solid #8888;border-radius:2px;vertical-align:middle;background:#ff0000"></span> `#ff0000` red | <span style="display:inline-block;width:0.9em;height:0.9em;border:1px solid #8888;border-radius:2px;vertical-align:middle;background:#ffffff"></span> `#ffffff` white |
+| emergency | `emer`, `emergency` | <span style="display:inline-block;width:0.9em;height:0.9em;border:1px solid #8888;border-radius:2px;vertical-align:middle;background:#ff0000"></span> `#ff0000` red | <span style="display:inline-block;width:0.9em;height:0.9em;border:1px solid #8888;border-radius:2px;vertical-align:middle;background:#000000"></span> `#000000` black |
+| critical | `crit`, `critical` | <span style="display:inline-block;width:0.9em;height:0.9em;border:1px solid #8888;border-radius:2px;vertical-align:middle;background:#ff0000"></span> `#ff0000` red | <span style="display:inline-block;width:0.9em;height:0.9em;border:1px solid #8888;border-radius:2px;vertical-align:middle;background:#000000"></span> `#000000` black |
 | high | `high` | <span style="display:inline-block;width:0.9em;height:0.9em;border:1px solid #8888;border-radius:2px;vertical-align:middle;background:#ffc100"></span> `#ffc100` orange | <span style="display:inline-block;width:0.9em;height:0.9em;border:1px solid #8888;border-radius:2px;vertical-align:middle;background:#000000"></span> `#000000` black |
 | medium | `med`, `medium` | <span style="display:inline-block;width:0.9em;height:0.9em;border:1px solid #8888;border-radius:2px;vertical-align:middle;background:#ffff00"></span> `#ffff00` yellow | <span style="display:inline-block;width:0.9em;height:0.9em;border:1px solid #8888;border-radius:2px;vertical-align:middle;background:#000000"></span> `#000000` black |
 | low | `low` | <span style="display:inline-block;width:0.9em;height:0.9em;border:1px solid #8888;border-radius:2px;vertical-align:middle;background:#00ff00"></span> `#00ff00` green | <span style="display:inline-block;width:0.9em;height:0.9em;border:1px solid #8888;border-radius:2px;vertical-align:middle;background:#000000"></span> `#000000` black |
