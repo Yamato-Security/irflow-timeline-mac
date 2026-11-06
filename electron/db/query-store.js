@@ -41,6 +41,14 @@ function looksLikeAiHistoryMeta(meta) {
   return Boolean((cm.InvokedTool || cm.ToolName) && cm.Tool && cm.RecordType && cm.Summary && cm.SessionId);
 }
 
+// A header filter is a string (contains) or { op, value } for another operator (Yamato Security,
+// 2026-11-06). Operators are those of Edit Filter; is_empty / is_not_empty need no value.
+const NO_VALUE_OPERATORS = new Set(["is_empty", "is_not_empty"]);
+function columnFilterParts(raw) {
+  if (raw && typeof raw === "object") return { op: raw.op || "contains", value: raw.value == null ? "" : String(raw.value) };
+  return { op: "contains", value: raw == null ? "" : String(raw) };
+}
+
 function normalizedColumnExpr(meta, colName) {
   const safeCol = meta?.colMap?.[colName];
   if (!safeCol) return null;
@@ -582,8 +590,9 @@ class QueryStoreMethods {
   // ── Shared filter helpers (used by queryRows, preview*, getLateralMovement, etc.) ──
 
   _applyColumnFilters(columnFilters, meta, whereConditions, params) {
-    for (const [cn, fv] of Object.entries(columnFilters)) {
-      if (!fv) continue;
+    for (const [cn, raw] of Object.entries(columnFilters)) {
+      const { op, value: fv } = columnFilterParts(raw);
+      if (!fv && !NO_VALUE_OPERATORS.has(op)) continue;
       if (cn === "__tags__") {
         whereConditions.push(`data.rowid IN (SELECT rowid FROM tags WHERE tag LIKE ?)`);
         params.push(`%${fv}%`);
@@ -596,6 +605,10 @@ class QueryStoreMethods {
       }
       const sc = meta.colMap[cn];
       if (!sc) continue;
+      if (op !== "contains") {
+        whereConditions.push(this._conditionSql(meta, { column: cn, operator: op, value: fv }, params));
+        continue;
+      }
       const expr = normalizedColumnExpr(meta, cn);
       whereConditions.push(`${expr} LIKE ?`);
       params.push(`%${fv}%`);
@@ -792,6 +805,55 @@ class QueryStoreMethods {
   }
 
   /**
+   * SQL for one filter condition { column, operator, value }, as Edit Filter and the header
+   * filters write them. Pushes its parameters onto `params`.
+   */
+  _conditionSql(meta, f, params) {
+    const sc = normalizedColumnExpr(meta, f.column);
+    switch (f.operator) {
+      case "contains":
+        params.push(`%${f.value}%`);
+        return `${sc} LIKE ?`;
+      case "not_contains":
+        params.push(`%${f.value}%`);
+        return `${sc} NOT LIKE ?`;
+      case "equals":
+        params.push(f.value);
+        return `${sc} = ?`;
+      case "not_equals":
+        params.push(f.value);
+        return `${sc} != ?`;
+      case "starts_with":
+        params.push(`${f.value}%`);
+        return `${sc} LIKE ?`;
+      case "ends_with":
+        params.push(`%${f.value}`);
+        return `${sc} LIKE ?`;
+      case "greater_than":
+        params.push(f.value);
+        // Timestamp columns compare as instants (any format; Yamato Security, 2026-11-06).
+        if (meta.tsColumns?.has(f.column)) return `sort_datetime(${meta.colMap[f.column]}) > sort_datetime(?)`;
+        return `CAST(${sc} AS REAL) > CAST(? AS REAL)`;
+      case "less_than":
+        params.push(f.value);
+        if (meta.tsColumns?.has(f.column)) return `sort_datetime(${meta.colMap[f.column]}) < sort_datetime(?)`;
+        return `CAST(${sc} AS REAL) < CAST(? AS REAL)`;
+      case "is_empty":
+        return `(${sc} IS NULL OR ${sc} = '')`;
+      case "is_not_empty":
+        return `(${sc} IS NOT NULL AND ${sc} != '')`;
+      case "regex": {
+        const c = regexCondition(meta.db, sc, f.value);
+        params.push(...c.params);
+        return c.sql;
+      }
+      default:
+        params.push(`%${f.value}%`);
+        return `${sc} LIKE ?`;
+    }
+  }
+
+  /**
    * Apply advanced multi-condition filters (Edit Filter feature).
    * Groups conditions by AND/OR logic with correct SQL precedence:
    *   A AND B OR C AND D  →  (A AND B) OR (C AND D)
@@ -808,48 +870,7 @@ class QueryStoreMethods {
     });
     if (valid.length === 0) return;
 
-    // Build SQL for a single condition
-    const buildCondition = (f) => {
-      const sc = normalizedColumnExpr(meta, f.column);
-      switch (f.operator) {
-        case "contains":
-          params.push(`%${f.value}%`);
-          return `${sc} LIKE ?`;
-        case "not_contains":
-          params.push(`%${f.value}%`);
-          return `${sc} NOT LIKE ?`;
-        case "equals":
-          params.push(f.value);
-          return `${sc} = ?`;
-        case "not_equals":
-          params.push(f.value);
-          return `${sc} != ?`;
-        case "starts_with":
-          params.push(`${f.value}%`);
-          return `${sc} LIKE ?`;
-        case "ends_with":
-          params.push(`%${f.value}`);
-          return `${sc} LIKE ?`;
-        case "greater_than":
-          params.push(f.value);
-          return `CAST(${sc} AS REAL) > CAST(? AS REAL)`;
-        case "less_than":
-          params.push(f.value);
-          return `CAST(${sc} AS REAL) < CAST(? AS REAL)`;
-        case "is_empty":
-          return `(${sc} IS NULL OR ${sc} = '')`;
-        case "is_not_empty":
-          return `(${sc} IS NOT NULL AND ${sc} != '')`;
-        case "regex": {
-          const c = regexCondition(meta.db, sc, f.value);
-          params.push(...c.params);
-          return c.sql;
-        }
-        default:
-          params.push(`%${f.value}%`);
-          return `${sc} LIKE ?`;
-      }
-    };
+    const buildCondition = (f) => this._conditionSql(meta, f, params);
 
     // Group consecutive AND-linked conditions, join groups with OR
     const groups = [];
