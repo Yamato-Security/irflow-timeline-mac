@@ -219,9 +219,9 @@ test("light and seasonal text stays readable on panels, controls and selected/bo
   }
 });
 
-test("bar overrides: Autumn's and Spring's bars, the other schemes override nothing", async () => {
+test("bar overrides: Autumn's, Spring's and Christmas's bars, the other schemes override nothing", async () => {
   const { THEMES, barTheme } = await themesModule();
-  const PARTS = ["top", "menu", "dropdown", "group", "header", "inputs", "filters", "bottom"];
+  const PARTS = ["top", "menu", "dropdown", "group", "search", "header", "inputs", "filters", "bottom"];
   for (const [name, th] of Object.entries(THEMES)) {
     assert.deepEqual(Object.keys(th.bars), PARTS, `${name}.bars parts`);
     for (const part of PARTS) {
@@ -234,12 +234,23 @@ test("bar overrides: Autumn's and Spring's bars, the other schemes override noth
       assert.deepEqual(barTheme(th, part), { ...th, ...overrides }, `${name}: barTheme ${part}`);
     }
     assert.deepEqual(barTheme(th, "top", "group"), { ...th, ...th.bars.top, ...th.bars.group }, `${name}: later parts win`);
-    if (name !== "autumn" && name !== "spring") {
+    if (!["autumn", "spring", "christmas"].includes(name)) {
       for (const part of PARTS) assert.deepEqual(th.bars[part], {}, `${name}.bars.${part}`);
       assert.equal(barTheme(th, "top", "group"), th, `${name}: no overrides, same theme object`);
     }
   }
   const TEXT = ["text", "textDim", "textMuted", "accent", "success", "warning", "danger"];
+
+  // Christmas: the search conditions bar is red, like the column headers; the group strip is not.
+  const christmas = THEMES.christmas;
+  const christmasSearch = barTheme(christmas, "top", "group", "search");
+  assert.equal(christmasSearch.panelBg, christmas.headerBg);
+  assert.equal(barTheme(christmas, "top", "group").panelBg, christmas.panelBg);
+  for (const key of ["text", "textDim", "accent"]) assert.ok(contrast(christmasSearch[key], christmasSearch.panelBg) >= 4.5, `christmas search ${key}`);
+  assert.ok(contrast(christmasSearch.textMuted, christmasSearch.panelBg) >= 4.4, "christmas search textMuted");
+  // "Clear All" in the group strip and the status bar is vermillion.
+  assert.equal(barTheme(christmas, "top", "group").danger, "#ea4630");
+  assert.equal(barTheme(christmas, "bottom").danger, "#ea4630");
 
   const autumn = THEMES.autumn;
   const YELLOW = "#eac910";
@@ -261,20 +272,20 @@ test("bar overrides: Autumn's and Spring's bars, the other schemes override noth
   assert.equal(header.headerBg, "#c93036");
   assert.equal(header.headerText, "#fff8ed");
   assert.equal(header.borderAccent, "#ff8c00");
-  // Green text in the dropdowns (toolbar and match mode) and the search box.
+  // Light green text in the dropdowns (toolbar and match mode) and the search box.
   for (const base of [top, group]) {
     const inputs = barTheme(base, "inputs");
-    for (const key of ["text", "textDim", "textMuted"]) assert.equal(inputs[key], "#83a33c", `autumn inputs ${key}`);
+    for (const key of ["text", "textDim", "textMuted"]) assert.equal(inputs[key], "#a6b784", `autumn inputs ${key}`);
     assert.equal(inputs.btnBg, "#6b3c2c");
   }
   // Red status bar with yellow text.
   const bottom = barTheme(autumn, "bottom");
   assert.equal(bottom.toolbarBg, "rgba(201,48,54,0.98)");
   for (const key of [...TEXT, "borderAccent"]) assert.equal(bottom[key], YELLOW, `autumn bottom ${key}`);
-  // Yellow is 5.6:1 on the red-brown and 3.3:1 on the red; the green input text 3.2:1 on the red-brown.
+  // Yellow is 5.6:1 on the red-brown and 3.3:1 on the red; the light green input text 4.2:1 on the red-brown.
   assert.ok(contrast(YELLOW, "#6b3c2c") >= 4.5, "yellow on the red-brown bars");
   assert.ok(contrast(YELLOW, "#c93036") >= 3, "yellow on the red bars");
-  assert.ok(contrast("#83a33c", "#6b3c2c") >= 3, "green on the red-brown dropdowns");
+  assert.ok(contrast("#a6b784", "#6b3c2c") >= 3, "light green on the red-brown dropdowns");
   assert.ok(contrast(header.headerText, header.headerBg) >= 4.5, "column names on the red header row");
 
   const spring = THEMES.spring;
@@ -301,16 +312,16 @@ test("bar overrides: Autumn's and Spring's bars, the other schemes override noth
   assert.equal(springInputs.btnBg, PALE_YELLOW);
   assert.equal(springInputs.textDim, PURPLE);
   assert.equal(springInputs.text, PALE_YELLOW);
-  // Purple filter boxes with pale-yellow text; other text boxes stay pale yellow.
+  // Pale-yellow filter boxes with purple text; other text boxes are pale yellow with black text.
   const filters = barTheme(spring, "filters");
-  assert.equal(filters.bgInput, PURPLE);
-  assert.equal(filters.text, PALE_YELLOW);
+  assert.equal(filters.bgInput, PALE_YELLOW);
+  assert.equal(filters.text, PURPLE);
   assert.equal(spring.bgInput, PALE_YELLOW);
   // Filled controls are pale yellow with purple text; plain buttons are the bar green.
   for (const key of ["primaryBtn", "primaryBtnHover", "fillAccent", "fillAccentHover", "fillWarning", "fillDanger"]) assert.equal(spring[key], PALE_YELLOW, `spring.${key}`);
   for (const key of ["onPrimary", "onAccent"]) assert.equal(spring[key], PURPLE, `spring.${key}`);
   assert.equal(spring.btnBg, "#678215");
-  assert.ok(contrast(PALE_YELLOW, PURPLE) >= 4.5, "pale yellow on the purple filter boxes");
+  assert.ok(contrast(PURPLE, PALE_YELLOW) >= 4.5, "purple on the pale-yellow filter boxes");
   assert.ok(contrast(PURPLE, PALE_YELLOW) >= 4.5, "purple on pale yellow");
   assert.ok(contrast(PALE_YELLOW, "#678215") >= 3, "pale yellow on the dark green bars");
 });

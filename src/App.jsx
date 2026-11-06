@@ -564,6 +564,7 @@ export default function App() {
   const topTh = useMemo(() => barTheme(th, "top"), [th]);
   const menuTh = useMemo(() => barTheme(th, "top", "menu"), [th]);
   const groupTh = useMemo(() => barTheme(th, "top", "group"), [th]);
+  const searchTh = useMemo(() => barTheme(th, "top", "group", "search"), [th]);
   const bottomTh = useMemo(() => barTheme(th, "bottom"), [th]);
   const isDark = th.base === "dark";
   // Document-level colors (body background, scrollbars, text selection, native form controls)
@@ -3952,7 +3953,7 @@ export default function App() {
           }
         />
       </Suspense>
-      <SearchOptionsBar th={groupTh} ct={ct} up={up} />
+      <SearchOptionsBar th={searchTh} ct={ct} up={up} />
 
 
       {/* Cross-tab search results (auto-shown with 2+ tabs and active search) */}
