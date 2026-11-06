@@ -55,6 +55,21 @@ Full regular expression pattern matching.
 
 Best for: Complex pattern matching, IP addresses, structured data extraction.
 
+### Search Conditions
+
+While you search, the condition radios under the search bar set how a term matches a cell:
+
+| Condition | Matches |
+|---|---|
+| **Contains** | Cells containing the term (the default) |
+| **Fuzzy** | Close spellings and likely typos |
+| **Starts with** | Cells beginning with the term |
+| **Ends with** | Cells ending with the term, such as `.exe` or `system32` |
+| **Like** | SQL-style `%` and `_` wildcards |
+| **Equals** | The whole cell value |
+
+Starts with and Ends with ignore letter case; Equals is exact. In Mixed and Exact mode these three compare the whole input as one value, and `Col:value` limits the match to one column.
+
 ## Filter Types
 
 ### Column Filters
@@ -63,6 +78,20 @@ Click the filter icon on any column header to open column-specific filtering:
 
 - **Text filter** — type to match values within that column
 - Filters are additive — multiple column filters create an AND condition
+
+**Operators.** A text filter matches with **Contains** by default. Right-click the filter box, or click the operator button to its left (shown once the column is filtered), to choose another operator. The operators are those of the [Advanced Filter Editor](#advanced-filter-editor):
+
+| Button | Operator | Notes |
+|---|---|---|
+| `~` | Contains | The default, case-insensitive |
+| `!~` | Does not contain | |
+| `=` / `≠` | Equals / Does not equal | Exact value |
+| `a…` / `…a` | Starts with / Ends with | |
+| `>` / `<` | Greater than / Less than | Numbers compare as numbers; timestamp columns compare as dates, in any timestamp format |
+| `∅` / `!∅` | Is empty / Is not empty | Need no value; the box shows the operator |
+| `.*` | Matches regex | |
+
+The same menu has **Turn filter off** / **Turn filter on**, which pauses the column's filters without clearing them (the button turns red and struck through), and **Clear filter**. Every view that respects the active filters (stacking, gap and burst analysis, bulk actions, the analyzers) applies the operator too.
 
 ### Filter In / Filter Out
 
@@ -105,6 +134,8 @@ Open **View → Edit Filter** to build multi-condition filters with a visual edi
 - **Live preview** — the grid updates as you build the filter
 
 Advanced filters are applied alongside column filters and checkbox filters, giving you layered filter composition.
+
+**Filters under the column headers** are listed at the top of the editor: the text filter (with its operator), the ▼ value list (**Is one of**) and the date range (**Between**). They always apply on top of the conditions, so the conditions are listed below them, joined by AND. The preview shows the whole filter. In the editor you can change a header text filter's operator and value, or remove any header filter with ✕. **Apply** (or Enter) updates the header row to match, and **Clear All** clears the conditions and the header filters it lists. A header filter switched off with its toggle isn't listed and is left as it is.
 
 ### Filter Presets
 

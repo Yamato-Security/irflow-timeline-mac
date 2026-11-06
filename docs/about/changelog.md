@@ -23,6 +23,9 @@ description: IRFlow Timeline changelog — version history, new features, perfor
 - **View → Freeze First Column** keeps the first column, the one right of Tags, in view while the grid scrolls sideways; **View → Unfreeze First Column** releases it
 - **Right-click a column header** to open the column menu (as `Cmd+Click` does), and **Hide Column** works on every header, the Tags column included
 - **The Tags column can be hidden**, from the header menu or the Column Manager, which now lists it; **Show All** brings it back
+- **Edit Filter lists the filters set under the column headers** (text, value list and date range) above its own conditions. A header filter's operator and text can be changed there, or any header filter removed, and Apply updates the header row; Clear All clears them too
+- **Header filters have operators.** Right-click a filter box under a header, or click the button to its left, to choose Contains, Does not contain, Equals, Does not equal, Starts with, Ends with, Greater than, Less than, Is empty, Is not empty or Matches regex; the button shows the operator (`~`, `=`, `>`, …). The same menu turns the column's filter off and on (what the button did before) and clears it. Greater than and Less than compare timestamp columns as dates, in header filters and Edit Filter alike
+- **The search box has an Ends with condition**, next to Starts with: `.exe` or `system32` matches cells ending with it
 - The status bar, start screen and Quick Help say **DuckDB-backed** instead of SQLite-backed
 
 ### Juntei
