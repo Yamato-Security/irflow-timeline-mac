@@ -219,10 +219,12 @@ test("light and seasonal text stays readable on panels, controls and selected/bo
   }
 });
 
-test("bar overrides: Autumn has light blue top bars and a red status bar, the other schemes override nothing", async () => {
+test("bar overrides: Autumn's bars and inputs, the other schemes override nothing", async () => {
   const { THEMES, barTheme } = await themesModule();
+  const PARTS = ["top", "header", "inputs", "bottom"];
   for (const [name, th] of Object.entries(THEMES)) {
-    for (const part of ["top", "bottom"]) {
+    assert.deepEqual(Object.keys(th.bars), PARTS, `${name}.bars parts`);
+    for (const part of PARTS) {
       const overrides = th.bars[part];
       for (const key of Object.keys(overrides)) {
         assert.ok(key in th && !GROUPS.includes(key) && key !== "base", `${name}.bars.${part}.${key} must override a plain color token`);
@@ -231,24 +233,42 @@ test("bar overrides: Autumn has light blue top bars and a red status bar, the ot
       if ("headerBg" in overrides) assert.match(overrides.headerBg, HEX, `${name}.bars.${part}.headerBg must be opaque`);
       assert.deepEqual(barTheme(th, part), { ...th, ...overrides }, `${name}: barTheme ${part}`);
     }
+    assert.deepEqual(barTheme(th, "top", "header"), { ...th, ...th.bars.top, ...th.bars.header }, `${name}: later parts win`);
     if (name !== "autumn") {
-      assert.deepEqual(th.bars, { top: {}, bottom: {} }, `${name}.bars`);
-      assert.equal(barTheme(th, "top"), th, `${name}: no overrides, same theme object`);
+      for (const part of PARTS) assert.deepEqual(th.bars[part], {}, `${name}.bars.${part}`);
+      assert.equal(barTheme(th, "top", "header"), th, `${name}: no overrides, same theme object`);
     }
   }
   const autumn = THEMES.autumn;
+  const YELLOW = "#eac910";
+  const TEXT = ["text", "textDim", "textMuted", "accent", "success", "warning", "danger"];
   for (const key of ["bg", "bgAlt", "rowOdd", "rowEven"]) assert.equal(autumn[key], "#6b3c2c", `autumn.${key}`);
+  // Red-brown menu bar, tab bar and search options; red menus, as before.
   const top = barTheme(autumn, "top");
-  for (const key of ["toolbarBg", "modalBg", "panelBg", "headerBg"]) assert.equal(top[key], "#add8e6", `autumn top ${key}`);
-  for (const key of ["text", "textDim", "textMuted", "accent", "success", "warning", "danger"]) assert.equal(top[key], "#c93036", `autumn top ${key}`);
+  assert.equal(top.toolbarBg, "rgba(107,60,44,0.98)");
+  assert.equal(top.panelBg, "#6b3c2c");
+  assert.equal(top.modalBg, "#c93036");
+  for (const key of TEXT) assert.equal(top[key], YELLOW, `autumn top ${key}`);
   for (const key of ["border", "borderAccent", "btnBorder", "glassBorder"]) assert.equal(top[key], "#ff8c00", `autumn top ${key}`);
-  assert.equal(top.headerText, autumn.headerText, "column names keep the scheme's header text color");
+  // Red group strip and column headers; the column names keep the cream header text.
+  const header = barTheme(autumn, "top", "header");
+  assert.equal(header.panelBg, "#c93036");
+  assert.equal(header.headerBg, "#c93036");
+  assert.equal(header.headerText, "#fff8ed");
+  for (const key of TEXT) assert.equal(header[key], YELLOW, `autumn header ${key}`);
+  // Light blue text in the toolbar dropdowns and the search box.
+  const inputs = barTheme(top, "inputs");
+  for (const key of ["text", "textDim", "textMuted"]) assert.equal(inputs[key], "#add8e6", `autumn inputs ${key}`);
+  assert.equal(inputs.btnBg, "#6b3c2c");
+  // Red status bar with yellow text.
   const bottom = barTheme(autumn, "bottom");
-  assert.equal(bottom.toolbarBg, "rgba(201,48,54,0.98)", "the status bar stays red");
-  for (const key of ["text", "textDim", "textMuted", "accent", "success", "warning", "danger", "borderAccent"]) assert.equal(bottom[key], "#eac910", `autumn bottom ${key}`);
-  // Red on light blue is 3.5:1 and yellow on red 3.3:1; cream column names on light blue only 1.5:1.
-  assert.ok(contrast(top.text, top.toolbarBg) >= 3, "red text on the light blue bars");
-  assert.ok(contrast(bottom.text, "#c93036") >= 3, "yellow text on the red status bar");
+  assert.equal(bottom.toolbarBg, "rgba(201,48,54,0.98)");
+  for (const key of [...TEXT, "borderAccent"]) assert.equal(bottom[key], YELLOW, `autumn bottom ${key}`);
+  // Yellow is 5.6:1 on the red-brown and 3.3:1 on the red; light blue 6.0:1 on the red-brown.
+  assert.ok(contrast(YELLOW, "#6b3c2c") >= 4.5, "yellow on the red-brown bars");
+  assert.ok(contrast(YELLOW, "#c93036") >= 3, "yellow on the red bars");
+  assert.ok(contrast("#add8e6", "#6b3c2c") >= 4.5, "light blue on the red-brown dropdowns");
+  assert.ok(contrast(header.headerText, header.headerBg) >= 4.5, "column names on the red header row");
 });
 
 test("filled controls pair the foreground with the actual accent or primary surface", async () => {

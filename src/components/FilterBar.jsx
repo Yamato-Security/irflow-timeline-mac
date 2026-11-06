@@ -1,4 +1,4 @@
-// Modified by Yamato Security, 2026-11-06: the search box placeholder uses the bar's muted text color.
+// Modified by Yamato Security, 2026-11-06: the search box text and placeholder use the scheme's input colors.
 import { useState, useEffect } from "react";
 import useUIStore from "../store/useUIStore.js";
 import { formatNumber } from "../utils/format.js";
@@ -10,6 +10,7 @@ import {
   SEARCH_MATCH_MODES,
 } from "../constants/ui-controls.js";
 import { Tooltip } from "./primitives/index.js";
+import { barTheme } from "../constants/themes.js";
 
 /**
  * FilterBar — search input capsule + search options bar + regex pattern palette.
@@ -36,6 +37,8 @@ export default function FilterBar({
   highlightMatchCount,
   navigateSearch,
 }) {
+  // The search box's text can have its own colors (`bars.inputs`).
+  const inputTh = barTheme(th, "inputs");
   const [regexPaletteOpen, setRegexPaletteOpen] = useState(false);
   const shortSearch = isSearchTooShort(ct?.searchTerm);
   const searchBehavior = SEARCH_BEHAVIORS.find((item) => item.value === (ct?.searchHighlight ? "highlight" : "filter"));
@@ -61,9 +64,9 @@ export default function FilterBar({
         ) : (
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke={th.textMuted} strokeWidth="2" style={{ flexShrink: 0 }}><circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
         )}
-        <style>{`#gs::placeholder { color: ${th.textMuted}; opacity: 1; }`}</style>
+        <style>{`#gs::placeholder { color: ${inputTh.textMuted}; opacity: 1; }`}</style>
         <input id="gs" value={ct?.searchTerm || ""} onChange={(e) => up("searchTerm", e.target.value)} placeholder='Search: terms, +AND, -NOT, "phrase", Col:val'
-          style={{ flex: 1, minWidth: 80, background: "transparent", border: "none", outline: "none", color: th.text, fontSize: 12, padding: "6px 0", fontFamily: "inherit" }} />
+          style={{ flex: 1, minWidth: 80, background: "transparent", border: "none", outline: "none", color: inputTh.text, fontSize: 12, padding: "6px 0", fontFamily: "inherit" }} />
         <Tooltip content={`${searchBehavior.label} mode — ${searchBehavior.description}`}>
           <button onClick={() => ct && up("searchHighlight", !ct.searchHighlight)}
             aria-label={ct?.searchHighlight ? "Switch to filter mode" : "Switch to highlight mode"}

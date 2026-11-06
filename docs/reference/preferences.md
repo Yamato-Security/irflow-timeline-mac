@@ -92,7 +92,7 @@ There is no `Cmd+T` theme shortcut.
 | **Spring** | light | Predominantly Light Forest Green and fresh `#678215` green backgrounds, with lavender, cranberry and pale-yellow accents |
 | **Sakura** | light | Reference blossom pinks, cream and pale blue, with bright rose controls and dark plum lettering |
 | **Summer** | light | Aqua blue, pale-yellow headers and controls (`#F3E2B3`), sunny-yellow chart panels and inputs (`#EDC02C`), with citrus/green accents |
-| **Autumn** | dark | Red-brown timeline backgrounds (`#6B3C2C`), light blue top bars, menus and column headers (`#ADD8E6`) with red text, and a momiji-red status bar (`#C93036`) with yellow text |
+| **Autumn** | dark | Red-brown timeline and toolbar (`#6B3C2C`), momiji-red group strip, column headers, menus and status bar (`#C93036`), with yellow text and dark orange lines |
 | **Winter** | light | Icy blue panels, snow-white rows and pale glacier-blue controls |
 | **Christmas** | dark | SchemeColor Christmas HEX: Motherboard Green `#165B33` and Jewel `#146B3A` backgrounds, Beautiful Red `#BB2528` headers and controls, Vermillion `#EA4630` and Classic Orange `#F8B229` chart accents |
 
@@ -116,7 +116,7 @@ Light Mode uses neutral surfaces for long reading sessions, with separate colors
 
 Christmas uses the two reference greens for most of the workspace, red headers and primary controls, and vermillion-to-gold histogram bars. Darker green chart panels separate the bars from their background. Warm-white main text provides approximately **7.72:1** contrast on the main green background and **5.84:1** on the red headers and primary controls. Muted text, highlighted rows and control hover states are also checked for readability.
 
-In Autumn, `#6B3C2C` is the timeline background. The menu bar and its menus, the search box, the tab bar, the group strip and the column headers are light blue `#ADD8E6` with red `#C93036` text (3.5:1) and dark orange `#FF8C00` lines and outlines; the column names stay cream `#FFF8ED` (1.5:1). The status bar is red `#C93036` with yellow `#EAC910` text (3.3:1). These bar colors are below WCAG AA. Autumn main text on the timeline targets WCAG AA (4.5:1); the other palettes retain their 7:1 main-text target. The existing standard-palette checks still cover muted text, inputs, headers, controls and selections.
+In Autumn, `#6B3C2C` is the background of the timeline, the menu bar, the tab bar and the search options. The group strip, the column headers, the menus and the status bar are red `#C93036`. Text on all of them is yellow `#EAC910` (5.6:1 on the red-brown, 3.3:1 on the red, below WCAG AA), except the column names, which stay cream `#FFF8ED` (5.0:1), and the text in the timestamp format, time zone and color scheme dropdowns and the search box, which is light blue `#ADD8E6` (6.0:1). Lines and outlines above the timeline are dark orange `#FF8C00`. Autumn main text on the timeline targets WCAG AA (4.5:1); the other palettes retain their 7:1 main-text target. The existing standard-palette checks still cover muted text, inputs, headers, controls and selections.
 
 Accent lettering and opaque control fills are separate theme tokens. This lets the reference palettes retain their colors without drawing a label or checkmark in the same color as its button background.
 

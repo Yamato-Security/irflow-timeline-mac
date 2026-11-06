@@ -27,7 +27,7 @@ description: IRFlow Timeline changelog — version history, new features, perfor
 - **Header filters have operators.** Right-click a filter box under a header, or click the button to its left, to choose Contains, Does not contain, Equals, Does not equal, Starts with, Ends with, Greater than, Less than, Is empty, Is not empty or Matches regex; the button shows the operator (`~`, `=`, `>`, …). The same menu turns the column's filter off and on (what the button did before) and clears it. Greater than and Less than compare timestamp columns as dates, in header filters and Edit Filter alike
 - **The search box has an Ends with condition**, next to Starts with: `.exe` or `system32` matches cells ending with it
 - The status bar, start screen and Quick Help say **DuckDB-backed** instead of SQLite-backed
-- **Autumn has a red-brown timeline** (`#6B3C2C`) **with light blue bars above it and a red status bar below it.** The menu bar and its menus, the search box, the tab bar, the group strip and the column headers are light blue `#ADD8E6` with red `#C93036` text and dark orange `#FF8C00` lines and outlines; the column names stay cream. The status bar stays red `#C93036`, with yellow `#EAC910` text
+- **Autumn has a red-brown timeline and toolbar** (`#6B3C2C`) **with red headers and status bar** (`#C93036`). The menu bar, tab bar and search options are red-brown; the group strip, column headers, menus and status bar are red. Their text is yellow `#EAC910`, except the column names (cream, as before) and the timestamp format, time zone and color scheme dropdowns and the search box (light blue `#ADD8E6`). Lines and outlines above the timeline are dark orange `#FF8C00`
 
 ### Juntei
 

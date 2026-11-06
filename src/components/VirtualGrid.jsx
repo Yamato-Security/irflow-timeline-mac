@@ -3,7 +3,7 @@
 // opens the column menu.
 // Modified by Yamato Security, 2026-11-06: a header text filter has an operator (Contains, Equals,
 // Greater than, …), chosen from a menu on its button or by right-clicking the filter box.
-// Modified by Yamato Security, 2026-11-06: the column header row uses the scheme's top bar colors.
+// Modified by Yamato Security, 2026-11-06: the column header row uses the scheme's header bar colors.
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import { FILTER_OPERATORS, NO_VALUE_OPERATORS, filterOperator, columnFilterParts, encodeColumnFilter, isActiveColumnFilter } from "../utils/header-filters.js";
@@ -96,7 +96,7 @@ export default function VirtualGrid({
   // horizontally scrolled columns and vertically scrolled rows remain legible
   // underneath, which looks like duplicated/overlapping header content.
   // The column header row belongs to the bars above the timeline and takes their colors.
-  const headerTh = useMemo(() => barTheme(th, "top"), [th]);
+  const headerTh = useMemo(() => barTheme(th, "top", "header"), [th]);
   const stickyHeaderBg = headerTh.headerBg;
   const stickyFilterBg = th.bg;
   // Structural (non-data) sticky columns rendered in each data row, for an accurate

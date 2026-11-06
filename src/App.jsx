@@ -559,9 +559,10 @@ export default function App() {
     if (r?.scopePending) handleOpenFileDialogResult(tle, setModal, r);
   }, [tle, setModal]);
   const th = resolveTheme(themeName);
-  // The bars above the timeline (menu bar, search, tab bar, group strip) and the status bar
-  // below it can have their own colors.
+  // The bars above the timeline (menu bar, search, tab bar; the group strip and column headers)
+  // and the status bar below it can have their own colors.
   const topTh = useMemo(() => barTheme(th, "top"), [th]);
+  const headerTh = useMemo(() => barTheme(th, "top", "header"), [th]);
   const bottomTh = useMemo(() => barTheme(th, "bottom"), [th]);
   const isDark = th.base === "dark";
   // Document-level colors (body background, scrollbars, text selection, native form controls)
@@ -3988,41 +3989,41 @@ export default function App() {
           onDragLeave={() => setGroupDragOver(false)}
           onDrop={(e) => { e.preventDefault(); setGroupDragOver(false); const col = e.dataTransfer.getData("text/column-name"); if (col) addGroupBy(col); }}
           style={{ display: "flex", alignItems: "center", gap: 6, padding: "3px 12px",
-            background: groupDragOver ? topTh.accentSubtle : topTh.panelBg,
-            borderBottom: `1px solid ${topTh.border}`, minHeight: 28, flexShrink: 0, transition: "background var(--m-base)",
-            border: groupDragOver ? `1px dashed ${topTh.accent}` : undefined,
+            background: groupDragOver ? headerTh.accentSubtle : headerTh.panelBg,
+            borderBottom: `1px solid ${headerTh.border}`, minHeight: 28, flexShrink: 0, transition: "background var(--m-base)",
+            border: groupDragOver ? `1px dashed ${headerTh.accent}` : undefined,
             borderRadius: groupDragOver ? 4 : 0, margin: groupDragOver ? "2px 4px" : 0 }}>
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke={groupDragOver ? topTh.accent : isGrouped ? topTh.accent : topTh.textMuted} strokeWidth="2" style={{ flexShrink: 0 }}>
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke={groupDragOver ? headerTh.accent : isGrouped ? headerTh.accent : headerTh.textMuted} strokeWidth="2" style={{ flexShrink: 0 }}>
             <rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" /><rect x="3" y="14" width="7" height="7" /><rect x="14" y="14" width="7" height="7" />
           </svg>
           {groupDragOver && !isGrouped ? (
-            <span style={{ color: topTh.accent, fontSize: 10, fontWeight: 600, fontFamily: "-apple-system, sans-serif" }}>Drop here to group by column</span>
+            <span style={{ color: headerTh.accent, fontSize: 10, fontWeight: 600, fontFamily: "-apple-system, sans-serif" }}>Drop here to group by column</span>
           ) : isGrouped ? (<>
             {(ct.groupByColumns || []).map((col, i) => (
               <span key={col} style={{ display: "inline-flex", alignItems: "center", gap: 4 }}>
-                {i > 0 && <span style={{ color: topTh.textMuted, fontSize: 9 }}>›</span>}
+                {i > 0 && <span style={{ color: headerTh.textMuted, fontSize: 9 }}>›</span>}
                 <span draggable
                   onDragStart={(e) => { e.stopPropagation(); e.dataTransfer.setData("text/group-reorder", col); setGroupReorderDrag(col); }}
                   onDragEnd={() => setGroupReorderDrag(null)}
                   onDragOver={(e) => { if (groupReorderDrag && groupReorderDrag !== col) { e.preventDefault(); e.dataTransfer.dropEffect = "move"; } }}
                   onDrop={(e) => { e.preventDefault(); e.stopPropagation(); const dragCol = e.dataTransfer.getData("text/group-reorder"); if (dragCol && dragCol !== col) { setTabs((prev) => prev.map((t) => { if (t.id !== ct.id) return t; const cols = [...(t.groupByColumns || [])]; const fromIdx = cols.indexOf(dragCol); const toIdx = cols.indexOf(col); if (fromIdx < 0 || toIdx < 0) return t; cols.splice(fromIdx, 1); cols.splice(toIdx, 0, dragCol); return { ...t, groupByColumns: cols, expandedGroups: {}, groupData: [] }; })); setGroupReorderDrag(null); } }}
-                  style={{ display: "inline-flex", alignItems: "center", gap: 4, padding: "2px 8px", background: groupReorderDrag === col ? `${topTh.accent}44` : `${topTh.accent}22`, border: `1px solid ${topTh.accent}4D`, borderRadius: 4, color: topTh.accent, fontSize: 10, fontWeight: 500, fontFamily: "-apple-system, sans-serif", cursor: "grab" }}>
+                  style={{ display: "inline-flex", alignItems: "center", gap: 4, padding: "2px 8px", background: groupReorderDrag === col ? `${headerTh.accent}44` : `${headerTh.accent}22`, border: `1px solid ${headerTh.accent}4D`, borderRadius: 4, color: headerTh.accent, fontSize: 10, fontWeight: 500, fontFamily: "-apple-system, sans-serif", cursor: "grab" }}>
                   {col}
-                  <button onClick={() => removeGroupBy(col)} style={{ background: "none", border: "none", color: topTh.accent, cursor: "pointer", fontSize: 9, padding: 0, lineHeight: 1, opacity: 0.7 }} title={`Remove ${col} grouping`}>✕</button>
+                  <button onClick={() => removeGroupBy(col)} style={{ background: "none", border: "none", color: headerTh.accent, cursor: "pointer", fontSize: 9, padding: 0, lineHeight: 1, opacity: 0.7 }} title={`Remove ${col} grouping`}>✕</button>
                 </span>
               </span>
             ))}
-            <button onClick={() => setTabs((prev) => prev.map((t) => t.id === ct.id ? { ...t, groupByColumns: [], expandedGroups: {}, groupData: [] } : t))} style={{ background: "none", border: "none", color: topTh.textMuted, cursor: "pointer", fontSize: 9, padding: "1px 4px", fontFamily: "-apple-system, sans-serif" }} title="Clear all grouping">Clear</button>
+            <button onClick={() => setTabs((prev) => prev.map((t) => t.id === ct.id ? { ...t, groupByColumns: [], expandedGroups: {}, groupData: [] } : t))} style={{ background: "none", border: "none", color: headerTh.textMuted, cursor: "pointer", fontSize: 9, padding: "1px 4px", fontFamily: "-apple-system, sans-serif" }} title="Clear all grouping">Clear</button>
           </>) : (
-            <span style={{ color: topTh.textMuted, fontSize: 10, fontFamily: "-apple-system, sans-serif" }}>Drag a column header here to group</span>
+            <span style={{ color: headerTh.textMuted, fontSize: 10, fontFamily: "-apple-system, sans-serif" }}>Drag a column header here to group</span>
           )}
           {totalActiveFilters > 0 && (
             <span style={{ marginLeft: "auto", display: "inline-flex", alignItems: "center", gap: 8, fontSize: 10, fontFamily: "-apple-system, sans-serif" }}>
-              <span style={{ color: topTh.borderAccent }}>
+              <span style={{ color: headerTh.borderAccent }}>
                 {totalActiveFilters} filter{totalActiveFilters > 1 ? "s" : ""} active
                 {activeCheckboxCount > 0 ? ` (${activeCheckboxCount} value)` : ""}
               </span>
-              <button onClick={clearAllFilters} style={{ background: (topTh.danger) + "18", border: `1px solid ${(topTh.danger)}55`, borderRadius: 4, color: topTh.danger, cursor: "pointer", fontSize: 10, padding: "1px 8px", fontFamily: "-apple-system, sans-serif", fontWeight: 600 }}>Clear All</button>
+              <button onClick={clearAllFilters} style={{ background: (headerTh.danger) + "18", border: `1px solid ${(headerTh.danger)}55`, borderRadius: 4, color: headerTh.danger, cursor: "pointer", fontSize: 10, padding: "1px 8px", fontFamily: "-apple-system, sans-serif", fontWeight: 600 }}>Clear All</button>
             </span>
           )}
         </div>

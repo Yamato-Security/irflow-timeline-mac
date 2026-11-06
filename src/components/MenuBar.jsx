@@ -2,10 +2,11 @@
 // Modified by Yamato Security, 2026-11-05: View → Full-width cells / Narrow-width cells; menu items show their shortcut.
 // Modified by Yamato Security, 2026-11-05: View → Freeze First Column / Unfreeze First Column.
 // Modified by Yamato Security, 2026-11-05: an open menu closes on a click anywhere outside it.
+// Modified by Yamato Security, 2026-11-06: the toolbar dropdowns use the scheme's input colors.
 import { Fragment, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import useUIStore from "../store/useUIStore.js";
-import { THEME_OPTIONS } from "../constants/themes.js";
+import { THEME_OPTIONS, barTheme } from "../constants/themes.js";
 import { chooseTheme } from "../utils/theme-preference.js";
 import useTabStore from "../store/useTabStore.js";
 import { toast } from "../store/useToastStore.js";
@@ -299,6 +300,8 @@ export default function MenuBar({
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [setActionsMenuOpen, setFileMenuOpen, setHelpMenuOpen, setToolsOpen, setViewMenuOpen]);
 
+  // The toolbar's dropdowns can have their own colors (`bars.inputs`).
+  const inputTh = barTheme(th, "inputs");
   const tb = { display: "flex", alignItems: "center", gap: 5, padding: "5px 12px", background: "transparent", color: th.textDim, border: "none", borderRadius: 8, fontSize: 13, fontWeight: 500, cursor: "pointer", fontFamily: "-apple-system,sans-serif", whiteSpace: "nowrap" };
 
   // Icon helper used in View/Actions/Tools menus
@@ -805,14 +808,14 @@ export default function MenuBar({
         <div id="timeline-toolbar-settings" className="tle-toolbar-settings" data-open={settingsOpen ? "true" : "false"}
           style={{ display: "flex", alignItems: "center", gap: 4, background: th.glassBg, border: `1px solid ${th.glassBorder}`, borderRadius: 10, padding: "2px 6px" }}>
         <span aria-hidden="true" style={{ color: th.textMuted, fontSize: 10 }}>⏱</span>
-        <select aria-label="Timestamp display format" value={dateTimeFormat} onChange={(e) => setDateTimeFormat(e.target.value)} style={{ background: th.btnBg, border: `1px solid ${th.btnBorder}`, color: th.textDim, fontSize: 10, padding: "3px 5px", borderRadius: 4, cursor: "pointer", outline: "none" }}>
+        <select aria-label="Timestamp display format" value={dateTimeFormat} onChange={(e) => setDateTimeFormat(e.target.value)} style={{ background: inputTh.btnBg, border: `1px solid ${inputTh.btnBorder}`, color: inputTh.textDim, fontSize: 10, padding: "3px 5px", borderRadius: 4, cursor: "pointer", outline: "none" }}>
           {DT_FORMATS.map((f) => <option key={f.value} value={f.value}>{f.label}</option>)}
         </select>
-        <select aria-label="Timestamp timezone" value={timezone} onChange={(e) => setTimezone(e.target.value)} style={{ background: th.btnBg, border: `1px solid ${th.btnBorder}`, color: th.textDim, fontSize: 10, padding: "3px 5px", borderRadius: 4, cursor: "pointer", outline: "none" }}>
+        <select aria-label="Timestamp timezone" value={timezone} onChange={(e) => setTimezone(e.target.value)} style={{ background: inputTh.btnBg, border: `1px solid ${inputTh.btnBorder}`, color: inputTh.textDim, fontSize: 10, padding: "3px 5px", borderRadius: 4, cursor: "pointer", outline: "none" }}>
           {TIMEZONES.map((tz) => <option key={tz.value} value={tz.value}>{tz.label}</option>)}
         </select>
         <span style={{ width: 1, height: 14, background: th.glassBorder, display: "inline-block" }} />
-        <select aria-label="Color scheme" title="Color scheme" value={themeName} onChange={(e) => chooseTheme(e.target.value)} style={{ background: th.btnBg, border: `1px solid ${th.btnBorder}`, color: th.textDim, fontSize: 10, padding: "3px 5px", borderRadius: 4, cursor: "pointer", outline: "none" }}>
+        <select aria-label="Color scheme" title="Color scheme" value={themeName} onChange={(e) => chooseTheme(e.target.value)} style={{ background: inputTh.btnBg, border: `1px solid ${inputTh.btnBorder}`, color: inputTh.textDim, fontSize: 10, padding: "3px 5px", borderRadius: 4, cursor: "pointer", outline: "none" }}>
           {THEME_OPTIONS.map((t) => <option key={t.id} value={t.id}>{t.icon} {t.label}</option>)}
         </select>
         <span style={{ width: 1, height: 14, background: th.glassBorder, display: "inline-block" }} />

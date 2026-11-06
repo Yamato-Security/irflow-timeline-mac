@@ -2,8 +2,8 @@
 // and defined onAccent/onPrimary foregrounds for readable filled controls. The `base` token
 // and THEME_OPTIONS catalog drive the Color Scheme menus; electron/themes.js is the
 // main-process mirror.
-// Modified by Yamato Security, 2026-11-06: `bars` overrides for the top bars and the status bar;
-// Autumn's timeline is red-brown under light blue top bars and a red status bar.
+// Modified by Yamato Security, 2026-11-06: `bars` overrides for the bars above and below the
+// timeline; Autumn's bars are red-brown and red with yellow text.
 
 /**
  * Color schemes.
@@ -19,9 +19,11 @@
  * Reference header and control fills use their own contrasting foregrounds.
  *
  * `bars` overrides tokens for the bars around the timeline: `top` for the menu bar and its
- * menus, the search box, tab bar, group strip and column headers; `bottom` for the status bar.
- * Most schemes override nothing. Autumn's top bars are light blue with red text (3.5:1),
- * cream column names (1.5:1) and dark orange lines; its status bar is red with yellow text (3.3:1).
+ * menus, the search box, the tab bar and the search options; `header`, on top of `top`, for the
+ * group strip and column headers; `inputs`, on top of `top`, for the toolbar dropdowns and the
+ * search box's text; `bottom` for the status bar. Most schemes override nothing. Autumn's bars
+ * have yellow text: 5.6:1 on the red-brown, 3.3:1 on the red group strip, column headers and
+ * status bar.
  */
 export const THEMES = {
   dark: {
@@ -41,7 +43,7 @@ export const THEMES = {
     // Severity palette — used by SUS_COLORS, INT_COLOR, PI_SEV_COLORS, IOC verdicts.
     // Distinct from brand `accent` (which is #E85D2A): severity needs cooler reds, deeper amber, etc.
     sev: { critical: "#f85149", high: "#f0883e", med: "#d29922", low: "#8b949e", custom: "#a371f7", clean: "#3fb950", info: "#58a6ff" },
-    bars: { top: {}, bottom: {} },
+    bars: { top: {}, header: {}, inputs: {}, bottom: {} },
   },
   light: {
     base: "light",
@@ -59,7 +61,7 @@ export const THEMES = {
     primaryBtn: "#2563a6", primaryBtnHover: "#1c4e86", onPrimary: "#ffffff",
     toolbarBg: "rgba(237,242,247,0.97)", glassBg: "rgba(255,255,255,0.55)", glassBorder: "rgba(48,74,105,0.16)", glassHover: "rgba(37,99,166,0.08)",
     sev: { critical: "#bd2035", high: "#b04b0a", med: "#895900", low: "#506176", custom: "#7045a2", clean: "#187345", info: "#2563a6" },
-    bars: { top: {}, bottom: {} },
+    bars: { top: {}, header: {}, inputs: {}, bottom: {} },
   },
   // ── Seasonal schemes ─────────────────────────────────────────────────────────
   // Spring reference: https://stitchpalettes.com/palette/uplifting-spring-spa1006/
@@ -79,7 +81,7 @@ export const THEMES = {
     fillAccent: "#6f5497", fillAccentHover: "#6f5497", fillWarning: "#6f5497", fillDanger: "#6f5497",
     toolbarBg: "rgba(103,130,21,0.98)", glassBg: "rgba(166,183,132,0.30)", glassBorder: "rgba(111,84,151,0.30)", glassHover: "rgba(250,227,160,0.10)",
     sev: { critical: "#732f4b", high: "#7e3e19", med: "#604c0f", low: "#142017", custom: "#614786", clean: "#27462e", info: "#24475c" },
-    bars: { top: {}, bottom: {} },
+    bars: { top: {}, header: {}, inputs: {}, bottom: {} },
   },
   // Sakura reference: https://img.magnific.com/premium-vector/color-element-trendy-pallete-color-sakura-color-pallete-swatch-summer-shade-tone-with-hex-code_615232-1235.jpg
   // Exact reference surfaces and accents, with plum foregrounds for readability.
@@ -98,7 +100,7 @@ export const THEMES = {
     fillAccent: "#ec275f", fillAccentHover: "#f25477", fillWarning: "#ffa7a6", fillDanger: "#f25477",
     toolbarBg: "rgba(255,219,219,0.98)", glassBg: "rgba(255,244,243,0.30)", glassBorder: "rgba(236,39,95,0.18)", glassHover: "rgba(236,39,95,0.08)",
     sev: { critical: "#b32445", high: "#ab4c16", med: "#856000", low: "#634153", custom: "#81509b", clean: "#286b4c", info: "#37628c" },
-    bars: { top: {}, bottom: {} },
+    bars: { top: {}, header: {}, inputs: {}, bottom: {} },
   },
   // Summer reference: https://avemateiu.com/wp-content/uploads/2019/06/summer-color-palette-6.png
   // Aqua and sunny yellow dominate; citrus red, leaf green and sand are accents.
@@ -117,7 +119,7 @@ export const THEMES = {
     fillAccent: "#f3e2b3", fillAccentHover: "#edc02c", fillWarning: "#f3e2b3", fillDanger: "#f03613",
     toolbarBg: "rgba(243,226,179,0.98)", glassBg: "rgba(237,192,44,0.30)", glassBorder: "rgba(0,93,116,0.20)", glassHover: "rgba(240,54,19,0.10)",
     sev: { critical: "#bb2a12", high: "#ad420c", med: "#795000", low: "#3b535b", custom: "#74519b", clean: "#196b47", info: "#005d74" },
-    bars: { top: {}, bottom: {} },
+    bars: { top: {}, header: {}, inputs: {}, bottom: {} },
   },
   // Autumn reference: https://branding-lab.net/wp-content/uploads/2026/11/japanese-fall-color-palette.jpg
   // Momiji red, orange, yellow, leaf green, plum and brown, with cream text.
@@ -136,14 +138,17 @@ export const THEMES = {
     fillAccent: "#f08300", fillAccentHover: "#e9b626", fillWarning: "#e9b626", fillDanger: "#f08300",
     toolbarBg: "rgba(201,48,54,0.98)", glassBg: "rgba(233,182,38,0.06)", glassBorder: "rgba(233,182,38,0.25)", glassHover: "rgba(240,131,0,0.12)",
     sev: { critical: "#ffb2a6", high: "#ffd0a0", med: "#ffdd7c", low: "#ffedd0", custom: "#f1d7e0", clean: "#d9e7b8", info: "#d4e0ee" },
-    // Light blue top bars, menus and column headers with red text (column names stay cream)
-    // and dark orange lines and outlines; red status bar with yellow text.
+    // Red-brown bars above the timeline and red group strip and column headers, all with
+    // yellow text and dark orange lines; light blue text in the toolbar dropdowns and search box;
+    // red status bar with yellow text. Column names keep the cream headerText.
     bars: {
       top: {
-        toolbarBg: "#add8e6", modalBg: "#add8e6", panelBg: "#add8e6", headerBg: "#add8e6", btnBg: "#add8e6", bgInput: "#add8e6",
+        toolbarBg: "rgba(107,60,44,0.98)", panelBg: "#6b3c2c",
         border: "#ff8c00", borderAccent: "#ff8c00", btnBorder: "#ff8c00", glassBorder: "#ff8c00",
-        text: "#c93036", textDim: "#c93036", textMuted: "#c93036", accent: "#c93036", success: "#c93036", warning: "#c93036", danger: "#c93036",
+        text: "#eac910", textDim: "#eac910", textMuted: "#eac910", accent: "#eac910", success: "#eac910", warning: "#eac910", danger: "#eac910",
       },
+      header: { panelBg: "#c93036" },
+      inputs: { text: "#add8e6", textDim: "#add8e6", textMuted: "#add8e6", btnBg: "#6b3c2c" },
       bottom: { text: "#eac910", textDim: "#eac910", textMuted: "#eac910", accent: "#eac910", success: "#eac910", warning: "#eac910", danger: "#eac910", borderAccent: "#eac910" },
     },
   },
@@ -163,7 +168,7 @@ export const THEMES = {
     primaryBtn: "#b8e5fa", primaryBtnHover: "#9ddaf5", onPrimary: "#163e52",
     toolbarBg: "rgba(218,239,252,0.96)", glassBg: "rgba(255,255,255,0.42)", glassBorder: "rgba(37,95,132,0.16)", glassHover: "rgba(77,153,199,0.12)",
     sev: { critical: "#b33445", high: "#ad4c17", med: "#856000", low: "#456478", custom: "#685895", clean: "#276f62", info: "#16678d" },
-    bars: { top: {}, bottom: {} },
+    bars: { top: {}, header: {}, inputs: {}, bottom: {} },
   },
   // Christmas reference: https://www.schemecolor.com/christmas-hex-color-codes.php
   // Both greens frame the workspace; red headers/actions and vermillion/gold bars add contrast.
@@ -182,7 +187,7 @@ export const THEMES = {
     fillAccent: "#bb2528", fillAccentHover: "#9e1f23", fillWarning: "#bb2528", fillDanger: "#bb2528",
     toolbarBg: "rgba(20,107,58,0.98)", glassBg: "rgba(255,248,237,0.06)", glassBorder: "rgba(248,178,41,0.25)", glassHover: "rgba(248,178,41,0.10)",
     sev: { critical: "#ffaaa0", high: "#ffc087", med: "#f8b229", low: "#e7d9c3", custom: "#dfc3ee", clean: "#a5e5b3", info: "#b8e5fa" },
-    bars: { top: {}, bottom: {} },
+    bars: { top: {}, header: {}, inputs: {}, bottom: {} },
   },
 };
 
@@ -207,7 +212,7 @@ export const THEME_OPTIONS = [
   { id: "spring", label: "Spring", icon: "🌱", description: "Light forest green, fresh #678215 green and floral accents" },
   { id: "sakura", label: "Sakura", icon: "🌸", description: "Reference Sakura pinks, cream, pale blue and plum text" },
   { id: "summer", label: "Summer", icon: "🌊", description: "Aqua blue, pale-yellow headers and sunny-yellow chart panels" },
-  { id: "autumn", label: "Autumn", icon: "🍂", description: "Japanese autumn: red-brown timeline, light blue top bars with red text, red status bar with yellow text" },
+  { id: "autumn", label: "Autumn", icon: "🍂", description: "Japanese autumn: red-brown timeline and toolbar, red headers and status bar, yellow text" },
   { id: "winter", label: "Winter", icon: "❄️", description: "Snow white and pale glacier blue" },
   { id: "christmas", label: "Christmas", icon: "🎄", description: "Forest and jewel greens, festive red headers and controls, vermillion and gold charts" },
 ];
@@ -224,10 +229,10 @@ export function resolveTheme(name) {
   return THEMES[isThemeName(name) ? name : DEFAULT_THEME];
 }
 
-/** The theme with the scheme's overrides for the `top` or `bottom` bars around the timeline. */
-export function barTheme(theme, part) {
-  const overrides = theme.bars?.[part];
-  return overrides && Object.keys(overrides).length ? { ...theme, ...overrides } : theme;
+/** The theme with the scheme's `bars` overrides for the given parts applied in order (later parts win). */
+export function barTheme(theme, ...parts) {
+  const overrides = Object.assign({}, ...parts.map((part) => theme.bars?.[part] || {}));
+  return Object.keys(overrides).length ? { ...theme, ...overrides } : theme;
 }
 
 /** Whether `name` resolves to a dark-based scheme. */
