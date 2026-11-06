@@ -28,6 +28,12 @@ const GROUPS = ["sev", "bars"];
 function tokenKeys(theme) {
   return Object.keys(theme).sort().map((key) => (GROUPS.includes(key) ? `${key}{${Object.keys(theme[key]).sort().join(",")}}` : key));
 }
+// Every color in a token value: plain colors, the sev group, and the bars' top/bottom overrides.
+function colorsOf(key, value) {
+  if (key === "sev") return Object.values(value);
+  if (key === "bars") return Object.values(value).flatMap((part) => Object.values(part));
+  return [value];
+}
 
 test("the catalog lists the eight schemes in menu order and every scheme has a complete token set", async () => {
   const { THEMES, THEME_OPTIONS, THEME_IDS, DEFAULT_THEME } = await themesModule();
@@ -41,7 +47,7 @@ test("the catalog lists the eight schemes in menu order and every scheme has a c
     assert.ok(["dark", "light"].includes(theme.base), `${name}.base`);
     for (const [key, value] of Object.entries(theme)) {
       if (key === "base") continue;
-      const values = GROUPS.includes(key) ? Object.values(value) : [value];
+      const values = colorsOf(key, value);
       for (const color of values) assert.ok(HEX.test(color) || RGBA.test(color), `${name}.${key} = ${color}`);
     }
   }
@@ -213,26 +219,36 @@ test("light and seasonal text stays readable on panels, controls and selected/bo
   }
 });
 
-test("bar text colors: Autumn has its own palette on red bars, the other schemes reuse their main text", async () => {
+test("bar overrides: Autumn has light blue top bars and a red status bar, the other schemes override nothing", async () => {
   const { THEMES, barTheme } = await themesModule();
   for (const [name, th] of Object.entries(THEMES)) {
-    const bars = barTheme(th);
-    for (const key of ["text", "textDim", "textMuted", "accent"]) assert.equal(bars[key], th.bars[key], `${name}: barTheme ${key}`);
-    assert.equal(bars.bg, th.bg, `${name}: barTheme keeps the surfaces`);
-    if (name === "autumn") continue;
-    assert.deepEqual(th.bars, { text: th.text, textDim: th.textDim, textMuted: th.textMuted, accent: th.accent, groupBg: th.panelBg }, `${name}.bars`);
+    for (const part of ["top", "bottom"]) {
+      const overrides = th.bars[part];
+      for (const key of Object.keys(overrides)) {
+        assert.ok(key in th && !GROUPS.includes(key) && key !== "base", `${name}.bars.${part}.${key} must override a plain color token`);
+      }
+      // The sticky column header row needs an opaque background.
+      if ("headerBg" in overrides) assert.match(overrides.headerBg, HEX, `${name}.bars.${part}.headerBg must be opaque`);
+      assert.deepEqual(barTheme(th, part), { ...th, ...overrides }, `${name}: barTheme ${part}`);
+    }
+    if (name !== "autumn") {
+      assert.deepEqual(th.bars, { top: {}, bottom: {} }, `${name}.bars`);
+      assert.equal(barTheme(th, "top"), th, `${name}: no overrides, same theme object`);
+    }
   }
   const autumn = THEMES.autumn;
-  // Brown timeline, red menu bar, tab bar, group strip, column headers and status bar.
   for (const key of ["bg", "bgAlt", "rowOdd", "rowEven"]) assert.equal(autumn[key], "#6b3c2c", `autumn.${key}`);
-  assert.equal(autumn.headerBg, "#c93036");
-  assert.equal(autumn.toolbarBg, "rgba(201,48,54,0.98)");
-  assert.deepEqual(autumn.bars, { text: "#ffda44", textDim: "#8fbc8f", textMuted: "#eac910", accent: "#ff8c00", groupBg: "#c93036" });
-  // Below AA on the red bars (2.3 to 3.9:1), but none of them disappears into it.
-  for (const key of ["text", "textDim", "textMuted", "accent"]) {
-    const ratio = contrast(autumn.bars[key], "#c93036");
-    assert.ok(ratio >= 2.2, `autumn.bars.${key} on the red bars: ${ratio.toFixed(2)}`);
-  }
+  const top = barTheme(autumn, "top");
+  for (const key of ["toolbarBg", "modalBg", "panelBg", "headerBg"]) assert.equal(top[key], "#add8e6", `autumn top ${key}`);
+  for (const key of ["text", "textDim", "textMuted", "accent", "success", "warning", "danger"]) assert.equal(top[key], "#c93036", `autumn top ${key}`);
+  for (const key of ["border", "borderAccent", "btnBorder", "glassBorder"]) assert.equal(top[key], "#ff8c00", `autumn top ${key}`);
+  assert.equal(top.headerText, autumn.headerText, "column names keep the scheme's header text color");
+  const bottom = barTheme(autumn, "bottom");
+  assert.equal(bottom.toolbarBg, "rgba(201,48,54,0.98)", "the status bar stays red");
+  for (const key of ["text", "textDim", "textMuted", "accent", "success", "warning", "danger", "borderAccent"]) assert.equal(bottom[key], "#eac910", `autumn bottom ${key}`);
+  // Red on light blue is 3.5:1 and yellow on red 3.3:1; cream column names on light blue only 1.5:1.
+  assert.ok(contrast(top.text, top.toolbarBg) >= 3, "red text on the light blue bars");
+  assert.ok(contrast(bottom.text, "#c93036") >= 3, "yellow text on the red status bar");
 });
 
 test("filled controls pair the foreground with the actual accent or primary surface", async () => {
