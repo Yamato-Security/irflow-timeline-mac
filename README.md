@@ -7,8 +7,8 @@
 >
 > - **Color schemes** — **Dark Mode** and a refined **Light Mode** (soft gray and white,
 >   navy text, teal and blue accents), plus six expressive palettes:
->   **Spring** (predominantly green backgrounds with floral accents), **Sakura** (reference pinks, cream and pale blue),
->   **Summer** (aqua blue, pale-yellow headers and sunny-yellow chart panels), **Autumn** (紅葉 — brighter red backgrounds, dark red headers and warm accents),
+>   **Spring** (light green timeline, green bars with pale-yellow text, purple text in pale-yellow controls), **Sakura** (reference pinks, cream and pale blue),
+>   **Summer** (aqua blue, pale-yellow headers and sunny-yellow chart panels), **Autumn** (紅葉 — red-brown timeline and toolbar, momiji-red headers and status bar, yellow text),
 >   **Winter** (icy blue and white), and **Christmas** (forest/jewel greens, festive reds and gold).
 >   Pick one from the toolbar's color-scheme dropdown or **Tools → Color Scheme**; the choice is
 >   remembered across launches.
