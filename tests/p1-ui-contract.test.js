@@ -74,11 +74,10 @@ test("column value filter is not hard-capped at a Top 1000 list", () => {
 });
 
 test("standard theme text tokens meet WCAG AA contrast", async () => {
-  // The exact reference Christmas palette and Spring's fixed pale-yellow text report their lower
-  // contrast in color-schemes.test.js.
+  // The exact reference Christmas palette explicitly reports its lower contrast in color-schemes.test.js.
   const { THEMES } = await import("../src/constants/themes.js");
   for (const [name, th] of Object.entries(THEMES)) {
-    if (name === "christmas" || name === "spring") continue;
+    if (name === "christmas") continue;
     assert.ok(contrast(th.textMuted, th.bg) >= 4.5, `${name}: textMuted on bg`);
     assert.ok(contrast(th.textDim, th.bg) >= 4.5, `${name}: textDim on bg`);
     assert.ok(contrast(th.headerText, th.headerBg) >= 4.5, `${name}: headerText on headerBg`);

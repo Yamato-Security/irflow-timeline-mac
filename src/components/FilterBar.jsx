@@ -1,5 +1,5 @@
 // Modified by Yamato Security, 2026-11-06: the search box text and placeholder, and the match mode dropdown, use
-// the scheme's input colors.
+// the scheme's input colors; the regex palette uses the dropdown colors.
 import { useState, useEffect } from "react";
 import useUIStore from "../store/useUIStore.js";
 import { formatNumber } from "../utils/format.js";
@@ -40,6 +40,8 @@ export default function FilterBar({
 }) {
   // The search box's text can have its own colors (`bars.inputs`).
   const inputTh = barTheme(th, "inputs");
+  // The regex palette is a dropdown and can have its own text colors (`bars.dropdown`).
+  const ddTh = barTheme(th, "dropdown");
   const [regexPaletteOpen, setRegexPaletteOpen] = useState(false);
   const shortSearch = isSearchTooShort(ct?.searchTerm);
   const searchBehavior = SEARCH_BEHAVIORS.find((item) => item.value === (ct?.searchHighlight ? "highlight" : "filter"));
@@ -110,9 +112,9 @@ export default function FilterBar({
             style={{ minWidth: 28, minHeight: 26, background: regexPaletteOpen ? `${th.accent}22` : "none", border: regexPaletteOpen ? `1px solid ${th.accent}66` : "1px solid transparent", color: regexPaletteOpen ? th.accent : th.textMuted, cursor: "pointer", fontSize: 11, padding: "1px 5px", borderRadius: 3, fontFamily: "'SF Mono',Menlo,monospace", fontWeight: 700, whiteSpace: "nowrap", lineHeight: "16px" }}>Rx</button>
           {regexPaletteOpen && (<>
             <div onClick={() => setRegexPaletteOpen(false)} style={{ position: "fixed", inset: 0, zIndex: 149 }} />
-            <div style={{ position: "absolute", top: "100%", right: 0, marginTop: 6, background: th.modalBg, border: `1px solid ${th.glassBorder}`, borderRadius: 10, backdropFilter: "blur(20px) saturate(180%)", WebkitBackdropFilter: "blur(20px) saturate(180%)", padding: "6px 0", zIndex: 150, boxShadow: "0 12px 40px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.04) inset", minWidth: 260, maxHeight: "70vh", overflow: "auto", animation: "tle-modal-in var(--m-modal) var(--ease-out)" }}>
-              <div style={{ padding: "4px 12px 6px", borderBottom: `1px solid ${th.border}`, marginBottom: 4 }}>
-                <span style={{ fontSize: 11, fontWeight: 600, color: th.textDim, textTransform: "uppercase", letterSpacing: "0.06em", fontFamily: "-apple-system, sans-serif" }}>Forensic Regex Patterns</span>
+            <div style={{ position: "absolute", top: "100%", right: 0, marginTop: 6, background: ddTh.modalBg, border: `1px solid ${ddTh.glassBorder}`, borderRadius: 10, backdropFilter: "blur(20px) saturate(180%)", WebkitBackdropFilter: "blur(20px) saturate(180%)", padding: "6px 0", zIndex: 150, boxShadow: "0 12px 40px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.04) inset", minWidth: 260, maxHeight: "70vh", overflow: "auto", animation: "tle-modal-in var(--m-modal) var(--ease-out)" }}>
+              <div style={{ padding: "4px 12px 6px", borderBottom: `1px solid ${ddTh.border}`, marginBottom: 4 }}>
+                <span style={{ fontSize: 11, fontWeight: 600, color: ddTh.textDim, textTransform: "uppercase", letterSpacing: "0.06em", fontFamily: "-apple-system, sans-serif" }}>Forensic Regex Patterns</span>
               </div>
               {[
                 { label: "IPv4 Address", pattern: "\\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b", icon: "IP" },
@@ -134,7 +136,7 @@ export default function FilterBar({
                 { label: "Registry Key", pattern: "(HKLM|HKCU|HKU|HKCR|HKCC)\\\\[^\\s\"]+", icon: "HK" },
                 { label: "MAC Address", pattern: "\\b([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}\\b", icon: "MA" },
               ].map((item, i) => item.label === "sep" ? (
-                <div key={i} style={{ height: 1, background: th.border, margin: "4px 0" }} />
+                <div key={i} style={{ height: 1, background: ddTh.border, margin: "4px 0" }} />
               ) : (
                 <button key={item.label} onClick={() => {
                   up("searchTerm", item.pattern);
@@ -142,12 +144,12 @@ export default function FilterBar({
                   setRegexPaletteOpen(false);
                   setTimeout(() => document.getElementById("gs")?.focus(), 50);
                 }}
-                  onMouseEnter={(e) => { e.currentTarget.style.background = th.btnBg; }}
+                  onMouseEnter={(e) => { e.currentTarget.style.background = ddTh.btnBg; }}
                   onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; }}
-                  style={{ display: "flex", alignItems: "center", gap: 8, width: "100%", padding: "5px 12px", background: "none", border: "none", color: th.text, fontSize: 11, cursor: "pointer", textAlign: "left", fontFamily: "-apple-system, sans-serif" }}>
-                  <span style={{ width: 22, textAlign: "center", fontSize: 11, fontWeight: 700, color: th.accent, fontFamily: "'SF Mono',Menlo,monospace", flexShrink: 0 }}>{item.icon}</span>
+                  style={{ display: "flex", alignItems: "center", gap: 8, width: "100%", padding: "5px 12px", background: "none", border: "none", color: ddTh.text, fontSize: 11, cursor: "pointer", textAlign: "left", fontFamily: "-apple-system, sans-serif" }}>
+                  <span style={{ width: 22, textAlign: "center", fontSize: 11, fontWeight: 700, color: ddTh.accent, fontFamily: "'SF Mono',Menlo,monospace", flexShrink: 0 }}>{item.icon}</span>
                   <span style={{ flex: 1 }}>{item.label}</span>
-                  <span style={{ color: th.textMuted, fontSize: 11, fontFamily: "'SF Mono',Menlo,monospace", maxWidth: 120, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }} title={item.pattern}>{item.pattern.length > 18 ? item.pattern.slice(0, 18) + "..." : item.pattern}</span>
+                  <span style={{ color: ddTh.textMuted, fontSize: 11, fontFamily: "'SF Mono',Menlo,monospace", maxWidth: 120, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }} title={item.pattern}>{item.pattern.length > 18 ? item.pattern.slice(0, 18) + "..." : item.pattern}</span>
                 </button>
               ))}
             </div>

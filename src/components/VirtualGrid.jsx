@@ -3,7 +3,8 @@
 // opens the column menu.
 // Modified by Yamato Security, 2026-11-06: a header text filter has an operator (Contains, Equals,
 // Greater than, …), chosen from a menu on its button or by right-clicking the filter box.
-// Modified by Yamato Security, 2026-11-06: the column header row uses the scheme's header bar colors.
+// Modified by Yamato Security, 2026-11-06: the column header row uses the scheme's header bar colors, and
+// the filter boxes under it the scheme's filter colors.
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import { FILTER_OPERATORS, NO_VALUE_OPERATORS, filterOperator, columnFilterParts, encodeColumnFilter, isActiveColumnFilter } from "../utils/header-filters.js";
@@ -97,6 +98,8 @@ export default function VirtualGrid({
   // underneath, which looks like duplicated/overlapping header content.
   // The column header row belongs to the bars above the timeline and takes their colors.
   const headerTh = useMemo(() => barTheme(th, "top", "header"), [th]);
+  // The text boxes under the column headers can have their own colors.
+  const filterTh = useMemo(() => barTheme(th, "filters"), [th]);
   const stickyHeaderBg = headerTh.headerBg;
   const stickyFilterBg = th.bg;
   // Structural (non-data) sticky columns rendered in each data row, for an accurate
@@ -194,7 +197,7 @@ export default function VirtualGrid({
           onContextMenu={(e) => { e.preventDefault(); e.stopPropagation(); openMenu(e.clientX, e.clientY); }}
           placeholder={noValue ? opInfo.label : op === "contains" ? "Filter..." : `${opInfo.label}...`}
           title="Right-click for the filter options (contains, equals, greater than, …)"
-          style={{ flex: 1, background: th.bgInput, border: `1px solid ${hasCbf || op !== "contains" ? th.borderAccent : th.border}`, borderRadius: 3, color: th.text, fontSize: 11, padding: "3px 4px", outline: "none", fontFamily: "inherit", minWidth: 0, opacity: isDis ? 0.4 : 1, textDecoration: isDis ? "line-through" : "none" }} />
+          style={{ flex: 1, background: filterTh.bgInput, border: `1px solid ${hasCbf || op !== "contains" ? th.borderAccent : th.border}`, borderRadius: 3, color: filterTh.text, fontSize: 11, padding: "3px 4px", outline: "none", fontFamily: "inherit", minWidth: 0, opacity: isDis ? 0.4 : 1, textDecoration: isDis ? "line-through" : "none" }} />
       </>
     );
   };
@@ -687,7 +690,7 @@ export default function VirtualGrid({
                         aria-label={isDis ? "Enable Tags filter" : "Disable Tags filter"}
                         style={{ width: 24, height: 24, background: "none", border: "none", cursor: "pointer", padding: 0, color: isDis ? th.danger : th.success, fontSize: 11, flexShrink: 0, lineHeight: 1 }} title={isDis ? "Enable filter" : "Disable filter"}>{isDis ? "⊘" : "⊙"}</button>}
                       <input aria-label="Filter Tags" value={ct.columnFilters["__tags__"] || ""} onChange={(e) => up("columnFilters", { ...ct.columnFilters, "__tags__": e.target.value })} placeholder="Filter..."
-                        style={{ flex: 1, background: th.bgInput, border: `1px solid ${hasCbf ? th.borderAccent : th.border}`, borderRadius: 3, color: th.text, fontSize: 11, padding: "3px 4px", outline: "none", fontFamily: "inherit", minWidth: 0, opacity: isDis ? 0.4 : 1, textDecoration: isDis ? "line-through" : "none" }} />
+                        style={{ flex: 1, background: filterTh.bgInput, border: `1px solid ${hasCbf ? th.borderAccent : th.border}`, borderRadius: 3, color: filterTh.text, fontSize: 11, padding: "3px 4px", outline: "none", fontFamily: "inherit", minWidth: 0, opacity: isDis ? 0.4 : 1, textDecoration: isDis ? "line-through" : "none" }} />
                       <button onClick={(e) => { e.stopPropagation(); const rect = e.currentTarget.getBoundingClientRect(); setFilterDropdown(filterDropdown?.colName === "__tags__" ? null : { colName: "__tags__", x: rect.left, y: rect.bottom + 2 }); }}
                         style={{ background: "none", border: "none", cursor: "pointer", padding: "2px 3px", color: hasCbf ? th.borderAccent : th.textDim, fontSize: 12, flexShrink: 0, lineHeight: 1 }} title="Filter by tags">▼</button>
                     </div>
