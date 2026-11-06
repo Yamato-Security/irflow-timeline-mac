@@ -1,3 +1,4 @@
+// Modified by Yamato Security, 2026-11-06: the search box placeholder uses the bar's muted text color.
 import { useState, useEffect } from "react";
 import useUIStore from "../store/useUIStore.js";
 import { formatNumber } from "../utils/format.js";
@@ -60,6 +61,7 @@ export default function FilterBar({
         ) : (
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke={th.textMuted} strokeWidth="2" style={{ flexShrink: 0 }}><circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
         )}
+        <style>{`#gs::placeholder { color: ${th.textMuted}; opacity: 1; }`}</style>
         <input id="gs" value={ct?.searchTerm || ""} onChange={(e) => up("searchTerm", e.target.value)} placeholder='Search: terms, +AND, -NOT, "phrase", Col:val'
           style={{ flex: 1, minWidth: 80, background: "transparent", border: "none", outline: "none", color: th.text, fontSize: 12, padding: "6px 0", fontFamily: "inherit" }} />
         <Tooltip content={`${searchBehavior.label} mode — ${searchBehavior.description}`}>

@@ -24,8 +24,9 @@ function contrast(foreground, background) {
   const b = luminance(background);
   return (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
 }
+const GROUPS = ["sev", "bars"];
 function tokenKeys(theme) {
-  return Object.keys(theme).sort().map((key) => (key === "sev" ? `sev{${Object.keys(theme.sev).sort().join(",")}}` : key));
+  return Object.keys(theme).sort().map((key) => (GROUPS.includes(key) ? `${key}{${Object.keys(theme[key]).sort().join(",")}}` : key));
 }
 
 test("the catalog lists the eight schemes in menu order and every scheme has a complete token set", async () => {
@@ -40,7 +41,7 @@ test("the catalog lists the eight schemes in menu order and every scheme has a c
     assert.ok(["dark", "light"].includes(theme.base), `${name}.base`);
     for (const [key, value] of Object.entries(theme)) {
       if (key === "base") continue;
-      const values = key === "sev" ? Object.values(value) : [value];
+      const values = GROUPS.includes(key) ? Object.values(value) : [value];
       for (const color of values) assert.ok(HEX.test(color) || RGBA.test(color), `${name}.${key} = ${color}`);
     }
   }
@@ -209,6 +210,28 @@ test("light and seasonal text stays readable on panels, controls and selected/bo
         assert.ok(contrast(th.text, composite(highlight, row)) >= (name === "autumn" ? 4.5 : 7), `${name}: highlighted row text`);
       }
     }
+  }
+});
+
+test("bar text colors: Autumn has its own palette on red bars, the other schemes reuse their main text", async () => {
+  const { THEMES, barTheme } = await themesModule();
+  for (const [name, th] of Object.entries(THEMES)) {
+    const bars = barTheme(th);
+    for (const key of ["text", "textDim", "textMuted", "accent"]) assert.equal(bars[key], th.bars[key], `${name}: barTheme ${key}`);
+    assert.equal(bars.bg, th.bg, `${name}: barTheme keeps the surfaces`);
+    if (name === "autumn") continue;
+    assert.deepEqual(th.bars, { text: th.text, textDim: th.textDim, textMuted: th.textMuted, accent: th.accent, groupBg: th.panelBg }, `${name}.bars`);
+  }
+  const autumn = THEMES.autumn;
+  // Brown timeline, red menu bar, tab bar, group strip, column headers and status bar.
+  for (const key of ["bg", "bgAlt", "rowOdd", "rowEven"]) assert.equal(autumn[key], "#6b3c2c", `autumn.${key}`);
+  assert.equal(autumn.headerBg, "#c93036");
+  assert.equal(autumn.toolbarBg, "rgba(201,48,54,0.98)");
+  assert.deepEqual(autumn.bars, { text: "#ffda44", textDim: "#8fbc8f", textMuted: "#eac910", accent: "#ff8c00", groupBg: "#c93036" });
+  // Below AA on the red bars (2.3 to 3.9:1), but none of them disappears into it.
+  for (const key of ["text", "textDim", "textMuted", "accent"]) {
+    const ratio = contrast(autumn.bars[key], "#c93036");
+    assert.ok(ratio >= 2.2, `autumn.bars.${key} on the red bars: ${ratio.toFixed(2)}`);
   }
 });
 

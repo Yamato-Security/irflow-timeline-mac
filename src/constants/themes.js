@@ -2,6 +2,8 @@
 // and defined onAccent/onPrimary foregrounds for readable filled controls. The `base` token
 // and THEME_OPTIONS catalog drive the Color Scheme menus; electron/themes.js is the
 // main-process mirror.
+// Modified by Yamato Security, 2026-11-06: `bars` text colors for the menu bar, tab bar, group
+// strip and status bar; Autumn's timeline is brown under red bars.
 
 /**
  * Color schemes.
@@ -15,6 +17,10 @@
  *   accent, success, warning, danger and every severity color / bg ≥ 3.
  * Autumn targets 4.5:1 for main text; the other schemes target 7:1.
  * Reference header and control fills use their own contrasting foregrounds.
+ *
+ * `bars` holds the text colors of the menu bar (and its menus), tab bar, group strip and
+ * status bar, plus the group strip's background. Most schemes repeat their main text colors
+ * and panelBg there. Autumn uses gold, green and orange text on red bars, below AA contrast.
  */
 export const THEMES = {
   dark: {
@@ -34,6 +40,7 @@ export const THEMES = {
     // Severity palette — used by SUS_COLORS, INT_COLOR, PI_SEV_COLORS, IOC verdicts.
     // Distinct from brand `accent` (which is #E85D2A): severity needs cooler reds, deeper amber, etc.
     sev: { critical: "#f85149", high: "#f0883e", med: "#d29922", low: "#8b949e", custom: "#a371f7", clean: "#3fb950", info: "#58a6ff" },
+    bars: { text: "#e0ddd8", textDim: "#b0aaa4", textMuted: "#948e88", accent: "#E85D2A", groupBg: "#0b0d10" },
   },
   light: {
     base: "light",
@@ -51,6 +58,7 @@ export const THEMES = {
     primaryBtn: "#2563a6", primaryBtnHover: "#1c4e86", onPrimary: "#ffffff",
     toolbarBg: "rgba(237,242,247,0.97)", glassBg: "rgba(255,255,255,0.55)", glassBorder: "rgba(48,74,105,0.16)", glassHover: "rgba(37,99,166,0.08)",
     sev: { critical: "#bd2035", high: "#b04b0a", med: "#895900", low: "#506176", custom: "#7045a2", clean: "#187345", info: "#2563a6" },
+    bars: { text: "#172536", textDim: "#34465b", textMuted: "#506176", accent: "#0b6274", groupBg: "#eaf0f6" },
   },
   // ── Seasonal schemes ─────────────────────────────────────────────────────────
   // Spring reference: https://stitchpalettes.com/palette/uplifting-spring-spa1006/
@@ -70,6 +78,7 @@ export const THEMES = {
     fillAccent: "#6f5497", fillAccentHover: "#6f5497", fillWarning: "#6f5497", fillDanger: "#6f5497",
     toolbarBg: "rgba(103,130,21,0.98)", glassBg: "rgba(166,183,132,0.30)", glassBorder: "rgba(111,84,151,0.30)", glassHover: "rgba(250,227,160,0.10)",
     sev: { critical: "#732f4b", high: "#7e3e19", med: "#604c0f", low: "#142017", custom: "#614786", clean: "#27462e", info: "#24475c" },
+    bars: { text: "#010500", textDim: "#040602", textMuted: "#070803", accent: "#0f060a", groupBg: "#a6b784" },
   },
   // Sakura reference: https://img.magnific.com/premium-vector/color-element-trendy-pallete-color-sakura-color-pallete-swatch-summer-shade-tone-with-hex-code_615232-1235.jpg
   // Exact reference surfaces and accents, with plum foregrounds for readability.
@@ -88,6 +97,7 @@ export const THEMES = {
     fillAccent: "#ec275f", fillAccentHover: "#f25477", fillWarning: "#ffa7a6", fillDanger: "#f25477",
     toolbarBg: "rgba(255,219,219,0.98)", glassBg: "rgba(255,244,243,0.30)", glassBorder: "rgba(236,39,95,0.18)", glassHover: "rgba(236,39,95,0.08)",
     sev: { critical: "#b32445", high: "#ab4c16", med: "#856000", low: "#634153", custom: "#81509b", clean: "#286b4c", info: "#37628c" },
+    bars: { text: "#432336", textDim: "#563647", textMuted: "#634153", accent: "#84264d", groupBg: "#fff4f3" },
   },
   // Summer reference: https://avemateiu.com/wp-content/uploads/2019/06/summer-color-palette-6.png
   // Aqua and sunny yellow dominate; citrus red, leaf green and sand are accents.
@@ -106,14 +116,15 @@ export const THEMES = {
     fillAccent: "#f3e2b3", fillAccentHover: "#edc02c", fillWarning: "#f3e2b3", fillDanger: "#f03613",
     toolbarBg: "rgba(243,226,179,0.98)", glassBg: "rgba(237,192,44,0.30)", glassBorder: "rgba(0,93,116,0.20)", glassHover: "rgba(240,54,19,0.10)",
     sev: { critical: "#bb2a12", high: "#ad420c", med: "#795000", low: "#3b535b", custom: "#74519b", clean: "#196b47", info: "#005d74" },
+    bars: { text: "#101b24", textDim: "#304e5c", textMuted: "#3b535b", accent: "#005166", groupBg: "#edc02c" },
   },
   // Autumn reference: https://branding-lab.net/wp-content/uploads/2026/11/japanese-fall-color-palette.jpg
   // Momiji red, orange, yellow, leaf green, plum and brown, with cream text.
   autumn: {
     base: "dark",
-    bg: "#c93036", bgAlt: "#c93036", bgInput: "#4b2a1f", border: "#a34c66", borderAccent: "#e9b626",
+    bg: "#6b3c2c", bgAlt: "#6b3c2c", bgInput: "#4b2a1f", border: "#a34c66", borderAccent: "#e9b626",
     text: "#fff8ed", textDim: "#fff1d8", textMuted: "#ffedd0", accent: "#fff4de", accentHover: "#fff8ed", onAccent: "#21120b",
-    rowOdd: "#c93036", rowEven: "#c93036", headerBg: "#6b3c2c", headerText: "#fff8ed",
+    rowOdd: "#6b3c2c", rowEven: "#6b3c2c", headerBg: "#c93036", headerText: "#fff8ed",
     selection: "rgba(240,131,0,0.12)", bookmark: "rgba(131,163,60,0.13)",
     modalBg: "#c93036", modalBorder: "#f08300", overlay: "rgba(15,8,5,0.83)",
     success: "#d9e7b8", warning: "#ffdd7c", danger: "#ffb2a6",
@@ -122,8 +133,9 @@ export const THEMES = {
     histBar: "#c93036", histBarHover: "#f08300", histGrid: "#6b3c2c",
     primaryBtn: "#f08300", primaryBtnHover: "#e9b626", onPrimary: "#21120b",
     fillAccent: "#f08300", fillAccentHover: "#e9b626", fillWarning: "#e9b626", fillDanger: "#f08300",
-    toolbarBg: "rgba(107,60,44,0.98)", glassBg: "rgba(233,182,38,0.06)", glassBorder: "rgba(233,182,38,0.25)", glassHover: "rgba(240,131,0,0.12)",
+    toolbarBg: "rgba(201,48,54,0.98)", glassBg: "rgba(233,182,38,0.06)", glassBorder: "rgba(233,182,38,0.25)", glassHover: "rgba(240,131,0,0.12)",
     sev: { critical: "#ffb2a6", high: "#ffd0a0", med: "#ffdd7c", low: "#ffedd0", custom: "#f1d7e0", clean: "#d9e7b8", info: "#d4e0ee" },
+    bars: { text: "#ffda44", textDim: "#8fbc8f", textMuted: "#eac910", accent: "#ff8c00", groupBg: "#c93036" },
   },
   // Winter — blue ice, snow-white rows and pale glacier-blue controls. Christmas
   // has its own scheme below; red and green here are reserved for status meanings.
@@ -141,6 +153,7 @@ export const THEMES = {
     primaryBtn: "#b8e5fa", primaryBtnHover: "#9ddaf5", onPrimary: "#163e52",
     toolbarBg: "rgba(218,239,252,0.96)", glassBg: "rgba(255,255,255,0.42)", glassBorder: "rgba(37,95,132,0.16)", glassHover: "rgba(77,153,199,0.12)",
     sev: { critical: "#b33445", high: "#ad4c17", med: "#856000", low: "#456478", custom: "#685895", clean: "#276f62", info: "#16678d" },
+    bars: { text: "#183749", textDim: "#365568", textMuted: "#456478", accent: "#16678d", groupBg: "#dff2ff" },
   },
   // Christmas reference: https://www.schemecolor.com/christmas-hex-color-codes.php
   // Both greens frame the workspace; red headers/actions and vermillion/gold bars add contrast.
@@ -159,6 +172,7 @@ export const THEMES = {
     fillAccent: "#bb2528", fillAccentHover: "#9e1f23", fillWarning: "#bb2528", fillDanger: "#bb2528",
     toolbarBg: "rgba(20,107,58,0.98)", glassBg: "rgba(255,248,237,0.06)", glassBorder: "rgba(248,178,41,0.25)", glassHover: "rgba(248,178,41,0.10)",
     sev: { critical: "#ffaaa0", high: "#ffc087", med: "#f8b229", low: "#e7d9c3", custom: "#dfc3ee", clean: "#a5e5b3", info: "#b8e5fa" },
+    bars: { text: "#fff8ed", textDim: "#f2e3d1", textMuted: "#e7d9c3", accent: "#ffe2a1", groupBg: "#0d371f" },
   },
 };
 
@@ -183,7 +197,7 @@ export const THEME_OPTIONS = [
   { id: "spring", label: "Spring", icon: "🌱", description: "Light forest green, fresh #678215 green and floral accents" },
   { id: "sakura", label: "Sakura", icon: "🌸", description: "Reference Sakura pinks, cream, pale blue and plum text" },
   { id: "summer", label: "Summer", icon: "🌊", description: "Aqua blue, pale-yellow headers and sunny-yellow chart panels" },
-  { id: "autumn", label: "Autumn", icon: "🍂", description: "Japanese autumn: bright-red timeline and dark-red headers" },
+  { id: "autumn", label: "Autumn", icon: "🍂", description: "Japanese autumn: brown timeline under bright-red bars with yellow, green, gold and orange text" },
   { id: "winter", label: "Winter", icon: "❄️", description: "Snow white and pale glacier blue" },
   { id: "christmas", label: "Christmas", icon: "🎄", description: "Forest and jewel greens, festive red headers and controls, vermillion and gold charts" },
 ];
@@ -198,6 +212,12 @@ export function isThemeName(name) {
 /** The theme object for `name`, or the default scheme when `name` is unknown or stale. */
 export function resolveTheme(name) {
   return THEMES[isThemeName(name) ? name : DEFAULT_THEME];
+}
+
+/** The theme with its text colors replaced by the scheme's `bars` colors, for the bars around the timeline. */
+export function barTheme(theme) {
+  const { text, textDim, textMuted, accent } = theme.bars;
+  return { ...theme, text, textDim, textMuted, accent };
 }
 
 /** Whether `name` resolves to a dark-based scheme. */
