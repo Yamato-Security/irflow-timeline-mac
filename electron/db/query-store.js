@@ -431,8 +431,9 @@ class QueryStoreMethods {
   _applySearch(searchTerm, searchMode, meta, whereConditions, params, searchCondition = "contains") {
     if (!searchTerm.trim()) return;
 
-    // Fuzzy, Starts with, Like and Equals. Starts with, Like and Equals compare whole cell
-    // values, so in Mixed and Exact mode the entire input is ONE value, as in Edit Filter.
+    // Fuzzy, Starts with, Ends with, Like and Equals. Starts with, Ends with, Like and Equals
+    // compare whole cell values, so in Mixed and Exact mode the entire input is ONE value, as in
+    // Edit Filter.
     // Splitting it into words made Equals `Local Settings` require one cell equal to "Local"
     // and another equal to "Settings". OR and AND mode, and Fuzzy (which matches word by
     // word), take several values. Double quotes group a phrase and are not part of the value.
@@ -455,6 +456,7 @@ class QueryStoreMethods {
         const colConds = targets.map((expr) => {
           if (fuzzy) { const c = fuzzyCondition(expr, value); params.push(...c.params); return c.sql; }
           if (searchCondition === "startswith") { params.push(`${value}%`); return `${expr} LIKE ?`; }
+          if (searchCondition === "endswith") { params.push(`%${value}`); return `${expr} LIKE ?`; }
           if (searchCondition === "like") { params.push(value); return `${expr} LIKE ?`; }
           if (searchCondition === "equals") { params.push(value); return `${expr} = ?`; }
           params.push(`%${value}%`); return `${expr} LIKE ?`;

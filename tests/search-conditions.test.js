@@ -101,3 +101,24 @@ test("Contains does not match a phrase across two columns", { skip: SKIP }, () =
   assert.deepEqual(search("Local Settings", "exact", "contains"), [1, 2]);
   assert.deepEqual(search("Local Settings", "mixed", "contains"), [1, 2, 3], "separate words may be in different cells");
 });
+
+// Added by Yamato Security, 2026-11-06: the search box has Ends with, next to Starts with.
+test("Ends with matches the end of a cell, whole input in Mixed mode, case-insensitive", { skip: SKIP }, () => {
+  const search = setup();
+  assert.deepEqual(search("BagMRU", "mixed", "endswith"), [1]);
+  assert.deepEqual(search("bagmru", "mixed", "endswith"), [1], "case-insensitive, like Starts with");
+  assert.deepEqual(search("Settings", "mixed", "endswith"), [2, 3]);
+  assert.deepEqual(search("Local Settings", "mixed", "endswith"), [2], "the whole input, not each word");
+  assert.deepEqual(search("KeyPath:Settings", "mixed", "endswith"), [2, 3]);
+  assert.deepEqual(search("ValueData:updater.exe", "mixed", "endswith"), [4]);
+  assert.deepEqual(search("ValueName:Settings", "mixed", "endswith"), []);
+  assert.deepEqual(search("BagMRU updater.exe", "or", "endswith"), [1, 4]);
+  assert.deepEqual(search("Windows", "mixed", "endswith"), [], "not Contains: Windows is only in the middle");
+});
+
+test("Ends with is offered next to Starts with", async () => {
+  const { SEARCH_CONDITIONS } = await import("../src/constants/ui-controls.js");
+  const values = SEARCH_CONDITIONS.map((c) => c.value);
+  assert.equal(values.indexOf("endswith"), values.indexOf("startswith") + 1);
+  assert.equal(SEARCH_CONDITIONS.find((c) => c.value === "endswith").label, "Ends with");
+});
